@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="node_modules/vary/|node_modules/uglify-js/lib/|node_modules/clean-css/lib/utils/|node_modules/transformers/node_modules/uglify-js/test/|node_modules/range-parser/|node_modules/forwarded/|node_modules/ipaddr.js/lib/|node_modules/qs/test/|node_modules/fresh/|node_modules/optimist/test/|node_modules/wordwrap/example/|node_modules/acorn/bin/|node_modules/yargs/lib/|node_modules/void-elements/test/|node_modules/transformers/node_modules/source-map/build/|node_modules/acorn/src/walk/|node_modules/utils-merge/|node_modules/cliui/node_modules/wordwrap/example/|node_modules/transformers/lib/|node_modules/camelcase/|node_modules/css-parse/|node_modules/clean-css/lib/stringifier/|node_modules/methods/|node_modules/window-size/|node_modules/escape-html/|node_modules/cookie-signature/|node_modules/type-is/|node_modules/qs/dist/|node_modules/void-elements/|node_modules/transformers/node_modules/source-map/lib/source-map/|node_modules/cliui/node_modules/wordwrap/|node_modules/is-buffer/|node_modules/clean-css/lib/properties/|node_modules/transformers/node_modules/is-promise/|node_modules/finalhandler/|node_modules/mkdirp/test/|node_modules/unpipe/|node_modules/uglify-to-browserify/|node_modules/iconv-lite/encodings/|node_modules/mkdirp/bin/|node_modules/uglify-js/bin/|node_modules/media-typer/|node_modules/longest/|node_modules/merge-descriptors/|node_modules/express/node_modules/qs/test/|node_modules/minimist/example/|node_modules/on-headers/|node_modules/decamelize/|node_modules/minimist/|node_modules/acorn/src/|node_modules/content-type/|node_modules/serve-static/node_modules/http-errors/|node_modules/cliui/test/|node_modules/depd/lib/compat/|node_modules/transformers/node_modules/uglify-js/tools/|node_modules/qs/lib/|node_modules/clean-css/node_modules/commander/|node_modules/debug/|node_modules/with/node_modules/acorn/dist/|node_modules/promise/lib/|node_modules/transformers/node_modules/source-map/test/source-map/|node_modules/with/node_modules/acorn/src/loose/|node_modules/css/|node_modules/depd/lib/browser/|node_modules/jstransformer/|node_modules/mime/|node_modules/clean-css/lib/colors/|node_modules/asap/|node_modules/clean-css/lib/tokenizer/|node_modules/jade/|node_modules/destroy/|node_modules/ee-first/|node_modules/parseurl/|node_modules/negotiator/|node_modules/bytes/|node_modules/clean-css/lib/|node_modules/yargs/|node_modules/uglify-js/node_modules/source-map/dist/|node_modules/clean-css/lib/selectors/|node_modules/express/|node_modules/align-text/|node_modules/uglify-js/tools/|node_modules/ipaddr.js/|node_modules/source-map/lib/source-map/|node_modules/setprototypeof/|node_modules/uglify-to-browserify/test/|node_modules/amdefine/|node_modules/optimist/|node_modules/transformers/node_modules/source-map/lib/|node_modules/serve-favicon/|node_modules/send/node_modules/statuses/|node_modules/clean-css/|node_modules/promise/|node_modules/iconv-lite/lib/|node_modules/with/node_modules/acorn/src/walk/|node_modules/graceful-readlink/|node_modules/express/node_modules/cookie/|node_modules/clean-css/lib/source-maps/|node_modules/jade/bin/|node_modules/repeat-string/|node_modules/css-stringify/|node_modules/basic-auth/|node_modules/mime-types/|node_modules/ms/|node_modules/express/lib/middleware/|node_modules/depd/|node_modules/uglify-js/node_modules/source-map/|node_modules/cookie-parser/|node_modules/serve-static/|node_modules/mkdirp/|node_modules/negotiator/lib/|node_modules/async/lib/|node_modules/etag/|node_modules/transformers/node_modules/promise/|node_modules/express/lib/router/|node_modules/cliui/node_modules/wordwrap/test/|node_modules/commander/|node_modules/acorn/dist/|node_modules/http-errors/|node_modules/constantinople/|node_modules/cookie/|node_modules/kind-of/|node_modules/express/node_modules/qs/lib/|node_modules/raw-body/|node_modules/mime/build/|node_modules/send/node_modules/http-errors/|node_modules/character-parser/|node_modules/clean-css/lib/text/|node_modules/acorn/src/loose/|routes/|node_modules/inherits/|node_modules/constantinople/test/|node_modules/optimist/example/|node_modules/transformers/node_modules/source-map/test/|node_modules/send/|node_modules/morgan/|node_modules/source-map/lib/|node_modules/optimist/test/_/|node_modules/wordwrap/test/|node_modules/transformers/node_modules/uglify-js/lib/|node_modules/right-align/|node_modules/serve-static/node_modules/statuses/|node_modules/wordwrap/|node_modules/acorn/src/bin/|node_modules/express/lib/|node_modules/uglify-js/node_modules/source-map/lib/|node_modules/array-flatten/|node_modules/acorn-globals/|node_modules/path-to-regexp/|node_modules/with/node_modules/acorn/bin/|node_modules/source-map/build/|node_modules/mkdirp/examples/|node_modules/transformers/node_modules/uglify-js/test/compress/|node_modules/lazy-cache/|node_modules/transformers/node_modules/source-map/|node_modules/cliui/|node_modules/with/|node_modules/statuses/|node_modules/jade/lib/nodes/|node_modules/body-parser/lib/|node_modules/with/node_modules/acorn/src/|node_modules/center-align/|node_modules/on-finished/|node_modules/jade/lib/|node_modules/minimist/test/|node_modules/serve-static/node_modules/send/|node_modules/is-buffer/test/|node_modules/proxy-addr/|node_modules/mime-db/|node_modules/body-parser/|node_modules/content-disposition/|node_modules/is-promise/|node_modules/accepts/|node_modules/clean-css/lib/urls/|node_modules/body-parser/lib/types/|node_modules/clean-css/lib/imports/" kind="src" path=""/>
+	<classpathentry kind="src" path="node_modules/accepts"/>
+	<classpathentry kind="src" path="node_modules/acorn-globals"/>
+	<classpathentry kind="src" path="node_modules/acorn/bin"/>
+	<classpathentry kind="src" path="node_modules/acorn/dist"/>
+	<classpathentry excluding="walk/|loose/|bin/" kind="src" path="node_modules/acorn/src"/>
+	<classpathentry kind="src" path="node_modules/acorn/src/bin"/>
+	<classpathentry kind="src" path="node_modules/acorn/src/loose"/>
+	<classpathentry kind="src" path="node_modules/acorn/src/walk"/>
+	<classpathentry kind="src" path="node_modules/align-text"/>
+	<classpathentry kind="src" path="node_modules/amdefine"/>
+	<classpathentry kind="src" path="node_modules/array-flatten"/>
+	<classpathentry kind="src" path="node_modules/asap"/>
+	<classpathentry kind="src" path="node_modules/async/lib"/>
+	<classpathentry kind="src" path="node_modules/basic-auth"/>
+	<classpathentry excluding="lib/|lib/types/" kind="src" path="node_modules/body-parser"/>
+	<classpathentry excluding="types/" kind="src" path="node_modules/body-parser/lib"/>
+	<classpathentry kind="src" path="node_modules/body-parser/lib/types"/>
+	<classpathentry kind="src" path="node_modules/bytes"/>
+	<classpathentry kind="src" path="node_modules/camelcase"/>
+	<classpathentry kind="src" path="node_modules/center-align"/>
+	<classpathentry kind="src" path="node_modules/character-parser"/>
+	<classpathentry excluding="lib/utils/|lib/stringifier/|lib/properties/|node_modules/commander/|lib/colors/|lib/tokenizer/|lib/|lib/selectors/|lib/source-maps/|lib/text/|lib/urls/|lib/imports/" kind="src" path="node_modules/clean-css"/>
+	<classpathentry excluding="utils/|stringifier/|properties/|colors/|tokenizer/|selectors/|source-maps/|text/|urls/|imports/" kind="src" path="node_modules/clean-css/lib"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/colors"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/imports"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/properties"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/selectors"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/source-maps"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/stringifier"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/text"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/tokenizer"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/urls"/>
+	<classpathentry kind="src" path="node_modules/clean-css/lib/utils"/>
+	<classpathentry kind="src" path="node_modules/clean-css/node_modules/commander"/>
+	<classpathentry excluding="node_modules/wordwrap/example/|node_modules/wordwrap/|test/|node_modules/wordwrap/test/" kind="src" path="node_modules/cliui"/>
+	<classpathentry excluding="example/|test/" kind="src" path="node_modules/cliui/node_modules/wordwrap"/>
+	<classpathentry kind="src" path="node_modules/cliui/node_modules/wordwrap/example"/>
+	<classpathentry kind="src" path="node_modules/cliui/node_modules/wordwrap/test"/>
+	<classpathentry kind="src" path="node_modules/cliui/test"/>
+	<classpathentry kind="src" path="node_modules/commander"/>
+	<classpathentry excluding="test/" kind="src" path="node_modules/constantinople"/>
+	<classpathentry kind="src" path="node_modules/constantinople/test"/>
+	<classpathentry kind="src" path="node_modules/content-disposition"/>
+	<classpathentry kind="src" path="node_modules/content-type"/>
+	<classpathentry kind="src" path="node_modules/cookie"/>
+	<classpathentry kind="src" path="node_modules/cookie-parser"/>
+	<classpathentry kind="src" path="node_modules/cookie-signature"/>
+	<classpathentry kind="src" path="node_modules/css"/>
+	<classpathentry kind="src" path="node_modules/css-parse"/>
+	<classpathentry kind="src" path="node_modules/css-stringify"/>
+	<classpathentry kind="src" path="node_modules/debug"/>
+	<classpathentry kind="src" path="node_modules/decamelize"/>
+	<classpathentry excluding="lib/compat/|lib/browser/" kind="src" path="node_modules/depd"/>
+	<classpathentry kind="src" path="node_modules/depd/lib/browser"/>
+	<classpathentry kind="src" path="node_modules/depd/lib/compat"/>
+	<classpathentry kind="src" path="node_modules/destroy"/>
+	<classpathentry kind="src" path="node_modules/ee-first"/>
+	<classpathentry kind="src" path="node_modules/escape-html"/>
+	<classpathentry kind="src" path="node_modules/etag"/>
+	<classpathentry excluding="node_modules/qs/test/|node_modules/cookie/|lib/middleware/|lib/router/|node_modules/qs/lib/|lib/" kind="src" path="node_modules/express"/>
+	<classpathentry excluding="middleware/|router/" kind="src" path="node_modules/express/lib"/>
+	<classpathentry kind="src" path="node_modules/express/lib/middleware"/>
+	<classpathentry kind="src" path="node_modules/express/lib/router"/>
+	<classpathentry kind="src" path="node_modules/express/node_modules/cookie"/>
+	<classpathentry kind="src" path="node_modules/express/node_modules/qs/lib"/>
+	<classpathentry kind="src" path="node_modules/express/node_modules/qs/test"/>
+	<classpathentry kind="src" path="node_modules/finalhandler"/>
+	<classpathentry kind="src" path="node_modules/forwarded"/>
+	<classpathentry kind="src" path="node_modules/fresh"/>
+	<classpathentry kind="src" path="node_modules/graceful-readlink"/>
+	<classpathentry kind="src" path="node_modules/http-errors"/>
+	<classpathentry kind="src" path="node_modules/iconv-lite/encodings"/>
+	<classpathentry kind="src" path="node_modules/iconv-lite/lib"/>
+	<classpathentry kind="src" path="node_modules/inherits"/>
+	<classpathentry excluding="lib/" kind="src" path="node_modules/ipaddr.js"/>
+	<classpathentry kind="src" path="node_modules/ipaddr.js/lib"/>
+	<classpathentry excluding="test/" kind="src" path="node_modules/is-buffer"/>
+	<classpathentry kind="src" path="node_modules/is-buffer/test"/>
+	<classpathentry kind="src" path="node_modules/is-promise"/>
+	<classpathentry excluding="bin/|lib/nodes/|lib/" kind="src" path="node_modules/jade"/>
+	<classpathentry kind="src" path="node_modules/jade/bin"/>
+	<classpathentry excluding="nodes/" kind="src" path="node_modules/jade/lib"/>
+	<classpathentry kind="src" path="node_modules/jade/lib/nodes"/>
+	<classpathentry kind="src" path="node_modules/jstransformer"/>
+	<classpathentry kind="src" path="node_modules/kind-of"/>
+	<classpathentry kind="src" path="node_modules/lazy-cache"/>
+	<classpathentry kind="src" path="node_modules/longest"/>
+	<classpathentry kind="src" path="node_modules/media-typer"/>
+	<classpathentry kind="src" path="node_modules/merge-descriptors"/>
+	<classpathentry kind="src" path="node_modules/methods"/>
+	<classpathentry excluding="build/" kind="src" path="node_modules/mime"/>
+	<classpathentry kind="src" path="node_modules/mime-db"/>
+	<classpathentry kind="src" path="node_modules/mime-types"/>
+	<classpathentry kind="src" path="node_modules/mime/build"/>
+	<classpathentry excluding="example/|test/" kind="src" path="node_modules/minimist"/>
+	<classpathentry kind="src" path="node_modules/minimist/example"/>
+	<classpathentry kind="src" path="node_modules/minimist/test"/>
+	<classpathentry excluding="test/|bin/|examples/" kind="src" path="node_modules/mkdirp"/>
+	<classpathentry kind="src" path="node_modules/mkdirp/bin"/>
+	<classpathentry kind="src" path="node_modules/mkdirp/examples"/>
+	<classpathentry kind="src" path="node_modules/mkdirp/test"/>
+	<classpathentry kind="src" path="node_modules/morgan"/>
+	<classpathentry kind="src" path="node_modules/ms"/>
+	<classpathentry excluding="lib/" kind="src" path="node_modules/negotiator"/>
+	<classpathentry kind="src" path="node_modules/negotiator/lib"/>
+	<classpathentry kind="src" path="node_modules/on-finished"/>
+	<classpathentry kind="src" path="node_modules/on-headers"/>
+	<classpathentry excluding="test/|example/|test/_/" kind="src" path="node_modules/optimist"/>
+	<classpathentry kind="src" path="node_modules/optimist/example"/>
+	<classpathentry excluding="_/" kind="src" path="node_modules/optimist/test"/>
+	<classpathentry kind="src" path="node_modules/optimist/test/_"/>
+	<classpathentry kind="src" path="node_modules/parseurl"/>
+	<classpathentry kind="src" path="node_modules/path-to-regexp"/>
+	<classpathentry excluding="lib/" kind="src" path="node_modules/promise"/>
+	<classpathentry kind="src" path="node_modules/promise/lib"/>
+	<classpathentry kind="src" path="node_modules/proxy-addr"/>
+	<classpathentry kind="src" path="node_modules/qs/dist"/>
+	<classpathentry kind="src" path="node_modules/qs/lib"/>
+	<classpathentry kind="src" path="node_modules/qs/test"/>
+	<classpathentry kind="src" path="node_modules/range-parser"/>
+	<classpathentry kind="src" path="node_modules/raw-body"/>
+	<classpathentry kind="src" path="node_modules/repeat-string"/>
+	<classpathentry kind="src" path="node_modules/right-align"/>
+	<classpathentry excluding="node_modules/statuses/|node_modules/http-errors/" kind="src" path="node_modules/send"/>
+	<classpathentry kind="src" path="node_modules/send/node_modules/http-errors"/>
+	<classpathentry kind="src" path="node_modules/send/node_modules/statuses"/>
+	<classpathentry kind="src" path="node_modules/serve-favicon"/>
+	<classpathentry excluding="node_modules/http-errors/|node_modules/statuses/|node_modules/send/" kind="src" path="node_modules/serve-static"/>
+	<classpathentry kind="src" path="node_modules/serve-static/node_modules/http-errors"/>
+	<classpathentry kind="src" path="node_modules/serve-static/node_modules/send"/>
+	<classpathentry kind="src" path="node_modules/serve-static/node_modules/statuses"/>
+	<classpathentry kind="src" path="node_modules/setprototypeof"/>
+	<classpathentry kind="src" path="node_modules/source-map/build"/>
+	<classpathentry excluding="source-map/" kind="src" path="node_modules/source-map/lib"/>
+	<classpathentry kind="src" path="node_modules/source-map/lib/source-map"/>
+	<classpathentry kind="src" path="node_modules/statuses"/>
+	<classpathentry kind="src" path="node_modules/transformers/lib"/>
+	<classpathentry kind="src" path="node_modules/transformers/node_modules/is-promise"/>
+	<classpathentry kind="src" path="node_modules/transformers/node_modules/promise"/>
+	<classpathentry excluding="build/|lib/source-map/|test/source-map/|lib/|test/" kind="src" path="node_modules/transformers/node_modules/source-map"/>
+	<classpathentry kind="src" path="node_modules/transformers/node_modules/source-map/build"/>
+	<classpathentry excluding="source-map/" kind="src" path="node_modules/transformers/node_modules/source-map/lib"/>
+	<classpathentry kind="src" path="node_modules/transformers/node_modules/source-map/lib/source-map"/>
+	<classpathentry excluding="source-map/" kind="src" path="node_modules/transformers/node_modules/source-map/test"/>
+	<classpathentry kind="src" path="node_modules/transformers/node_modules/source-map/test/source-map"/>
+	<classpathentry kind="src" path="node_modules/transformers/node_modules/uglify-js/lib"/>
+	<classpathentry excluding="compress/" kind="src" path="node_modules/transformers/node_modules/uglify-js/test"/>
+	<classpathentry kind="src" path="node_modules/transformers/node_modules/uglify-js/test/compress"/>
+	<classpathentry kind="src" path="node_modules/transformers/node_modules/uglify-js/tools"/>
+	<classpathentry kind="src" path="node_modules/type-is"/>
+	<classpathentry kind="src" path="node_modules/uglify-js/bin"/>
+	<classpathentry kind="src" path="node_modules/uglify-js/lib"/>
+	<classpathentry excluding="dist/|lib/" kind="src" path="node_modules/uglify-js/node_modules/source-map"/>
+	<classpathentry kind="src" path="node_modules/uglify-js/node_modules/source-map/dist"/>
+	<classpathentry kind="src" path="node_modules/uglify-js/node_modules/source-map/lib"/>
+	<classpathentry kind="src" path="node_modules/uglify-js/tools"/>
+	<classpathentry excluding="test/" kind="src" path="node_modules/uglify-to-browserify"/>
+	<classpathentry kind="src" path="node_modules/uglify-to-browserify/test"/>
+	<classpathentry kind="src" path="node_modules/unpipe"/>
+	<classpathentry kind="src" path="node_modules/utils-merge"/>
+	<classpathentry kind="src" path="node_modules/vary"/>
+	<classpathentry excluding="test/" kind="src" path="node_modules/void-elements"/>
+	<classpathentry kind="src" path="node_modules/void-elements/test"/>
+	<classpathentry kind="src" path="node_modules/window-size"/>
+	<classpathentry excluding="node_modules/acorn/dist/|node_modules/acorn/src/loose/|node_modules/acorn/src/walk/|node_modules/acorn/bin/|node_modules/acorn/src/" kind="src" path="node_modules/with"/>
+	<classpathentry kind="src" path="node_modules/with/node_modules/acorn/bin"/>
+	<classpathentry kind="src" path="node_modules/with/node_modules/acorn/dist"/>
+	<classpathentry excluding="loose/|walk/" kind="src" path="node_modules/with/node_modules/acorn/src"/>
+	<classpathentry kind="src" path="node_modules/with/node_modules/acorn/src/loose"/>
+	<classpathentry kind="src" path="node_modules/with/node_modules/acorn/src/walk"/>
+	<classpathentry excluding="example/|test/" kind="src" path="node_modules/wordwrap"/>
+	<classpathentry kind="src" path="node_modules/wordwrap/example"/>
+	<classpathentry kind="src" path="node_modules/wordwrap/test"/>
+	<classpathentry excluding="lib/" kind="src" path="node_modules/yargs"/>
+	<classpathentry kind="src" path="node_modules/yargs/lib"/>
+	<classpathentry kind="src" path="routes"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

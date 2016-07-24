@@ -1,0 +1,217 @@
+[
+	{
+		"id": "human",
+		"name": 
+		{
+			"singular": "Human",
+			"plural": "Humans"
+		},
+		"attributes" : 
+		[
+			{"id": "default", "center": 1.0, "range": 0.1}
+		],
+		"sexes":
+		[
+			{
+				"id": "male",
+				"name": "male",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "processing", "center": 1.1, "range": 0.1},
+					{"id": "strength", "center": 1.1, "range": 0.1}
+				]
+			},
+			{
+				"id": "female",
+				"name": "female",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "instincts", "center": 1.1, "range": 0.1},
+					{"id": "charisma", "center": 1.1, "range": 0.1}
+				]
+			}
+		]
+	},
+	{
+		"id": "newman",
+		"name": 
+		{
+			"singular": "Newman",
+			"plural": "Newmans"
+		},
+		"attributes" : 
+		[
+			{"id": "default", "center": 1.0, "range": 0.1}
+		],
+		"sexes":
+		[
+			{
+				"id": "male",
+				"name": "male",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "processing", "center": 1.1, "range": 0.1},
+					{"id": "strength", "center": 1.1, "range": 0.1}
+				]
+			},
+			{
+				"id": "female",
+				"name": "female",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "instincts", "center": 1.1, "range": 0.1},
+					{"id": "charisma", "center": 1.1, "range": 0.1}
+				]
+			}
+		]
+	},
+	{
+		"id": "elf",
+		"name": 
+		{
+			"singular": "Elf",
+			"plural": "Elves"
+		},
+		"attributes" : 
+		[
+			{"id": "default", "center": 1.0, "range": 0.1}
+		],
+		"sexes":
+		[
+			{
+				"id": "male",
+				"name": "male",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "processing", "center": 1.1, "range": 0.1},
+					{"id": "strength", "center": 1.1, "range": 0.1}
+				]
+			},
+			{
+				"id": "female",
+				"name": "female",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "instincts", "center": 1.1, "range": 0.1},
+					{"id": "charisma", "center": 1.1, "range": 0.1}
+				]
+			}
+		]
+	},
+	{
+		"id": "dwarf",
+		"name": 
+		{
+			"singular": "Dwarf",
+			"plural": "Dwarves"
+		},
+		"attributes" : 
+		[
+			{"id": "default", "center": 1.0, "range": 0.1}
+		],
+		"sexes":
+		[
+			{
+				"id": "male",
+				"name": "male",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "processing", "center": 1.1, "range": 0.1},
+					{"id": "strength", "center": 1.1, "range": 0.1}
+				]
+			},
+			{
+				"id": "female",
+				"name": "female",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "instincts", "center": 1.1, "range": 0.1},
+					{"id": "charisma", "center": 1.1, "range": 0.1}
+				]
+			}
+		]
+	},
+	{
+		"id": "halfing",
+		"name": 
+		{
+			"singular": "Halfing",
+			"plural": "Halflings"
+		},
+		"attributes" : 
+		[
+			{"id": "default", "center": 1.0, "range": 0.1}
+		],
+		"sexes":
+		[
+			{
+				"id": "male",
+				"name": "male",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "processing", "center": 1.1, "range": 0.1},
+					{"id": "strength", "center": 1.1, "range": 0.1}
+				]
+			},
+			{
+				"id": "female",
+				"name": "female",
+				"height":
+				{
+					"center": 1,
+					"range": 0.05
+				},
+				"attributes" : 
+				[
+					{"id": "instincts", "center": 1.1, "range": 0.1},
+					{"id": "charisma", "center": 1.1, "range": 0.1}
+				]
+			}
+		]
+	}
+]

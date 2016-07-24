@@ -1,43 +1,44 @@
 <html>
-    <head>
-        <title>Twisted MUD Account</title>
-        <script type='text/javascript' src="javascripts/lib/jquery-3.0.0.min.js"></script>
-        
-        <link rel="stylesheet" href="stylesheets/global.css" type="text/css" />
-        <link rel="stylesheet" href="stylesheets/account.css" type="text/css" />
-    </head>
-    <body>
-        <a class="logout" href="../auth/logout">
-            <div class="button">Logout</div>
-        </a>
-        <div class="view">
-            <div class="row">
-                <div class="box">
-                    <div class="text">
-                        Hello There!<br>
-                        This is the accounts page!
-                    </div>
-                </div>
-                <div class="box">
-                    <div class="text">
-                        Id: <%=account.id%><br>
-                        Name: <%=account.name%><br>
-                        Email: <%=account.email%>
-                    </div>
-                </div>
+
+<head>
+    <title>Twisted MUD Account</title>
+    <script type='text/javascript' src="javascripts/lib/jquery-3.0.0.min.js"></script>
+    <script src="javascripts/auth.js"></script>
+
+    <link rel="stylesheet" href="stylesheets/global.css" type="text/css" />
+    <link rel="stylesheet" href="stylesheets/auth.css" type="text/css" />
+    <link rel="stylesheet" href="stylesheets/account.css" type="text/css" />
+</head>
+
+<body>
+    {{{topBar}}}
+    <div class="view column" background="grey_1">
+        <div class="section header_2" background="purple">
+            Account
+        </div>
+        <div class="row section" background="grey_2">
+            <div class="section box" background="grey_3">
+                Hello There!<br> This is the accounts page!
             </div>
-            <div class="row">
-                <div class="column">
-                    <div class="box">
-                        <div class="button" id="createCharacter">Create New Character</div>
-                    </div>
-                    <%account.characters.forEach(function(character){%>
-                        <div class="box">
-                            <div class="text"><%=character.name%></div>
-                        </div>
-                    <%})%>
-                </div>
+            <div class="section box" background="grey_3">
+                Id: {{account.id}}<br> Name: {{account.name}}<br> Email: {{account.email}}
             </div>
         </div>
-    </body>
+        <div class="row section" background="grey_3">
+            <div class="column">
+                <a href="/account/create">
+                    <div class="section" background="blue">
+                        <div class="clickable" id="createCharacter">Create New Character</div>
+                    </div>
+                </a>
+                {{#account.characters}}
+                <div class="box">
+                    <div class="text">{{name}}</div>
+                </div>
+                {{/account.characters}}
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

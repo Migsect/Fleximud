@@ -1,5 +1,45 @@
 $(document).ready(function()
 {
+    $(document).mouseup(function(e)
+    {
+        var $createAccountWindow = $("#createAccountWindow");
+
+        if (!$createAccountWindow.is(e.target) && $createAccountWindow.has(e.target).length === 0)
+        {
+            $createAccountWindow.hide();
+        }
+
+        var $loginWindow = $("#loginWindow");
+
+        if (!$loginWindow.is(e.target) && $loginWindow.has(e.target).length === 0)
+        {
+            $loginWindow.hide();
+        }
+    });
+    $('#toggleCreateAccount').click(function()
+    {
+        if ($('#createAccountWindow').is(":visible"))
+        {
+            $('#loginWindow').hide();
+        } else
+        {
+            $('#createAccountWindow').show();
+        }
+    });
+    $('#toggleLogin').click(function()
+    {
+        if ($('#loginWindow').is(":visible"))
+        {
+            $('#loginWindow').hide();
+        } else
+        {
+            $('#loginWindow').show();
+        }
+    });
+    $('#loginInputs input').keypress(function(e)
+    {
+        if (e.keyCode == 13) $('#loginAccount').click();
+    });
     $("#loginAccount").click(function()
     {
         var $message = $("#loginMessage");
@@ -33,7 +73,7 @@ $(document).ready(function()
             return;
         }
 
-        $.post(window.location.href + "/login",
+        $.post("/auth/login",
         {
             email : email,
             pass : pass
@@ -51,8 +91,12 @@ $(document).ready(function()
                 return;
             }
             /* Redirect to the account page if we were successful */
-            window.location.replace("../account");
+            window.location.replace("/account");
         });
+    });
+    $('#createAccountInputs input').keypress(function(e)
+    {
+        if (e.keyCode == 13) $('#createAccount').click();
     });
     $("#createAccount").click(function()
     {
@@ -107,7 +151,7 @@ $(document).ready(function()
             return;
         }
 
-        $.post(window.location.href + "/create",
+        $.post("/auth/create",
         {
             name : name,
             email : email,
@@ -127,7 +171,7 @@ $(document).ready(function()
             }
             /* Redirect to the account page if we were successful */
             console.log()
-            window.location.replace("../account");
+            window.location.replace("/account");
         });
     });
 });

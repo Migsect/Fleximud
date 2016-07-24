@@ -1,14 +1,54 @@
 <html>
-    <head>
-        <title>Twisted MUD Account</title>
-        <script type='text/javascript' src="../javascripts/lib/jquery-3.0.0.min.js"></script>
-        
-        <link rel="stylesheet" href="../stylesheets/global.css" type="text/css" />
-        <link rel="stylesheet" href="../stylesheets/account.css" type="text/css" />
-    </head>
-    <body>
-        <div class="view">
-            Create Page
+
+<head>
+    <title>Twisted MUD Account</title>
+    <script type='text/javascript' src="../javascripts/lib/jquery-3.0.0.min.js"></script>
+    <script src="../javascripts/auth.js"></script>
+    <script src="../javascripts/accounts/create.js"></script>
+
+    <link rel="stylesheet" href="../stylesheets/global.css" type="text/css" />
+    <link rel="stylesheet" href="../stylesheets/auth.css" type="text/css" />
+    <link rel="stylesheet" href="../stylesheets/account.css" type="text/css" />
+</head>
+
+<body>
+    {{{topBar}}}
+    <div class="view column" background="grey_1">
+        <div class="section header_2" background="purple">
+            Create a New Character
         </div>
-    </body>
+        <div class="row">
+            <div class="section column filling" background="grey_2">
+                <div class="box section" background="grey_3">
+                    <div class="section compact header_3" background="green">Nominal Information</div>
+                    <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Full Name"></input>
+                    <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Short Name"></input>
+                </div>
+                <div class="box section" background="grey_3">
+                    <div class="section compact header_3" background="green">Attribute Selection</div>
+                    <div class="section attribute-tree">
+                        {{{attributeTree}}}
+                    </div>
+                    <div class="section" background="grey_1">
+                        You may select up to {{attributeCount}} attributes from the above tree. <br><br>Note that there is no restriction on the tier of attribute you choose either. Attributes are generally normalized at the top tier(s) and as such it
+                        is normally unwise to pick the top tier.
+                    </div>
+                </div>
+            </div>
+            <div class="section column filling" background="grey_2">
+                <div class="box section" background="grey_3">
+                    <div class="section header_3" background="green">Biology Selection</div>
+                    <div class="" id="species-sex-selection">
+                        {{{speciesItems}}}
+
+                    </div>
+                    <div class="section" id="species-sex-info">
+                        {{{speciesInfos}}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

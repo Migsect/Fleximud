@@ -1,106 +1,357 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+/* Overriding base functionality to remove its styles */
+html, body {
+    margin: 0;
+    height: 100%;
+}
 
-body {
+
+body 
+{
   	padding: 0px;
   	margin: 0px;
   	font: 14px "Open Sans", Helvetica, Arial, sans-serif;
-    color: white;
 }
 
-div.view {
-	box-sizing: border-box;
-	margin: 0px;
-	padding: 8px;
-	width: 100%;
-	height: 100%;
-	
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	
-	background-color: #1a1a1a;
-}
-div.row {
-	justify-content: center;
-	align-items: flex-start;
-	display: flex;
-	flex-direction: row;
-}
-div.column {
-	justify-content: center;
-	display: flex;
-	flex-direction: column;
-
+a 
+{
+  text-decoration: none;
 }
 
-div.box {
-	background-color: #4d4d4d;
-	box-shadow: 4px 4px 10px rgba(0, 0, 0, .3);
-	padding: 8px;
-	margin: 4px;
+input
+{
+	border: none;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	padding: 2px;
 }
-div.box .text {
-	padding: 4px 8px 4px 8px;
-	background-color: #262626;
-	border-radius: 2px;
+textarea
+{
+	border: none;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	padding: 2px;
 }
-div.box .button:first-child {
+div.column input+input
+{
 	margin-top: 0px;
 }
-div.box .button {
-	margin-top: 8px;
+
+div.header_1
+{
+	font-size: 24px;
+	font-variant: small-caps;
 }
-div.button {
-	padding: 4px 8px 4px 8px;
-	border-radius: 2px;
-	background-color: #666666;
-	display: block;
-	text-align: center;
-	
-	-webkit-touch-callout: none;
+
+div.header_2
+{
+	font-size: 20px;
+	font-variant: small-caps;
+}
+
+div.header_3
+{
+	font-variant: small-caps;
+	font-size: 16px;
+}
+
+div.header_4
+{
+	font-variant: small-caps;
+}
+
+
+
+/* Black Backgrounds */
+div[background=black] {
+  background-color: #000000;
+  color: white;
+  border-color: grey_1;
+}
+div.clickable[background=black]:hover
+{
+  background-color: #005ce6;
+}
+
+
+/* Grey 1 Backgrounds - 10*/
+div[background=grey_1] {
+  background-color: #1a1a1a;
+  color: white;
+  border-color: black;
+}
+div.clickable[background=grey_1]:hover
+{
+  background-color: #005ce6;
+}
+
+/* Green Backgrounds - 15*/
+div[background=grey_2] {
+  background-color: #262626;
+  color: white;
+  border-color: black;
+}
+div.clickable[background=grey_2]:hover
+{
+  background-color: #005ce6;
+}
+
+/* Grey 3 Backgrounds - 30*/
+div[background=grey_3] {
+  	background-color: #4d4d4d;
+  	color: white;
+  	border-color: black;
+}
+div.clickable[background=grey_3]:hover
+{
+  	background-color: #005ce6;
+}
+
+/* Grey 4 Backgrounds - 80*/
+div[background=grey_4] {
+  	background-color: #cccccc;
+  	color: black;
+  	border-color: black;
+}
+div.clickable[background=grey_4]:hover
+{
+  	background-color: #b3d1ff;
+}
+
+/* White Backgrounds */
+div[background=white] {
+  	background-color: #ffffff;
+  	color: black;
+  	border-color: #cccccc;
+}
+div.clickable[background=white]:hover
+{
+  background-color: #b3d1ff;
+}
+
+/* Blue Backgrounds */
+div[background=blue] {
+  	background-color: #0066ff;
+  	color: white;
+  	border-color: black;
+}
+div.clickable[background=blue]:hover
+{
+  	background-color: #3385ff;
+}
+
+/* Grey-Blue Backgrounds */
+div[background=bluegrey] {
+  	background-color: #4073bf;
+  	color: white;
+  	border-color: black;
+}
+div.clickable[background=bluegrey]:hover
+{
+  	background-color: #799dd2;
+}
+
+/* Green Backgrounds */
+div[background=green] {
+  	background-color: #33cc33;
+  	color: white;
+  	border-color: black;
+}
+div.clickable[background=green]:hover
+{
+ 	background-color: #5cd65c;
+}
+
+/* Red Backgrounds */
+div[background=red] {
+  	background-color: #ff0000;
+  	color: white;
+  	border-color: black;
+}
+div.clickable[background=red]:hover
+{
+  	background-color: #ff4d4d;
+}
+
+/* Yellow Backgrounds */
+div[background=yellow] 
+{
+  	background-color: #ffff00;
+  	color: black;
+  	border-color: black;
+}
+div.clickable[background=yellow]:hover
+{
+  	background-color: #ffffb3;
+}
+
+/* Orange Backgrounds */
+div[background=orange] {
+  	background-color: #ff8000;
+ 	color: white;
+  	border-color: black;
+}
+div.clickable[background=orange]:hover
+{
+  	background-color: #ffad33;
+}
+
+/* Purple Backgrounds */
+div[background=purple] {
+  	background-color: #9900cc;
+  	color: white;
+  	border-color: black;
+}
+div.clickable[background=purple]:hover
+{
+  	background-color: #d966ff;
+}
+
+/* Clickable class */
+div.clickable {
+    -webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 	
-	transition: all 0.3s ease 0s;
+	transition: all 0.1s ease 0s;
 }
-div.button:hover {
-	background-color: #005ce6;
-	
+div.clickable:hover {
 	cursor: pointer;
 }
-div.input {
-	display: flex;
-	flex-flow: column;
-	
-	margin-top: 8px;
-}
-div.input input {
-	padding: 4px 8px 4px 8px;
-	margin-bottom: 2px;
-	border: none;
-	border-radius: 2px;
-}
-div.input input:last-child {
-	margin-bottom: 0px;
-}
-.error {
-	background-color: #ffb3b3;
-	border-color: #ff0000;
-}
-div.message {
-	
+
+/* View is the main box that covers the screen*/
+div.view 
+{
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
 }
 
-a.logout {
-	margin: 8px;
-	position: absolute;
-	display: block;
-	right: 0px;
-	
-	text-decoration: none;
-	color: white;
+/* Different Kinds of containers*/
+div.box 
+{
+  	margin: 8px;
 }
+div.box.compact
+{
+	margin: 4px;
+}
+div.box.tight
+{
+	margin: 2px;
+}
+
+div.section 
+{
+  	padding: 8px;
+}
+div.section.compact
+{
+	padding: 4px;
+}
+div.section.tight
+{
+	padding: 2px;
+}
+
+/* Container Flow types*/
+div.row 
+{
+  	width: 100%;
+	display: flex;
+	flex-direction: row;
+}
+
+div.column 
+{
+	display: flex;
+	flex-direction: column;
+}
+div.filling
+{
+	width: 100%;
+	height: 100%;
+}
+.fill_h
+{
+	height: 100%;
+}
+.fill_w
+{
+	width: 100%;
+}
+
+/* Effect of the box ghovering */
+.hovering 
+{
+  	box-shadow: 2px 2px 10px rgba(0, 0, 0, .4);
+}
+
+/* Dropdown functionality */
+div.dropdown 
+{
+  	display: none;
+  	position: absolute;
+}
+div>.dropdown.box
+{
+ 	 margin-top: 0px;
+}
+div.section>.dropdown 
+{
+  	margin-left: -8px;
+  	margin-top: 8px;
+}
+div.section>.dropdown.box 
+{
+ 	 margin-left: 8px;
+}
+div:hover>.dropdown 
+{
+  	display: block;
+}
+
+/* Rounded Cornerss */
+.rounded {
+	border-radius: 2px;
+}
+
+/* Containers seperating items */
+div.sectioned>div 
+{
+  	border-width: 1px;
+}
+
+div.row.sectioned>div
+{
+ 	border-right-style: solid;
+}
+div.column.sectioned>div
+{
+ 	border-bottom-style: solid;
+}
+div.sectioned>div:last-child 
+{
+  	border-style: none;
+}
+
+/* Manual Sectioning*/
+div.seperated
+{
+	border-width: 1px;
+}
+div.row div.seperated
+{
+	border-right-style: solid;
+}
+div.column div.seperated
+{
+	border-bottom-style: solid;
+}
+div.seperated:last-child
+{
+	border-style: none;
+}
+

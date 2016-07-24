@@ -1,29 +1,30 @@
 <html>
-    <head>
-        <title>Twisted MUD Account</title>
-        <script type='text/javascript' src="../javascripts/lib/jquery-3.0.0.min.js"></script>
-        
-        <link rel="stylesheet" href="../stylesheets/global.css" type="text/css" />
-        <link rel="stylesheet" href="../stylesheets/account.css" type="text/css" />
-    </head>
-    <body>
-        <div class="view">
-            <div class="row">
-                <div class="box">
-                    <div class="text">Account Admin Page</div>
-                </div>
-            </div>
-            <div class="column" id="accountList">
-                <%accounts.forEach(function(account){%>
-                    <div class="box">
-                        <div class="text">
-                            <%=account.name%><br>
-                            <%=account.email%><br>
-                            <%=account.id%><br>
-                        </div>
-                    </div>
-                <% }) %>
+
+<head>
+    <title>Twisted MUD Account</title>
+    <script type='text/javascript' src="../javascripts/lib/jquery-3.0.0.min.js"></script>
+
+    <link rel="stylesheet" href="../stylesheets/global.css" type="text/css" />
+    <link rel="stylesheet" href="../stylesheets/account.css" type="text/css" />
+</head>
+
+<body>
+    <div class="view">
+        <div class="row">
+            <div class="box">
+                <div class="text">Account Admin Page</div>
             </div>
         </div>
-    </body>
+        <div class="column" id="accountList">
+            {{#accounts}}
+            <div class="box">
+                <div class="text">
+                    {{name}}<br>{{email}}<br>{{id}}
+                </div>
+            </div>
+            {{/accounts}}
+        </div>
+    </div>
+</body>
+
 </html>

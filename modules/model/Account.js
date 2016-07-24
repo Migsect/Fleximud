@@ -1,12 +1,15 @@
 "use strict";
 
 /* Includes */
-var passwordHash = require('password-hash');
-var uuid = require('node-uuid');
 var fs = require('fs');
 var path = require('path');
-var mongoose = require('mongoose');
+
+var passwordHash = require('password-hash');
+var uuid = require('node-uuid');
 var Promise = require('promise');
+
+var Mongoose = require('mongoose');
+var Schema = Mongoose.Schema;
 
 /* Modules */
 var Character = require('./Character.js');
@@ -15,13 +18,33 @@ var Character = require('./Character.js');
 var CharacterSchema = Character.schema;
 
 /* Creating the Account Schema */
-var AccountSchema = mongoose.Schema(
+var AccountSchema = Schema(
 {
-    name : String,
-    id : String,
-    email : String,
-    characters : [ CharacterSchema ],
-    password : String
+    name :
+    {
+        type : String,
+        required : true
+    },
+    id :
+    {
+        type : String,
+        required : true
+    },
+    email :
+    {
+        type : String,
+        required : true
+    },
+    characters : [
+    {
+        type : Schema.Types.ObjectId,
+        ref : 'Character'
+    } ],
+    password :
+    {
+        type : String,
+        required : true
+    },
 });
 AccountSchema.methods.addCharacter = function(character)
 {
@@ -36,7 +59,7 @@ AccountSchema.methods.verify = function(password)
     return passwordHash.verify(password, this.password);
 };
 
-var Account = mongoose.model('Account', AccountSchema);
+var Account = Mongoose.model('Account', AccountSchema);
 
 module.exports =
 {
@@ -99,7 +122,7 @@ module.exports =
     {
         return new Promise(function(resolve, reject)
         {
-            Account.findOne(query, function(error, result)
+            Account.findOne(query).populate('characters').exec(function(error, result)
             {
                 if (error)
                 {

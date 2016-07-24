@@ -1,25 +1,26 @@
 {
-  "name": "RPGMUD",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "nodemon ./bin/www"
-  },
-  "dependencies": {
-    "body-parser": "~1.15.1",
-    "connect-mongo": "*",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.2.0",
-    "ejs": "*",
-    "express": "~4.13.4",
-    "express-session": "*",
-    "html": "*",
-    "mongoose": "*",
-    "morgan": "~1.7.0",
-    "node-uuid": "*",
-    "password-hash": "*",
-    "promise": "^7.1.1",
-    "serve-favicon": "~2.3.0",
-    "sqlite3": "*"
-  }
+    "name": "RPGMUD",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "nodemon ./bin/www"
+    },
+    "dependencies": {
+        "body-parser": "~1.15.1",
+        "connect-mongo": "*",
+        "cookie-parser": "~1.4.3",
+        "debug": "~2.2.0",
+        "ejs": "*",
+        "express": "~4.13.4",
+        "express-session": "*",
+        "html": "*",
+        "mongoose": "*",
+        "morgan": "~1.7.0",
+        "node-uuid": "*",
+        "password-hash": "*",
+        "promise": "^7.1.1",
+        "serve-favicon": "~2.3.0",
+        "sqlite3": "*",
+        "consolidate": "0.14.1"
+    }
 }

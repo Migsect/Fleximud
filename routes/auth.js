@@ -15,7 +15,7 @@ router.get('/', function(req, res, next)
         res.redirect("/account");
     } else
     {
-        res.render("auth");
+        res.redirect("/");
     }
 });
 router.post('/login', function(req, res, next)
@@ -105,7 +105,7 @@ router.get('/logout', function(req, res, next)
     session.account = null;
 
     /* Redirecting back to authentication */
-    res.redirect("/auth");
+    res.redirect("/");
 });
 
 module.exports = router;

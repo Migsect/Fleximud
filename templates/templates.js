@@ -1,21 +1,24 @@
+"use strict";
+
 /**
  * Used to load and have a single reference to all templates.
  */
 
 var fs = require('fs');
-var ejs = require('ejs')
+var handlebars = require('handlebars');
 
-var loginBarTemplate = null;
-fs.readFile('loginBar.html', 'utf-8', function(error, data)
-{
-    if (error)
-    {
-        throw error;
-    }
-    loginBarTemplate = ejs.compile(data);
-});
+function compileTemplate(fileName) {
+    var file = fs.readFileSync(__dirname + "/" + fileName + ".html", 'utf-8');
+    var storeName = fileName.replace("/", "_");
+    console.log("Loading Template '" + fileName + "' and storing to '" + storeName + "'");
 
-module.exports =
-{
-    loginBarTemplate : loginBarTemplate
-};
+    module.exports[fileName.replace("/", "_")] = handlebars.compile(file);
+}
+
+/* TODO probably automate the template loading */
+compileTemplate('topBar');
+compileTemplate('characterCreation/attribute');
+compileTemplate('characterCreation/speciesItem');
+compileTemplate('characterCreation/speciesInfo');
+compileTemplate('characterCreation/sexItem');
+compileTemplate('characterCreation/sexInfo');

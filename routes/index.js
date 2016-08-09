@@ -5,36 +5,38 @@ var router = express.Router();
 
 var Accounts = require("../modules/model/Account");
 
-var templates = require('../templates/templates')
+var templates = require("../templates/templates");
+var topBar = templates("topBar");
 
 /* GET home page. */
-router.get('/', function(req, res, next)
+router.get('/', function(req, res)
 {
-    var session = req.session;
-    var accountId = session.account;
+  var session = req.session;
+  var accountId = session.account;
 
-    function render(account)
+  function render(account)
+  {
+    res.render('index',
     {
-        res.render('index',
-        {
-            topBar : templates.topBar(
-            {
-                character : null,
-                account : account
-            })
-        });
-    }
+      topBar: topBar(
+      {
+        character: null,
+        account: account
+      })
+    });
+  }
 
-    if (!accountId)
+  if (!accountId)
+  {
+    render(null);
+  }
+  else
+  {
+    Accounts.getAccountById(accountId).then(function(account)
     {
-        render(null);
-    } else
-    {
-        Accounts.getAccountById(accountId).then(function(account)
-        {
-            render(account);
-        });
-    }
+      render(account);
+    });
+  }
 
 });
 

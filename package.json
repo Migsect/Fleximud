@@ -1,26 +1,36 @@
 {
-    "name": "RPGMUD",
-    "version": "0.0.0",
-    "private": true,
-    "scripts": {
-        "start": "nodemon ./bin/www"
-    },
-    "dependencies": {
-        "body-parser": "~1.15.1",
-        "connect-mongo": "*",
-        "cookie-parser": "~1.4.3",
-        "debug": "~2.2.0",
-        "ejs": "*",
-        "express": "~4.13.4",
-        "express-session": "*",
-        "html": "*",
-        "mongoose": "*",
-        "morgan": "~1.7.0",
-        "node-uuid": "*",
-        "password-hash": "*",
-        "promise": "^7.1.1",
-        "serve-favicon": "~2.3.0",
-        "sqlite3": "*",
-        "consolidate": "0.14.1"
-    }
+  "name": "RPGMUD",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "gulp start-server"
+  },
+  "dependencies": {
+    "body-parser": "~1.15.1",
+    "connect-mongo": "*",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "ejs": "*",
+    "express": "~4.13.4",
+    "express-session": "*",
+    "html": "*",
+    "mongoose": "*",
+    "morgan": "~1.7.0",
+    "node-uuid": "*",
+    "password-hash": "*",
+    "promise": "^7.1.1",
+    "serve-favicon": "~2.3.0",
+    "sqlite3": "*",
+    "consolidate": "0.14.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jsbeautifier": "^2.0.3",
+    "gulp-jshint": "^2.0.1",
+    "gulp-nodemon": "^2.1.0",
+    "gulp-shell": "^0.5.2",
+    "gulp-spawn": "^0.3.0",
+    "jshint": "^2.9.2",
+    "require-dir": "^0.3.0"
+  }
 }

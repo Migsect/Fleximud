@@ -1,217 +1,205 @@
 [
-	{
-		"id": "human",
-		"name": 
-		{
-			"singular": "Human",
-			"plural": "Humans"
-		},
-		"attributes" : 
-		[
-			{"id": "default", "center": 1.0, "range": 0.1}
-		],
-		"sexes":
-		[
-			{
-				"id": "male",
-				"name": "male",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "processing", "center": 1.1, "range": 0.1},
-					{"id": "strength", "center": 1.1, "range": 0.1}
-				]
-			},
-			{
-				"id": "female",
-				"name": "female",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "instincts", "center": 1.1, "range": 0.1},
-					{"id": "charisma", "center": 1.1, "range": 0.1}
-				]
-			}
-		]
-	},
-	{
-		"id": "newman",
-		"name": 
-		{
-			"singular": "Newman",
-			"plural": "Newmans"
-		},
-		"attributes" : 
-		[
-			{"id": "default", "center": 1.0, "range": 0.1}
-		],
-		"sexes":
-		[
-			{
-				"id": "male",
-				"name": "male",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "processing", "center": 1.1, "range": 0.1},
-					{"id": "strength", "center": 1.1, "range": 0.1}
-				]
-			},
-			{
-				"id": "female",
-				"name": "female",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "instincts", "center": 1.1, "range": 0.1},
-					{"id": "charisma", "center": 1.1, "range": 0.1}
-				]
-			}
-		]
-	},
-	{
-		"id": "elf",
-		"name": 
-		{
-			"singular": "Elf",
-			"plural": "Elves"
-		},
-		"attributes" : 
-		[
-			{"id": "default", "center": 1.0, "range": 0.1}
-		],
-		"sexes":
-		[
-			{
-				"id": "male",
-				"name": "male",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "processing", "center": 1.1, "range": 0.1},
-					{"id": "strength", "center": 1.1, "range": 0.1}
-				]
-			},
-			{
-				"id": "female",
-				"name": "female",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "instincts", "center": 1.1, "range": 0.1},
-					{"id": "charisma", "center": 1.1, "range": 0.1}
-				]
-			}
-		]
-	},
-	{
-		"id": "dwarf",
-		"name": 
-		{
-			"singular": "Dwarf",
-			"plural": "Dwarves"
-		},
-		"attributes" : 
-		[
-			{"id": "default", "center": 1.0, "range": 0.1}
-		],
-		"sexes":
-		[
-			{
-				"id": "male",
-				"name": "male",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "processing", "center": 1.1, "range": 0.1},
-					{"id": "strength", "center": 1.1, "range": 0.1}
-				]
-			},
-			{
-				"id": "female",
-				"name": "female",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "instincts", "center": 1.1, "range": 0.1},
-					{"id": "charisma", "center": 1.1, "range": 0.1}
-				]
-			}
-		]
-	},
-	{
-		"id": "halfing",
-		"name": 
-		{
-			"singular": "Halfing",
-			"plural": "Halflings"
-		},
-		"attributes" : 
-		[
-			{"id": "default", "center": 1.0, "range": 0.1}
-		],
-		"sexes":
-		[
-			{
-				"id": "male",
-				"name": "male",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "processing", "center": 1.1, "range": 0.1},
-					{"id": "strength", "center": 1.1, "range": 0.1}
-				]
-			},
-			{
-				"id": "female",
-				"name": "female",
-				"height":
-				{
-					"center": 1,
-					"range": 0.05
-				},
-				"attributes" : 
-				[
-					{"id": "instincts", "center": 1.1, "range": 0.1},
-					{"id": "charisma", "center": 1.1, "range": 0.1}
-				]
-			}
-		]
-	}
-]
+{
+    "id": "human",
+    "name":
+    {
+        "singular": "Human",
+        "plural": "Humans"
+    },
+    "attributes": [
+    {
+        "id": "default",
+        "center": 1.0,
+        "range": 0.1
+    }],
+    "documentation": "humans.html",
+    "descriptors": [
+    {
+        "id": "eyeColor",
+        "name": "Eye Color",
+        "variations": ["green", "blue", "brown"]
+    },
+    {
+        "id": "skinColor",
+        "name": "Skin Color",
+        "variations": ["white", "light brown", "dark brown", "black"]
+    },
+    {
+        "id": "hairColor",
+        "name": "Hair Color",
+        "variations": ["blonde", "black", "red", "brown"]
+    },
+    {
+        "id": "bodyType",
+        "name": "Body Type",
+        "variations": ["ectomorph", "ecto-mesomorph", "mesomorph", "meso-endomorph", "endomorph"]
+    }],
+    "slots": [
+    {
+        "type": "head",
+        "value": 1
+    },
+    {
+        "type": "chest",
+        "value": 1
+    },
+    {
+        "type": "waist",
+        "value": 1
+    },
+    {
+        "type": "legs",
+        "value": 1
+    },
+    {
+        "type": "feet",
+        "value": 2
+    },
+    {
+        "type": "arms",
+        "value": 2
+    },
+    {
+        "type": "wrists",
+        "value": 2
+    },
+    {
+        "type": "hands",
+        "value": 2
+    },
+    {
+        "type": "back",
+        "value": 1
+    }],
+    "sexes": [
+    {
+        "id": "male",
+        "name": "male",
+        "attributes": [
+        {
+            "id": "processing",
+            "center": 1.1,
+            "range": 0.1
+        },
+        {
+            "id": "strength",
+            "center": 1.1,
+            "range": 0.1
+        }],
+        "descriptors": [
+        {
+            "id": "height",
+            "name": "Height",
+            "center": 1.1,
+            "range": 0.05
+        }]
+    },
+    {
+        "id": "female",
+        "name": "female",
+        "attributes": [
+        {
+            "id": "instincts",
+            "center": 1.1,
+            "range": 0.1
+        },
+        {
+            "id": "charisma",
+            "center": 1.1,
+            "range": 0.1
+        }],
+        "descriptors": [
+        {
+            "id": "height",
+            "name": "Height",
+            "center": 1,
+            "range": 0.05
+        }]
+    }]
+},
+{
+    "id": "newman",
+    "name":
+    {
+        "singular": "Newman",
+        "plural": "Newmans"
+    },
+    "attributes": [
+    {
+        "id": "default",
+        "center": 1.0,
+        "range": 0.1
+    }],
+    "descriptors": [
+    {
+        "id": "eye-color",
+        "variations": ["green", "blue", "brown"]
+    },
+    {
+        "id": "skin-color",
+        "variations": ["white", "light brown", "dark brown", "black"]
+    },
+    {
+        "id": "hair-color",
+        "variations": ["blonde", "black", "red", "brown"]
+    },
+    {
+        "id": "body-type",
+        "variations": ["ectomorph", "ecto-mesomorph", "mesomorph", "meso-endomorph", "endomorph"]
+    }],
+    "slots":
+    {
+        "head": 1,
+        "chest": 1,
+        "waist": 1,
+        "legs": 1,
+        "feet": 2,
+        "arms": 2,
+        "wrists": 2,
+        "hands": 2,
+        "back": 1
+    },
+    "sexes": [
+    {
+        "id": "male",
+        "name": "male",
+        "attributes": [
+        {
+            "id": "processing",
+            "center": 1.1,
+            "range": 0.1
+        },
+        {
+            "id": "strength",
+            "center": 1.1,
+            "range": 0.1
+        }],
+        "descriptors": [
+        {
+            "id": "height",
+            "center": 1.1,
+            "range": 0.05
+        }]
+    },
+    {
+        "id": "female",
+        "name": "female",
+        "attributes": [
+        {
+            "id": "instincts",
+            "center": 1.1,
+            "range": 0.1
+        },
+        {
+            "id": "charisma",
+            "center": 1.1,
+            "range": 0.1
+        }],
+        "descriptors": [
+        {
+            "id": "height",
+            "center": 1,
+            "range": 0.05
+        }]
+    }]
+}]

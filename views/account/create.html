@@ -21,28 +21,33 @@
             <div class="section column filling" background="grey_2">
                 <div class="box section" background="grey_3">
                     <div class="section compact header_3" background="green">Nominal Information</div>
-                    <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Full Name"></input>
-                    <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Short Name"></input>
+                    <div class="section compact" id="nominal-info" background="grey_1">
+                        <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Full Name"></input>
+                        <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Short Name"></input>
+                    </div>
                 </div>
                 <div class="box section" background="grey_3">
                     <div class="section compact header_3" background="green">Attribute Selection</div>
-                    <div class="section attribute-tree">
+                    <div class="section compact attribute-tree" background="grey_1">
                         {{{attributeTree}}}
                     </div>
                     <div class="section" background="grey_1">
-                        You may select up to {{attributeCount}} attributes from the above tree. <br><br>Note that there is no restriction on the tier of attribute you choose either. Attributes are generally normalized at the top tier(s) and as such it
-                        is normally unwise to pick the top tier.
+                        You may select up to {{attributeCount}} attributes from the above tree. <br><br>Note that there is no restriction on the tier of attribute you choose either. Attributes are generally normalized at the top tier(s) and as such it is normally unwise to pick the top tier.
                     </div>
                 </div>
             </div>
             <div class="section column filling" background="grey_2">
                 <div class="box section" background="grey_3">
-                    <div class="section header_3" background="green">Biology Selection</div>
-                    <div class="" id="species-sex-selection">
+                    <div class="section compact header_3" background="green">Biology Selection</div>
+                    <div class="section compact" id="species-sex-selections" background="grey_1">
                         {{{speciesItems}}}
-
                     </div>
-                    <div class="section" id="species-sex-info">
+                    <div class="section compact
+" id="species-sex-descriptors" background="grey_1" style="display:none;">
+                        <div class="section compact header_3" background="purple">Character Descriptors</div>
+                        {{{speciesDescriptors}}}
+                    </div>
+                    <div class="section compact" id="species-sex-infos" background="grey_1" style="display:none;">
                         {{{speciesInfos}}}
                     </div>
                 </div>

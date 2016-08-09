@@ -1,36 +1,38 @@
+"use strict";
+
 var Fuzzy = function(center, range)
 {
     this.center = center;
     this.range = range;
 };
 
-Fuzzy.prototype =
-{
-    stable : function()
+/* A fuzzy value, can return a random number near the center */
+Fuzzy.prototype = {
+    stable: function()
     {
         return this.center;
     },
-    fuzzy : function()
+    fuzzy: function()
     {
         return this.center * (2 * Math.random() * this.range - this.range + 1);
     },
-    add : function(other)
+    add: function(other)
     {
         return new Fuzzy(this.center + other.center, this.range + other.range);
     },
-    subtract : function(other)
+    subtract: function(other)
     {
         return this.add(other.negate());
     },
-    negate : function()
+    negate: function()
     {
         return new Fuzzy(-this.center, this.range);
     },
-    reverse : function()
+    reverse: function()
     {
         return new Fuzzy(this.center, 1 - this.range);
     },
-    mulitply : function(other)
+    mulitply: function(other)
     {
         var max = this.center * (1 + this.range) * other.center * (1 + other.range);
         var min = this.center * (1 - this.range) * other.center * (1 - other.range);
@@ -38,28 +40,64 @@ Fuzzy.prototype =
         var ran = mid - min;
         return new Fuzzy(mid, ran);
     },
-    scale : function(scalar)
+    scale: function(scalar)
     {
         return new Fuzzy(this.center * scalar, this.range);
     }
 };
 
-module.exports =
+/**
+ * Error thrown when an object is not the specified type
+ */
+var TypeCheckError = function(type, value)
 {
-    isNull : function(value)
+    Error.call(this, value + " was not found to be of type " + type);
+    this.value = value;
+    this.type = type;
+};
+var NullError = function(argument)
+{
+    Error.call(this, "Argument " + i + " was found null.");
+    this.argument = argument;
+}
+
+module.exports = {
+    isNull: function(value)
     {
-        return (value == null) || (value === undefined);
+        return (value === null) || (value === undefined);
     },
-    assertNotNull : function()
+    assertNotNull: function()
     {
         for (var i = 0; i < arguments.length; i++)
         {
             var argument = arguments[i];
             if (this.isNull(argument))
             {
-                throw new Error("Argument " + i + " was found null.");
+                throw new NullError(i);
             }
         }
     },
-    Fuzzy : Fuzzy
+    isString: function(value)
+    {
+        return (typeof value === 'string' || value instanceof String);
+    },
+    assertString: function(value)
+    {
+        if (!this.isString(value))
+        {
+            throw new TypeCheckError('string', value);
+        }
+    },
+    isNumber: function(value)
+    {
+        return (typeof value === 'number' || value instanceof Number)
+    },
+    assertNumber: function(value)
+    {
+        if (!this.isNumber(value))
+        {
+            throw new TypeCheckError('number', value);
+        }
+    },
+    Fuzzy: Fuzzy
 }

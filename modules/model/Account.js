@@ -12,7 +12,7 @@ var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
 /* Modules */
-var Character = require('./Character.js');
+var Character = require('./character//Character.js');
 
 /* Schemas */
 var CharacterSchema = Character.schema;

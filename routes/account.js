@@ -8,128 +8,109 @@ var templates = require('../templates/templates');
 var Accounts = require("../modules/model/Account");
 var Util = require('../modules/Util');
 
-var Species = require("../modules/model/Species");
-var Attribute = require("../modules/model/Attribute");
-
-/**
- * Compiled the HTML for the attribute tree
- */
-function getAttributeTree(type) {
-    var name = type.name;
-    /**
-     * Getting the HTML for all the children
-     */
-    var children = [];
-    if (type.children) {
-        type.children.forEach(function(child) {
-            children.push(getAttributeTree(child));
-        });
-    }
-
-    var compiled = templates.characterCreation_attribute({
-        name: name,
-        children: children.join(''),
-        color: type.color ? type.color : "#333333"
-    });
-    return compiled;
-}
+var Species = require("../modules/model/character/Classification/Species");
+var Attribute = require("../modules/model/character/Attribute");
 
 /* Main page get */
-router.get('/', function(req, res) {
-    var session = req.session;
-    var accountId = session.account;
-    Accounts.getAccountById(accountId).then(function(account) {
-        if (Util.isNull(account)) {
-            res.redirect("/");
-        }
+router.get('/', function(req, res)
+{
+  var session = req.session;
+  var accountId = session.account;
+  Accounts.getAccountById(accountId).then(function(account)
+  {
+    if (Util.isNull(account))
+    {
+      res.redirect("/");
+    }
 
-        res.render("account/account", {
-            account: account,
-            topBar: templates.topBar({
-                account: account,
-                character: null
-            })
-        });
+    res.render("account/account",
+    {
+      account: account,
+      topBar: templates("topBar")(
+      {
+        account: account,
+        character: null
+      })
     });
+  });
 
 });
 
 /* Character Creation Page */
-router.get('/create', function(req, res) {
-    var session = req.session;
-    var accountId = session.account;
-    Accounts.getAccountById(accountId).then(function(account) {
-        if (Util.isNull(account)) {
-            res.redirect("/");
-        }
+router.get('/create', function(req, res)
+{
 
-        var speciesItems = [];
-        var speciesInfos = [];
-        Species.list.forEach(function(species) {
-            var sexItems = [];
-            var sexInfos = [];
-            species.getSexes().forEach(function(sex) {
-                var sexItem = templates.characterCreation_sexItem({
-                    sex: sex
-                });
-                var sexInfo = templates.characterCreation_sexInfo({
-                    sex: sex
-                });
-                sexItems.push(sexItem);
-                sexInfos.push(sexInfo);
-            });
+  var session = req.session;
+  var accountId = session.account;
+  Accounts.getAccountById(accountId).then(function(account)
+  {
+    if (Util.isNull(account))
+    {
+      res.redirect("/");
+    }
 
-            var speciesItem = templates.characterCreation_speciesItem({
-                species: species,
-                sexItems: sexItems.join('')
-            });
-            var speciesInfo = templates.characterCreation_speciesInfo({
-                species: species,
-                sexInfos: sexInfos.join('')
-            });
-            speciesItems.push(speciesItem);
-            speciesInfos.push(speciesInfo);
+    var speciesItems = Species.list.map(function(species)
+    {
+      return species.getItemHTML();
+    }).join("");
+    var speciesInfos = Species.list.map(function(species)
+    {
+      return species.getInfoHTML();
+    }).join("");
+    var speciesDescriptors = Species.list.map(function(species)
+    {
+      return species.getDescriptorHTML();
+    }).join("");
 
-        });
+    console.log("rendering page now...");
 
-        res.render("account/create", {
-            account: account,
-            topBar: templates.topBar({
-                account: account,
-                character: null
-            }),
-            attributeTree: getAttributeTree(Attribute.types.top),
-            attributeCount: 5,
-            speciesItems: speciesItems.join(''),
-            speciesInfo: speciesInfos.join('')
-        });
-    })
+    res.render("account/create",
+    {
+      account: account,
+      topBar: templates("topBar")(
+      {
+        account: account,
+        character: null
+      }),
+      attributeTree: Attribute.types.top.getHTML(),
+      attributeCount: 5,
+      speciesItems: speciesItems,
+      speciesInfos: speciesInfos,
+      speciesDescriptors: speciesDescriptors
+    });
+  });
 });
 
 /* Admin Control Panel Page */
-router.get('/admin', function(req, res) {
-    console.log("Going into admin");
-    var session = req.session;
-    var accountId = session.account;
-    Accounts.getAccountById(accountId).then(function(account) {
-        console.log("Inside Promise");
-        if (Util.isNull(account)) {
-            res.redirect("/auth");
-        }
+router.get('/admin', function(req, res)
+{
+  console.log("Going into admin");
+  var session = req.session;
+  var accountId = session.account;
+  Accounts.getAccountById(accountId).then(function(account)
+  {
+    console.log("Inside Promise");
+    if (Util.isNull(account))
+    {
+      res.redirect("/auth");
+    }
 
-        if (account.name != 'radmin') {
-            res.redirect("/account");
-        }
+    if (account.name != 'radmin')
+    {
+      res.redirect("/account");
+    }
 
-        Accounts.getAccounts().then(function(accounts) {
-            console.log("Got all accounts!", accounts);
-            res.render("account/admin", {
-                accounts: accounts
-            });
-            console.log("Leaving accounts");
-        });
-        console.log("Ending Promise");
+    Accounts.getAccounts().then(function(accounts)
+    {
+      console.log("Got all accounts!", accounts);
+      res.render("account/admin",
+      {
+        accounts: accounts
+      });
+      console.log("Leaving accounts");
     });
+    console.log("Ending Promise");
+  });
 
 });
 

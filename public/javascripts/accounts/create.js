@@ -1,19 +1,31 @@
 "use strict";
 $(document).ready(function()
 {
+
+  var selectedAttributes = [];
+
   /* Attribute selecting */
   $("div.attribute-family").click(function(event)
   {
     var updateSelected = function(element)
     {
+      var clickedAttribute = element.attr("data-attribute");
+      console.log(clickedAttribute, "clicked");
       if (element.hasClass("selected"))
       {
         element.removeClass("selected");
+        selectedAttributes = selectedAttributes.filter(function(attribute)
+        {
+          return attribute != clickedAttribute;
+        });
       }
       else
       {
+
+        selectedAttributes.push(clickedAttribute);
         element.addClass("selected");
       }
+      console.log(selectedAttributes);
     };
     event.stopPropagation();
     var clicked = $(event.target);
@@ -88,7 +100,6 @@ $(document).ready(function()
 
   $(".descriptor-select").change(function()
   {
-    console.log("It changed")
     var element = $(this);
     element.parent().attr("data-value", element.val());
   });

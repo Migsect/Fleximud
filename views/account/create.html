@@ -1,59 +1,63 @@
 <html>
 
 <head>
-    <title>Twisted MUD Account</title>
-    <script type='text/javascript' src="../javascripts/lib/jquery-3.0.0.min.js"></script>
-    <script src="../javascripts/auth.js"></script>
-    <script src="../javascripts/accounts/create.js"></script>
+  <title>Twisted MUD Account</title>
+  <script type='text/javascript' src="../javascripts/lib/jquery-3.0.0.min.js"></script>
 
-    <link rel="stylesheet" href="../stylesheets/global.css" type="text/css" />
-    <link rel="stylesheet" href="../stylesheets/auth.css" type="text/css" />
-    <link rel="stylesheet" href="../stylesheets/account.css" type="text/css" />
+  <link rel="stylesheet" href="../stylesheets/global.css" type="text/css" />
+  <link rel="stylesheet" href="../stylesheets/auth.css" type="text/css" />
+  <link rel="stylesheet" href="../stylesheets/account.css" type="text/css" />
 </head>
 
 <body>
+  <div class="view column" background="grey_1">
     {{{topBar}}}
-    <div class="view column" background="grey_1">
-        <div class="section header_2" background="purple">
-            Create a New Character
-        </div>
-        <div class="row">
-            <div class="section column filling" background="grey_2">
-                <div class="box section" background="grey_3">
-                    <div class="section compact header_3" background="green">Nominal Information</div>
-                    <div class="section compact" id="nominal-info" background="grey_1">
-                        <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Full Name"></input>
-                        <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Short Name"></input>
-                    </div>
-                </div>
-                <div class="box section" background="grey_3">
-                    <div class="section compact header_3" background="green">Attribute Selection</div>
-                    <div class="section compact attribute-tree" background="grey_1">
-                        {{{attributeTree}}}
-                    </div>
-                    <div class="section" background="grey_1">
-                        You may select up to {{attributeCount}} attributes from the above tree. <br><br>Note that there is no restriction on the tier of attribute you choose either. Attributes are generally normalized at the top tier(s) and as such it is normally unwise to pick the top tier.
-                    </div>
-                </div>
-            </div>
-            <div class="section column filling" background="grey_2">
-                <div class="box section" background="grey_3">
-                    <div class="section compact header_3" background="green">Biology Selection</div>
-                    <div class="section compact" id="species-sex-selections" background="grey_1">
-                        {{{speciesItems}}}
-                    </div>
-                    <div class="section compact
-" id="species-sex-descriptors" background="grey_1" style="display:none;">
-                        <div class="section compact header_3" background="purple">Character Descriptors</div>
-                        {{{speciesDescriptors}}}
-                    </div>
-                    <div class="section compact" id="species-sex-infos" background="grey_1" style="display:none;">
-                        {{{speciesInfos}}}
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="section header_2" background="purple">
+      Create a New Character
     </div>
+    <div class="row fill_h">
+      <div class="section column fill_w" background="grey_2">
+        <div class="box section" background="grey_3">
+          <div class="section compact header_3" background="green">Nominal Information</div>
+          <div class="section compact" id="nominal-info" background="grey_1">
+            <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Full Name"></input>
+            <input class="rounded fill_w" type="text" id="loginEmail" placeholder="Character Short Name"></input>
+          </div>
+        </div>
+        <div class="box section" background="grey_3">
+          <div class="section compact header_3" background="green">Attribute Selection</div>
+          <div class="section compact attribute-tree" background="grey_1">
+            {{{attributeTree}}}
+          </div>
+          <div class="section" background="grey_1">
+            You may select up to {{attributeCount}} attributes from the above tree. <br><br>Note that there is no restriction on the tier of attribute you choose either. Attributes are generally normalized at the top tier(s) and as such it is normally unwise to pick the top tier.
+          </div>
+        </div>
+      </div>
+      <div class="section column fill_w" background="grey_2">
+        <div class="box section" background="grey_3">
+          <div class="section compact header_3" background="green">Biology Selection</div>
+          <div class="section compact" id="species-sex-selections" background="grey_1">
+            {{{speciesItems}}}
+          </div>
+          <div class="section compact
+" id="species-sex-descriptors" background="grey_1" style="display:none;">
+            <div class="section compact header_3" background="purple">Character Descriptors</div>
+            {{{speciesDescriptors}}}
+          </div>
+          <div class="section compact" id="species-sex-infos" background="grey_1" style="display:none;">
+            {{{speciesInfos}}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section box header_3 clickable" background="blue">
+      Create Character
+    </div>
+  </div>
+  <!-- loading the neccessary javascripts -->
+  <script src="javascripts/auth.js"></script>
+  <script src="../javascripts/accounts/create.js"></script>
 </body>
 
 </html>

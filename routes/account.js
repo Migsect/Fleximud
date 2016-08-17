@@ -9,7 +9,7 @@ var Accounts = require("../modules/model/Account");
 var Util = require('../modules/Util');
 
 var Species = require("../modules/model/character/Classification/Species");
-var Attribute = require("../modules/model/character/Attribute");
+var Attributes = require("../modules/model/character/AttributeTypes");
 
 /* Main page get */
 router.get('/', function(req, res)
@@ -62,8 +62,6 @@ router.get('/create', function(req, res)
       return species.getDescriptorHTML();
     }).join("");
 
-    console.log("rendering page now...");
-
     res.render("account/create",
     {
       account: account,
@@ -72,7 +70,7 @@ router.get('/create', function(req, res)
         account: account,
         character: null
       }),
-      attributeTree: Attribute.types.top.getHTML(),
+      attributeTree: Attributes.top.getHTML(),
       attributeCount: 5,
       speciesItems: speciesItems,
       speciesInfos: speciesInfos,

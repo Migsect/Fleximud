@@ -1,73 +1,73 @@
 <div class="row" background="grey_3">
-    <div class="row sectioned" style="justify-content:flex-start;">
-        {{#if account}}
-        <a href="/">
-            <div class="section seperated" background="blue">
-                Home
-            </div>
-        </a>
-        {{#if character}}
-        <div class="section" background="green">
-            Character Name
-        </div>
-        {{/if}}
-        <div class="section clickable" background="blue">
-            <div>
-                Character Select
-            </div>
-            <div class="column dropdown">
-                <!-- TODO make this generated as opposed to static test links -->
-                <a href="http://www.google.com">
-                    <div class="section clickable" background="blue">Google.com</div>
-                </a>
-                <a href="http://www.yahoo.com">
-                    <div class="section clickable" background="blue">Yahoo.com</div>
-                </a>
-            </div>
-        </div>
-        {{else}} {{/if}}
+  <div class="row sectioned" style="justify-content:flex-start;">
+    {{#if account}}
+    <a href="/">
+      <div class="section seperated" background="blue">
+        Home
+      </div>
+    </a>
+    {{#if character}}
+    <div class="section" background="green">
+      Character Name
     </div>
-    <div class="row sectioned" style="justify-content:flex-end;">
-        {{#if account}}
-        <a href='/account'>
-            <div class="section clickable seperated" background="green">
-                {{account.name}}
-            </div>
+    {{/if}}
+    <div class="section clickable" background="blue">
+      <div>
+        Character Select
+      </div>
+      <div class="column dropdown">
+        <!-- TODO make this generated as opposed to static test links -->
+        <a href="http://www.google.com">
+          <div class="section clickable" background="blue">Google.com</div>
         </a>
-        <a href='/auth/logout'>
-            <div class="section clickable" background="blue">
-                Logout
-            </div>
+        <a href="http://www.yahoo.com">
+          <div class="section clickable" background="blue">Yahoo.com</div>
         </a>
-        {{else}}
-        <div class="section clickable" id="toggleCreateAccount" background="blue">
-            Create Account
-        </div>
-        <div class="section clickable" id="toggleLogin" background="blue">
-            Login
-        </div>
-        {{/if}}
+      </div>
     </div>
+    {{else}} {{/if}}
+  </div>
+  <div class="row sectioned" style="justify-content:flex-end;">
+    {{#if account}}
+    <a href='/account'>
+      <div class="section clickable seperated" background="green">
+        {{account.name}}
+      </div>
+    </a>
+    <a href='/auth/logout'>
+      <div class="section clickable" background="blue">
+        Logout
+      </div>
+    </a>
+    {{else}}
+    <div class="section clickable" id="toggleCreateAccount" background="blue">
+      Create Account
+    </div>
+    <div class="section clickable" id="toggleLogin" background="blue">
+      Login
+    </div>
+    {{/if}}
+  </div>
 </div>
 <!-- Window to show when logging into an account -->
-<div class="section box column" id="loginWindow" background='grey_3'>
-    <div class="section" background='grey_2'>Login to Existing Account</div>
-    <div class="input column" id="loginInputs">
-        <input class="rounded" type="text" id="loginEmail" placeholder="Email"></input>
-        <input class="rounded" type="password" id="loginPass" placeholder="Password"></input>
-    </div>
-    <div class="clickable section" background='blue' id="loginAccount">Login</div>
-    <div class="text message" style="display:none;" id="loginMessage"></div>
+<div class="section box column hidden" id="loginWindow" background='grey_3'>
+  <div class="section" background='grey_2'>Login to Existing Account</div>
+  <div class="input column" id="loginInputs">
+    <input class="rounded" type="text" id="loginEmail" placeholder="Email"></input>
+    <input class="rounded" type="password" id="loginPass" placeholder="Password"></input>
+  </div>
+  <div class="clickable section" background='blue' id="loginAccount">Login</div>
+  <div class="text message hidden" id="loginMessage"></div>
 </div>
 <!-- Window to show when creating an account -->
-<div class="section box column" id="createAccountWindow" background='grey_3'>
-    <div class="section" background='grey_2'>Create New Account</div>
-    <div class="input column" id="createAccountInputs">
-        <input class="rounded" type="text" id="createName" placeholder="Account Name"></input>
-        <input class="rounded" type="text" id="createEmail" placeholder="Email"></input>
-        <input class="rounded" type="password" id="createPass" placeholder="Password"></input>
-        <input class="rounded" type="password" id="createPassRedo" placeholder="Confirm Password"></input>
-    </div>
-    <div class="clickable section" background='blue' id="createAccount">Create Account</div>
-    <div class="text message" style="display:none;" id="createMessage"></div>
+<div class="section box column hidden" id="createAccountWindow" background='grey_3'>
+  <div class="section" background='grey_2'>Create New Account</div>
+  <div class="input column" id="createAccountInputs">
+    <input class="rounded" type="text" id="createName" placeholder="Account Name"></input>
+    <input class="rounded" type="text" id="createEmail" placeholder="Email"></input>
+    <input class="rounded" type="password" id="createPass" placeholder="Password"></input>
+    <input class="rounded" type="password" id="createPassRedo" placeholder="Confirm Password"></input>
+  </div>
+  <div class="clickable section" background='blue' id="createAccount">Create Account</div>
+  <div class="text message hidden" id="createMessage"></div>
 </div>

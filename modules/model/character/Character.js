@@ -3,38 +3,41 @@
 var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
-var Attribute = require('./Attribute.js');
-var AttributeTreeSchema = Attribute.schema;
-var AttributeTypeSchema = Attribute.typeSchema;
+var AttributesSchema = require("./DataModels/Attributes");var SpeciesSexSchema = require("./DataModels/SpeciesSex");
 
-var Species = require("./Classification/Species.js");
+var DescriptorsSchema = require("./DataModels/Descriptors");
 
+/**
+ * The character schema is represented by a character id and the character's data.
+ * The character data can be anything ranging from their name to an attribute.*Because the character model may change,
+ we make use of a conglomerated data attribute 
+ * to store a character's varied data.
+ */
 var CharacterSchema = Schema(
 {
-  name:
-  {
-    type: String,
-    required: true
-  },
   id:
   {
     type: String,
     required: true
   },
-  attributes: AttributeTreeSchema,
-  species:
+  attributes:
   {
-    type: String,
+    type: AttributesSchema,
     required: true
   },
-  size:
+  speciesSex:
   {
-    type: Number,
-    "default": 1
+    type: SpeciesSexSchema,
+    require: true
+  },
+  descriptors:
+  {
+    type: DescriptorsSchema,
+    require: true
   }
-}); // Hello
 
-var Character = Mongoose.model('Character', CharacterSchema);
+});
+var Character = Mongoose.model("Character", CharacterSchema);
 
 module.exports = {
   schema: CharacterSchema,

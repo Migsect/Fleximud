@@ -1,16 +1,13 @@
-#loginWindow
-{
-	display: none;
-	position: absolute;
-	right: 0px;
+#loginWindow {
+  position: absolute;
+  right: 0px;
 }
-#createAccountWindow
-{
-	display: none;
-	position: absolute;
-	right: 0px;
+
+#createAccountWindow {
+  position: absolute;
+  right: 0px;
 }
-.error
-{
-	background-color: #ffb3b3;
+
+.error {
+  background-color: #ffb3b3;
 }

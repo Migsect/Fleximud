@@ -55,7 +55,7 @@ var onSpeciesSexClick = function(event)
   {
     return
   }
-  var parent = clicked.parentNode;
+  var parent = clicked.parentNode.parentNode;
   var parentChildren = Array.prototype.slice.call(parent.parentNode.children, 0);
   console.log(parentChildren)
   var parentSiblings = parentChildren.filter(function(item)
@@ -69,7 +69,7 @@ var onSpeciesSexClick = function(event)
     /* Removing from the node */
     item.classList.remove("selected");
     /* removing selected from all elements in the parent's siblings*/
-    Array.prototype.slice.call(parent.querySelectorAll("div.species-item-sexes div.classification-item"), 0).forEach(function(item)
+    Array.prototype.slice.call(item.querySelectorAll("div.species-item-sexes div.classification-item"), 0).forEach(function(item)
     {
       item.classList.remove("selected");
     });
@@ -85,13 +85,18 @@ var onSpeciesSexClick = function(event)
 
   /* Unhiding the descriptors*/
   var descritporsId = "species-sex-descriptors-" + speciesId + "-" + sexId;
-  $("div.species-sex-descriptors").hide();
-  $("#" + descritporsId).show();
+  Array.prototype.slice.call(document.querySelectorAll("div.species-sex-descriptors"), 0).forEach(function(element)
+  {
+    element.classList.add("hidden");
+  });
+  document.getElementById(descritporsId).classList.remove("hidden");
 
   /* Unhiding the spcies-sex info */
-  var infoId = "classification-info-" + speciesId;
-  $("div.classification-info").hide();
-  $("#" + infoId).show();
+  Array.prototype.slice.call(document.querySelectorAll("div.classification-info"), 0).forEach(function(element)
+  {
+    element.classList.add("hidden");
+  });
+  document.getElementById("classification-info-" + speciesId).classList.remove("hidden");
 
 };
 var $speciesSexes = Array.prototype.slice.call(document.querySelectorAll("div.species-item-sexes div.classification-item"), 0);
@@ -101,32 +106,43 @@ $speciesSexes.forEach(function(item)
 });
 
 /* Descriptor interactions */
-$(".descriptor-slider").change(function()
+var onSliderChange = function(event)
 {
-  var element = $(this);
-  console.log(element.parent());
-  var siblings = element.siblings(".descriptor-number");
-  siblings.val(element.val());
-  element.parent().attr("data-value", element.val());
-});
-$(".descriptor-number").change(function()
+  var element = this;
+  element.parentNode.querySelector(".descriptor-number").value = element.value;
+  element.parentNode.dataset.value = element.value;
+};
+Array.prototype.slice.call(document.querySelectorAll(".descriptor-slider"), 0).forEach(function(element)
 {
-  var element = $(this);
-  var siblings = element.siblings(".descriptor-slider");
-  if (element.val() > element.attr("max"))
-  {
-    element.val(element.attr("max"));
-  }
-  if (element.val() < element.attr("min"))
-  {
-    element.val(element.attr("min"));
-  }
-  siblings.val(element.val());
-  element.parent().attr("data-value", element.val());
+  element.addEventListener("change", onSliderChange);
 });
 
-$(".descriptor-select").change(function()
+var onNumberChange = function(event)
 {
-  var element = $(this);
-  element.parent().attr("data-value", element.val());
+  var element = this;
+  if (element.value > element.max)
+  {
+    element.value = element.max;
+  }
+  if (element.value < element.min)
+  {
+    element.value = element.min;
+  }
+  element.parentNode.querySelector(".descriptor-slider").value = element.value;
+  element.parentNode.dataset.value = element.value;
+
+}
+Array.prototype.slice.call(document.querySelectorAll(".descriptor-number"), 0).forEach(function(element)
+{
+  element.addEventListener("change", onNumberChange);
+});
+
+var onDescriptorSelectChange = function(event)
+{
+  var element = this;
+  element.parentNode.dataset.value = element.value;
+}
+Array.prototype.slice.call(document.querySelectorAll(".descriptor-select"), 0).forEach(function(element)
+{
+  element.addEventListener("change", onDescriptorSelectChange);
 });

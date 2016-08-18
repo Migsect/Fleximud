@@ -123,14 +123,17 @@ var sendLogin = function()
 
   // request.send();
 }
-
-document.querySelector('#loginInputs input').addEventListener("keydown", function(e)
+Array.prototype.slice.call(document.querySelectorAll("#loginInputs input"), 0).forEach(function(element)
 {
-  if (e.keyCode == 13)
+  element.addEventListener("keydown", function(e)
   {
-    sendLogin();
-  };
-});
+    if (e.keyCode == 13)
+    {
+      sendLogin();
+    };
+  });
+})
+Array.prototype.slicedocument.querySelector("#loginInputs input").
 document.getElementById("loginAccount").addEventListener("click", function()
 {
   sendLogin();
@@ -258,12 +261,15 @@ var sendCreateAccount = function()
   // request.send();
 }
 
-document.querySelector("#createAccountInputs input").addEventListener("keydown", function(e)
+Array.prototype.slice.call(document.querySelectorAll("#loginInputs input"), 0).forEach(function(element)
 {
-  if (e.keyCode == 13)
+  element.addEventListener("keydown", function(e)
   {
-    sendCreateAccount()
-  }
+    if (e.keyCode == 13)
+    {
+      sendCreateAccount()
+    }
+  });
 });
 document.getElementById("createAccount").addEventListener("click", function()
 {

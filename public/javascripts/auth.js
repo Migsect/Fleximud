@@ -45,11 +45,10 @@ if ($toggleLogin)
   });
 }
 
-document.querySelector('#loginInputs input').addEventListener("keypress", function(e)
-{
-  if (e.keyCode == 13) document.getElementById("loginAccount").click();
-});
-document.getElementById("loginAccount").addEventListener("click", function()
+/**
+ * Sends a login to the server based on the current info in the inputs.
+ */
+var sendLogin = function()
 {
   var $message = document.getElementById("loginMessage");
   $message.innerHTML = "";
@@ -122,16 +121,24 @@ document.getElementById("loginAccount").addEventListener("click", function()
     // Connection error
   };
 
-  request.send();
+  // request.send();
+}
 
-});
-document.querySelector("#createAccountInputs input").addEventListener("keypress", function(e)
+document.querySelector('#loginInputs input').addEventListener("keydown", function(e)
 {
-  if (e.keyCode == 13) document.querySelector("#createAccount").click();
+  if (e.keyCode == 13)
+  {
+    sendLogin();
+  };
 });
-document.getElementById("createAccount").addEventListener("click", function()
+document.getElementById("loginAccount").addEventListener("click", function()
 {
-  var $message = document.selectElementById("createMessage");
+  sendLogin();
+});
+
+var sendCreateAccount = function()
+{
+  var $message = document.getElementById("createMessage");
   $message.innerHTML = "";
   $message.classList.add("hidden");
 
@@ -248,5 +255,17 @@ document.getElementById("createAccount").addEventListener("click", function()
     // Connection error
   };
 
-  request.send();
+  // request.send();
+}
+
+document.querySelector("#createAccountInputs input").addEventListener("keydown", function(e)
+{
+  if (e.keyCode == 13)
+  {
+    sendCreateAccount()
+  }
+});
+document.getElementById("createAccount").addEventListener("click", function()
+{
+  sendCreateAccount();
 });

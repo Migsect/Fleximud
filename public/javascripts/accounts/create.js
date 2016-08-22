@@ -1,6 +1,8 @@
 "use strict";
 
 var selectedAttributes = [];
+var speciesId = "";
+var sexId = "";
 
 var onAttributeClick = function(event)
 {
@@ -37,31 +39,33 @@ var onAttributeClick = function(event)
     updateSelected(clicked.parentElement);
   }
 };
+
 /* Attribute selecting */
 var $attributes = Array.prototype.slice.call(document.querySelectorAll("div.attribute-family"), 0);
 $attributes.forEach(function(item)
 {
-  item.addEventListener("click", onAttributeClick)
+  item.addEventListener("click", onAttributeClick);
 });
 
-var onSpeciesSexClick = function(event)
+/* When a species sex is clicked */
+var onSpeciesSexClick = function()
 {
   /* Unhiding the panels for info and descriptors*/
   document.getElementById("species-sex-descriptors").classList.remove("hidden");
   document.getElementById("species-sex-infos").classList.remove("hidden");
 
-  var clicked = this
+  var clicked = this;
   if (clicked.classList.contains("selected"))
   {
-    return
+    return;
   }
   var parent = clicked.parentNode.parentNode;
   var parentChildren = Array.prototype.slice.call(parent.parentNode.children, 0);
-  console.log(parentChildren)
-  var parentSiblings = parentChildren.filter(function(item)
-  {
-    return item === parent;
-  });
+  console.log(parentChildren);
+  // var parentSiblings = parentChildren.filter(function(item)
+  // {
+  //   return item === parent;
+  // });
 
   /* Going through all the children of that area and removing selected */
   parentChildren.forEach(function(item)
@@ -78,8 +82,8 @@ var onSpeciesSexClick = function(event)
   parent.classList.add("selected");
   clicked.classList.add("selected");
 
-  var speciesId = parent.dataset.classification;
-  var sexId = clicked.dataset.classification;
+  speciesId = parent.dataset.classification;
+  sexId = clicked.dataset.classification;
   console.log("SpeciesId:", speciesId);
   console.log("SexId:", sexId);
 
@@ -102,10 +106,10 @@ var onSpeciesSexClick = function(event)
 var $speciesSexes = Array.prototype.slice.call(document.querySelectorAll("div.species-item-sexes div.classification-item"), 0);
 $speciesSexes.forEach(function(item)
 {
-  item.addEventListener("click", onSpeciesSexClick)
+  item.addEventListener("click", onSpeciesSexClick);
 });
 
-/* Descriptor interactions */
+/* ==== ==== Descriptor interactions Start ==== ==== */
 var onSliderChange = function(event)
 {
   var element = this;
@@ -131,7 +135,7 @@ var onNumberChange = function(event)
   element.parentNode.querySelector(".descriptor-slider").value = element.value;
   element.parentNode.dataset.value = element.value;
 
-}
+};
 Array.prototype.slice.call(document.querySelectorAll(".descriptor-number"), 0).forEach(function(element)
 {
   element.addEventListener("change", onNumberChange);
@@ -141,8 +145,54 @@ var onDescriptorSelectChange = function(event)
 {
   var element = this;
   element.parentNode.dataset.value = element.value;
-}
+};
 Array.prototype.slice.call(document.querySelectorAll(".descriptor-select"), 0).forEach(function(element)
 {
   element.addEventListener("change", onDescriptorSelectChange);
+});
+
+/* ==== ==== Descriptors Interactions End ==== ==== */
+
+var $createCharacterButton = document.getElementById("createCharacterButton");
+$createCharacterButton.addEventListener("click", function(event)
+{
+  var $characterFullName = document.getElementById("characterFullName");
+  var $characterShortName = document.getElementById("characterShortName");
+
+  var request = new XMLHttpRequest();
+  request.open("POST", "/account/createCharacter", true);
+  request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8; charset=UTF-8');
+  request.send(
+    JSON.stringify(
+    {
+      fullName: $characterFullName.value,
+      shortName: $characterShortName.value,
+      attributes: selectedAttributes,
+      species: speciesId,
+      sex: sexId
+    }));
+
+  request.onload = function()
+  {
+
+    console.log("Status :", request.status);
+    if (request.status >= 200 && request.status < 400)
+    {
+      var message = request.responseText;
+      console.log("Response :", message);
+      if (message == "badInfo")
+      {
+        return;
+      }
+      /* Redirect to the account page if we were successful */
+    }
+    else
+    {
+      // error
+    }
+  };
+  request.onerror = function()
+  {
+    // Connection error
+  };
 });

@@ -1,114 +1,114 @@
 "use strict";
 
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
-var templates = require('../templates/templates');
+var templates = require("../templates/templates");
+
+var accountGrabber = require(process.cwd() + "/modules/middleware/accountGrabber");
 
 var Accounts = require("../modules/model/Account");
-var Util = require('../modules/Util');
+var Util = require("../modules/Util");
 
 var Species = require("../modules/model/character/Classification/Species");
 var Attributes = require("../modules/model/character/AttributeTypes");
 
 /* Main page get */
-router.get('/', function(req, res)
+router.get("/", accountGrabber, function(request, response)
 {
-  var session = req.session;
-  var accountId = session.account;
-  Accounts.getAccountById(accountId).then(function(account)
-  {
-    if (Util.isNull(account))
-    {
-      res.redirect("/");
-    }
+  var account = request.account;
 
-    res.render("account/account",
+  // var session = req.session;
+  // var accountId = session.account;
+  // Accounts.getAccountById(accountId).then(function(account)
+  // {
+  //   if (Util.isNull(account))
+  //   {
+  //     res.redirect("/");
+  //   }
+
+  response.render("account/account",
+  {
+    account: account,
+    topBar: templates("topBar")(
     {
       account: account,
-      topBar: templates("topBar")(
-      {
-        account: account,
-        character: null
-      })
-    });
+      character: null
+    })
   });
+  // });
 
 });
 
 /* Character Creation Page */
-router.get('/create', function(req, res)
+router.get("/create", accountGrabber, function(request, response)
 {
 
-  var session = req.session;
-  var accountId = session.account;
-  Accounts.getAccountById(accountId).then(function(account)
+  var account = request.account;
+
+  var speciesItems = Species.list.map(function(species)
   {
-    if (Util.isNull(account))
-    {
-      res.redirect("/");
-    }
+    return species.getItemHTML();
+  }).join("");
+  var speciesInfos = Species.list.map(function(species)
+  {
+    return species.getInfoHTML();
+  }).join("");
+  var speciesDescriptors = Species.list.map(function(species)
+  {
+    return species.getDescriptorHTML();
+  }).join("");
 
-    var speciesItems = Species.list.map(function(species)
-    {
-      return species.getItemHTML();
-    }).join("");
-    var speciesInfos = Species.list.map(function(species)
-    {
-      return species.getInfoHTML();
-    }).join("");
-    var speciesDescriptors = Species.list.map(function(species)
-    {
-      return species.getDescriptorHTML();
-    }).join("");
-
-    res.render("account/create",
+  response.render("account/create",
+  {
+    account: account,
+    topBar: templates("topBar")(
     {
       account: account,
-      topBar: templates("topBar")(
-      {
-        account: account,
-        character: null
-      }),
-      attributeTree: Attributes.top.getHTML(),
-      attributeCount: 5,
-      speciesItems: speciesItems,
-      speciesInfos: speciesInfos,
-      speciesDescriptors: speciesDescriptors
-    });
+      character: null
+    }),
+    attributeTree: Attributes.top.getHTML(),
+    attributeCount: 5,
+    speciesItems: speciesItems,
+    speciesInfos: speciesInfos,
+    speciesDescriptors: speciesDescriptors
   });
+
+});
+/* Creates a character */
+router.post("/createCharacter", accountGrabber, function(request, response)
+{
+  var account = request.account;
+  var data = request.body;
+  console.log("create character data:", data);
+  response.status(200).send("It's kay: " + JSON.stringify(data));
 });
 
 /* Admin Control Panel Page */
-router.get('/admin', function(req, res)
+router.get("/admin", accountGrabber, function(request, response)
 {
-  console.log("Going into admin");
-  var session = req.session;
-  var accountId = session.account;
-  Accounts.getAccountById(accountId).then(function(account)
+  var account = request.account;
+  console.log("Inside Promise");
+  if (Util.isNull(account))
   {
-    console.log("Inside Promise");
-    if (Util.isNull(account))
-    {
-      res.redirect("/auth");
-    }
+    response.redirect("/auth");
+  }
 
-    if (account.name != 'radmin')
-    {
-      res.redirect("/account");
-    }
+  if (account.name != "radmin")
+  {
+    response.redirect("/account");
+  }
 
-    Accounts.getAccounts().then(function(accounts)
+  Accounts.getAccounts().then(function(accounts)
+  {
+    console.log("Got all accounts!", accounts);
+    response.render("account/admin",
     {
-      console.log("Got all accounts!", accounts);
-      res.render("account/admin",
-      {
-        accounts: accounts
-      });
-      console.log("Leaving accounts");
+      accounts: accounts
     });
-    console.log("Ending Promise");
+    console.log("Leaving accounts");
   });
+  console.log("Ending Promise");
 
 });
 

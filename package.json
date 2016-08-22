@@ -5,7 +5,7 @@
   "scripts":
   {
     "start": "gulp start-server",
-    "database": "mongod --dbpath /data"
+    "database": "mongod --dbpath ./data"
   },
   "dependencies":
   {

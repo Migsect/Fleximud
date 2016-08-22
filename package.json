@@ -16,6 +16,7 @@
     "ejs": "*",
     "express": "~4.13.4",
     "express-session": "*",
+    "handlebars": "^4.0.5",
     "html": "*",
     "mongoose": "*",
     "morgan": "~1.7.0",
@@ -34,7 +35,6 @@
     "gulp-nodemon": "^2.1.0",
     "gulp-shell": "^0.5.2",
     "gulp-spawn": "^0.3.0",
-    "handlebars": "^4.0.5",
     "jshint": "^2.9.2",
     "require-dir": "^0.3.0"
   }

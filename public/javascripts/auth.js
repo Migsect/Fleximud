@@ -32,7 +32,7 @@ if ($toggleCreateAccount)
 {
   $toggleCreateAccount.addEventListener("click", function()
   {
-    createAccountWindow.classList.toggle("hidden");
+    $createAccountWindow.classList.toggle("hidden");
   });
 }
 
@@ -41,7 +41,7 @@ if ($toggleLogin)
 {
   $toggleLogin.addEventListener("click", function()
   {
-    loginWindow.classList.toggle("hidden");
+    $loginWindow.classList.toggle("hidden");
   });
 }
 
@@ -54,7 +54,7 @@ var sendLogin = function()
   $message.innerHTML = "";
   $message.classList.add("hidden");
 
-  var invalid = false
+  var invalid = false;
 
   var $email = document.getElementById("loginEmail");
   var $pass = document.getElementById("loginPass");
@@ -75,9 +75,9 @@ var sendLogin = function()
     $pass.classList.add("error");
     $message.innerHTML = "Password is too short.<br>";
   }
-  if (invalid == true)
+  if (invalid)
   {
-    $message.classList.removeClass(hidden);
+    $message.classList.remove("hidden");
     return;
   }
 
@@ -122,7 +122,7 @@ var sendLogin = function()
   };
 
   // request.send();
-}
+};
 Array.prototype.slice.call(document.querySelectorAll("#loginInputs input"), 0).forEach(function(element)
 {
   element.addEventListener("keydown", function(e)
@@ -130,10 +130,10 @@ Array.prototype.slice.call(document.querySelectorAll("#loginInputs input"), 0).f
     if (e.keyCode == 13)
     {
       sendLogin();
-    };
+    }
   });
-})
-Array.prototype.slicedocument.querySelector("#loginInputs input").
+});
+Array.prototype.slice.call(document.querySelector("#loginInputs input"));
 document.getElementById("loginAccount").addEventListener("click", function()
 {
   sendLogin();
@@ -188,7 +188,7 @@ var sendCreateAccount = function()
     $message.append("Password is too short.<br>");
   }
 
-  if (invalid == true)
+  if (invalid)
   {
     $message.classList.remove("hidden");
     return;
@@ -213,7 +213,6 @@ var sendCreateAccount = function()
       return;
     }
     /* Redirect to the account page if we were successful */
-    console.log()
     window.location.replace("/account");
   });
 
@@ -259,7 +258,7 @@ var sendCreateAccount = function()
   };
 
   // request.send();
-}
+};
 
 Array.prototype.slice.call(document.querySelectorAll("#loginInputs input"), 0).forEach(function(element)
 {
@@ -267,7 +266,7 @@ Array.prototype.slice.call(document.querySelectorAll("#loginInputs input"), 0).f
   {
     if (e.keyCode == 13)
     {
-      sendCreateAccount()
+      sendCreateAccount();
     }
   });
 });

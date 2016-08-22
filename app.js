@@ -24,11 +24,13 @@ var databaseURL = 'mongodb://localhost/devtest';
 mongoose.connect(databaseURL);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.on('connected', function() {
-    console.log("Connected to the database!");
+db.on('connected', function()
+{
+  console.log("Connected to the database!");
 });
-db.on('disconnected', function() {
-    console.log("Disconnected from the database!");
+db.on('disconnected', function()
+{
+  console.log("Disconnected from the database!");
 });
 
 /* view engine setup */
@@ -40,24 +42,28 @@ app.set('view engine', 'html');
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: false
+app.use(bodyParser.urlencoded(
+{
+  extended: false
 }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
 
 /* Session setup */
-app.use(session({
-    store: new MongoStore({
-        url: 'mongodb://localhost/devtest'
-    }),
-    secret: 'macro dogs',
-    cookie: {
-        maxAge: 24 * 60 * 60 * 1000
-    },
-    resave: true,
-    saveUninitialized: true
+app.use(session(
+{
+  store: new MongoStore(
+  {
+    url: 'mongodb://localhost/devtest'
+  }),
+  secret: 'macro dogs',
+  cookie:
+  {
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  resave: true,
+  saveUninitialized: true
 }));
 
 app.use('/', index);
@@ -66,24 +72,28 @@ app.use('/account', account);
 app.use('/client', client);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+app.use(function(req, res, next)
+{
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handlers
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+if (app.get('env') === 'development')
+{
+  app.use(function(err, req, res)
+  {
+    res.status(err.status || 500);
+    res.render('error',
+    {
+      message: err.message,
+      error: err
     });
+  });
 }
 
 module.exports = app;

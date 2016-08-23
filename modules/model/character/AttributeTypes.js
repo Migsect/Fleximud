@@ -38,7 +38,6 @@ AttributeType.prototype = {
    */
   getHTML: function()
   {
-    console.log("getting html");
     var template = templates("characterCreation/attribute");
     return template(
     {

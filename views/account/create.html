@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="../stylesheets/global.css" type="text/css" />
   <link rel="stylesheet" href="../stylesheets/auth.css" type="text/css" />
   <link rel="stylesheet" href="../stylesheets/account.css" type="text/css" />
+  <link rel="stylesheet" href="../stylesheets/createCharacter.css" type="text/css" />
 </head>
 
 <body>
@@ -15,7 +16,7 @@
       Create a New Character
     </div>
     <div class="row fill_h">
-      <div class="section column fill_w" background="grey_2">
+      <div class="section fill_w" id="create-view" background="grey_2">
         <div class="box section" background="grey_3">
           <div class="section compact header_3" background="green">Nominal Information</div>
           <div class="section compact" id="nominal-info" background="grey_1">
@@ -32,8 +33,6 @@
             You may select up to {{attributeCount}} attributes from the above tree. <br><br>Note that there is no restriction on the tier of attribute you choose either. Attributes are generally normalized at the top tier(s) and as such it is normally unwise to pick the top tier.
           </div>
         </div>
-      </div>
-      <div class="section column fill_w" background="grey_2">
         <div class="box section" background="grey_3">
           <div class="section compact header_3" background="green">Biology Selection</div>
           <div class="section compact" id="species-sex-selections" background="grey_1">
@@ -48,13 +47,20 @@
             {{{speciesInfos}}}
           </div>
         </div>
+        <div class="section box header_3 clickable" id="createCharacterButton" background="blue">
+          Create Character
+        </div>
       </div>
+      <!--<div class="section column fill_w" background="grey_2">
+
+      </div> -->
     </div>
-    <div class="section box header_3 clickable" id="createCharacterButton" background="blue">
+    <!--<div class="section box header_3 clickable" id="createCharacterButton" background="blue">
       Create Character
-    </div>
+    </div> -->
   </div>
   <!-- loading the neccessary javascripts -->
+  <script src="/javascripts/utils.js"></script>
   <script src="/javascripts/auth.js"></script>
   <script src="/javascripts/accounts/create.js"></script>
 </body>

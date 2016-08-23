@@ -88,6 +88,7 @@ RangeDescriptor.prototype.merge = function(other)
 RangeDescriptor.prototype.getJSON = function()
 {
   var json = {
+    id: this.id,
     name: this.displayName.singular,
     max: this.getMax(),
     min: this.getMin(),
@@ -157,6 +158,7 @@ VariationDescriptor.prototype.merge = function(other)
 VariationDescriptor.prototype.getJSON = function()
 {
   var json = {
+    id: this.id,
     name: this.displayName.singular,
     variations: this.variations,
     first: this.variations[0]

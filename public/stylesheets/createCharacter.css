@@ -1,0 +1,17 @@
+div#create-view {
+  overflow-y: auto;
+}
+
+div.section {
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+@media (min-width: 1000px) {
+  div#create-view {
+    column-count: 2;
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+  }
+}

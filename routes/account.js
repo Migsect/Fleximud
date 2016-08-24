@@ -8,6 +8,7 @@ var templates = require("../templates/templates");
 var accountGrabber = require(process.cwd() + "/modules/middleware/accountGrabber");
 
 var Accounts = require("../modules/model/Account");
+var Character = require("../modules/model/character/Character");
 var Util = require("../modules/Util");
 
 var Species = require("../modules/model/character/Classification/Species");
@@ -79,8 +80,12 @@ router.get("/create", accountGrabber, function(request, response)
 router.post("/createCharacter", accountGrabber, function(request, response)
 {
   var account = request.account;
+  /* Getting the data */
   var data = request.body;
-  console.log("create character data:", data);
+
+  /* Extracting the character information */
+  var newCharacter = Character.createCharacter(account, data);
+
   response.status(200).send("It's kay: " + JSON.stringify(data));
 });
 

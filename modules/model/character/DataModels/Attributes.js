@@ -119,6 +119,10 @@ AttributesSchema.methods.setValue = function(attribute, value)
   }
 };
 
-var Attributes = Mongoose.model("Attributes", AttributesSchema);
-
-module.exports = AttributesSchema;
+module.exports = {
+  schema: AttributesSchema,
+  createLiteral: function()
+  {
+    return {};
+  }
+};

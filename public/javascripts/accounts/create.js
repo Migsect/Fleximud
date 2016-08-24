@@ -66,7 +66,6 @@
     }
     var parent = clicked.parentNode.parentNode;
     var parentChildren = Utils.convertNodeListToArray(parent.parentNode.children);
-    console.log(parentChildren);
     // var parentSiblings = parentChildren.filter(function(item)
     // {
     //   return item === parent;

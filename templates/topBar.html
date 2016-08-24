@@ -16,13 +16,11 @@
         Character Select
       </div>
       <div class="column dropdown">
-        <!-- TODO make this generated as opposed to static test links -->
-        <a href="http://www.google.com">
-          <div class="section clickable" background="blue">Google.com</div>
+        {{#each account.characters}}
+        <a href="">
+          <div class="section clickable" background="blue">{{{this.name.fullName}}}</div>
         </a>
-        <a href="http://www.yahoo.com">
-          <div class="section clickable" background="blue">Yahoo.com</div>
-        </a>
+        {{/each}}
       </div>
     </div>
     {{else}} {{/if}}

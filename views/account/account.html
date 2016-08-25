@@ -27,11 +27,13 @@
     </div>
     <div class="box" background="grey_2">
       <div class="section header_2" background="green">Characters</div>
+      <!-- The button that leads to the create Character page -->
       <a href="/account/create">
         <div class="section box clickable" background="blue">
           <div class="header_3" id="createCharacter">Create New Character</div>
         </div>
       </a>
+      <!-- The list of all the character elements -->
       <div class="character-list">
         {{#account.characters}}
         <a class="character-item" href="/client?character={{id}}">

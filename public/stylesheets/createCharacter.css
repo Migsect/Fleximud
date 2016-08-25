@@ -111,6 +111,14 @@ div.descriptor input {
   flex: .5;
 }
 
+div#remaining-attributes-display {
+  text-align: center;
+}
+
+div#attribute-help-text {
+  text-align: center;
+}
+
 div#create-view {
   overflow-y: auto;
 }

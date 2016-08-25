@@ -13,8 +13,12 @@
   {
     var updateSelected = function(element)
     {
+      /* The attribute counter and the maxAttributes */
+      var $remainingAttributesDisplay = document.getElementById("remaining-attributes-display");
+      var maxAttributes = $remainingAttributesDisplay.dataset.maxattributes;
+
       var clickedAttribute = element.dataset.name;
-      console.log(clickedAttribute, "clicked");
+      /* Performing the selection toggle */
       if (element.classList.contains("selected"))
       {
         element.classList.remove("selected");
@@ -25,11 +29,17 @@
       }
       else
       {
+        /* Checking if we already are at the limit of attributes */
+        if (selectedAttributes.length >= maxAttributes)
+        {
+          return;
+        }
 
         selectedAttributes.push(clickedAttribute);
         element.classList.add("selected");
       }
-      console.log(selectedAttributes);
+      /* Setting the counter to the new ratio */
+      $remainingAttributesDisplay.innerHTML = selectedAttributes.length + "/" + maxAttributes;
     };
 
     /* Stopping the event's propogation*/
@@ -217,14 +227,19 @@
       if (request.status >= 200 && request.status < 400)
       {
         /* Forward to next page */
-        // var message = request.responseText;
         // console.log("Response :", message);
         window.location.replace("/account");
       }
       else
       {
-        setCreateCharacterButtonState(true);
         /* Unlocking for a retry */
+        setCreateCharacterButtonState(true);
+
+        /* Displaying the error message */
+        var message = request.responseText;
+        var $serverCreateResults = document.getElementById("server-create-results");
+        $serverCreateResults.classList.remove("hidden");
+        $serverCreateResults.innerHTML = message;
       }
 
     };

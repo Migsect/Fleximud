@@ -30,7 +30,8 @@
             {{{attributeTree}}}
           </div>
           <div class="section" background="grey_1">
-            You may select up to {{attributeCount}} attributes from the above tree. <br><br>Note that there is no restriction on the tier of attribute you choose either. Attributes are generally normalized at the top tier(s) and as such it is normally unwise to pick the top tier.
+            <div class="header_3" id="remaining-attributes-display" data-maxAttributes={{attributeCount}}>0 / {{attributeCount}}</div>
+            <div id="attribute-help-text">You may select up to {{attributeCount}} attributes from the above tree. <br><br>Note that there is no restriction on the tier of attribute you choose from. Attributes will adjust themselves based on the strength of their siblings in the attribute tree.</div>
           </div>
         </div>
         <div class="box section" background="grey_3">
@@ -49,6 +50,8 @@
         </div>
         <div class="section box header_3 clickable" id="createCharacterButton" background="blue">
           Create Character
+        </div>
+        <div id="server-create-results" class="section box hidden header_3" background="red">
         </div>
       </div>
       <!--<div class="section column fill_w" background="grey_2">

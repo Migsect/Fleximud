@@ -2,15 +2,14 @@
   "name": "RPGMUD",
   "version": "0.0.0",
   "private": true,
-  "scripts":
-  {
+  "scripts": {
     "start": "gulp start-server",
     "database": "mongod --dbpath ./data"
   },
-  "dependencies":
-  {
+  "dependencies": {
     "body-parser": "~1.15.1",
     "connect-mongo": "*",
+    "consolidate": "0.14.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "ejs": "*",
@@ -24,11 +23,10 @@
     "password-hash": "*",
     "promise": "^7.1.1",
     "serve-favicon": "~2.3.0",
-    "sqlite3": "*",
-    "consolidate": "0.14.1"
+    "socket.io": "^1.4.8",
+    "sqlite3": "*"
   },
-  "devDependencies":
-  {
+  "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-jsbeautifier": "^2.0.3",
     "gulp-jshint": "^2.0.1",

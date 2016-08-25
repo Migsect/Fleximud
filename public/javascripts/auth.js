@@ -194,28 +194,6 @@ var sendCreateAccount = function()
     return;
   }
 
-  $.post("/auth/create",
-  {
-    name: name,
-    email: email,
-    pass: pass
-  }, function(response)
-  {
-    var message = response.message;
-    console.log("Response :", response);
-    if (message == "nameTaken")
-    {
-      $message.empty();
-      $email.addClass("error");
-      $name.addClass("error");
-      $message.append("Username or Email already taken.<br>");
-      $message.show(100);
-      return;
-    }
-    /* Redirect to the account page if we were successful */
-    window.location.replace("/account");
-  });
-
   var request = new XMLHttpRequest();
   request.open('POST', '/auth/create', true);
   request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8; charset=UTF-8');

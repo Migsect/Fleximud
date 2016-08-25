@@ -18,39 +18,62 @@ var Name = require("./DataModels/Name");
  */
 var CharacterSchema = Schema(
 {
+  /** @type {UUID} The unique ID of the character that is allowed to be shown on the front end. */
   id:
   {
     type: String,
     required: true
   },
+  /** @type {ObjectId.Account} The objectId of the account this character belongs to. */
   accountId:
   {
     type: Schema.Types.ObjectId,
     ref: "Account",
     required: true
   },
+  /** @type {Name Schema} An object that stores name information about the character */
   name:
   {
     type: Name.schema,
     required: true
   },
+  /** @type {Attributes Schema} An object that stores or calculates the attributes of a character */
   attributes:
   {
     type: Attributes.schema,
     required: true
   },
+  /** @type {SpeciesSex Schema} An objet that stores the species-sex of the character */
   speciesSex:
   {
     type: SpeciesSex.schema,
     require: true
   },
+  /** @type {Decriptors Schema} An object that stores all the descriptors of the character */
   descriptors:
   {
     type: Descriptors.schema,
     require: true
+  },
+  /** @type {String} A location path that depicts the location of the character. */
+  locationPath:
+  {
+    type: String
   }
 
 });
+
+/**
+ * Retrieves the location object for the character.
+ * This transforms the path into a location by using the location graph.
+ * 
+ * @return {Location} The location object the character is in.
+ */
+CharacterSchema.method.getLocation = function()
+{
+  /* TODO Get the location object */
+}
+
 var Character = Mongoose.model("Character", CharacterSchema);
 
 module.exports = {

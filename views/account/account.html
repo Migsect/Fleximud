@@ -12,32 +12,34 @@
   <div class="view column" background="grey_1">
     {{{topBar}}}
     <div class="section header_2" background="purple">
-      Account
+      {{account.name}}'s Account
     </div>
-    <div class="row section" background="grey_2">
-      <div class="section box" background="grey_3">
-        Hello There!<br> This is the accounts page!
-      </div>
-      <div class="section box" background="grey_3">
-        Id: {{account.id}}<br> Name: {{account.name}}<br> Email: {{account.email}}
+    <div class="box" background="grey_2">
+      <div class="section header_2" background="green">Information</div>
+      <div class="row section" background="grey_2">
+        <div class="section box" background="grey_3">
+          Hello There!<br> This is the accounts page!
+        </div>
+        <div class="section box" background="grey_3">
+          Id: {{account.id}}<br> Name: {{account.name}}<br> Email: {{account.email}}
+        </div>
       </div>
     </div>
-    <div class="row section" background="grey_3">
-      <div class="column">
-        <a href="/account/create">
-          <div class="section" background="blue">
-            <div class="clickable" id="createCharacter">Create New Character</div>
+    <div class="box" background="grey_2">
+      <div class="section header_2" background="green">Characters</div>
+      <a href="/account/create">
+        <div class="section box clickable" background="blue">
+          <div class="header_3" id="createCharacter">Create New Character</div>
+        </div>
+      </a>
+      <div class="character-list">
+        {{#account.characters}}
+        <a class="character-item" href="/client?character={{id}}">
+          <div class="box section clickable" background="grey_3">
+            <div class="header_2">{{name.fullName}}</div>
+            <div class="">{{speciesSex.species}} - {{speciesSex.sex}}</div>
           </div>
         </a>
-        {{#account.characters}}
-        <div class="box">
-          <div class="text">{{name}}</div>
-          <div class="text">{{id}}</div>
-          <div class="text">{{_id}}</div>
-          <div class="text">{{speciesSex}}</div>
-          <div class="text">{{attributes}}</div>
-          <div class="text">{{descriptions}}</div>
-        </div>
         {{/account.characters}}
       </div>
     </div>

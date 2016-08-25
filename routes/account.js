@@ -4,6 +4,7 @@ var express = require("express");
 var router = express.Router();
 
 var templates = require("../templates/templates");
+var config = require("../config/general.json");
 
 var accountGrabber = require(process.cwd() + "/modules/middleware/accountGrabber");
 
@@ -19,15 +20,6 @@ router.get("/", accountGrabber, function(request, response)
 {
   var account = request.account;
 
-  // var session = req.session;
-  // var accountId = session.account;
-  // Accounts.getAccountById(accountId).then(function(account)
-  // {
-  //   if (Util.isNull(account))
-  //   {
-  //     res.redirect("/");
-  //   }
-
   response.render("account/account",
   {
     account: account,
@@ -37,7 +29,6 @@ router.get("/", accountGrabber, function(request, response)
       character: null
     })
   });
-  // });
 
 });
 
@@ -69,7 +60,7 @@ router.get("/create", accountGrabber, function(request, response)
       character: null
     }),
     attributeTree: Attributes.top.getHTML(),
-    attributeCount: 5,
+    attributeCount: config.characterCreation.maxAttributeChoices,
     speciesItems: speciesItems,
     speciesInfos: speciesInfos,
     speciesDescriptors: speciesDescriptors
@@ -83,10 +74,58 @@ router.post("/createCharacter", accountGrabber, function(request, response)
   /* Getting the data */
   var data = request.body;
 
-  /* Extracting the character information */
-  var newCharacter = Character.createCharacter(account, data);
+  /* ==== Validating the received data ==== */
+  /* Checking if there is a fullname or if the fullname is no empty */
+  if (!data.fullName && data.fullName.length <= 0)
+  {
+    response.status(400).send("No full name provided.");
+    return;
+  }
+  /* Checking if the fullName fits the constaints */
+  if (data.fullName.length < config.characterCreation.minimumLongNameLength)
+  {
+    response.status(400).send("The name must be at least " + config.characterCreation.minimumLongNameLength + " characters long.");
+    return;
+  }
+  /* Checking if a species was included */
+  if (!data.species)
+  {
+    response.status(400).send("No species specified.");
+    return;
+  }
+  /* Checking if the species is a valid species type */
+  if (!Species.map.has(data.species))
+  {
+    response.status(400).send("'" + data.species + "' specified is not a valid species.");
+    return;
+  }
+  /* Checking if the sex was a valid sex of the species */
+  var speciesType = Species.map.get(data.species);
+  /* Checking if a sex was specified */
+  if (!data.sex)
+  {
+    response.status(400).send("No sex specified.");
+    return;
+  }
+  /* Checking if the sex is a valid sex type */
+  if (!speciesType.sexes.has(data.sex))
+  {
+    response.status(400).send("'" + data.sex + "' specified is not a valid sex for '" + data.species + "'.");
+    return;
+  }
+  /* Checking the attributes is of the correct length */
+  if (data.attributes && data.attributes.length > config.attributeChoices)
+  {
+    response.status(400).send("Too many attributes selected.");
+    return;
+  }
 
-  response.status(200).send("It's kay: " + JSON.stringify(data));
+  /* ==== End Data Validation ==== */
+
+  /* Creating the character */
+  Character.createCharacter(account, data);
+
+  response.status(200).send("Charcter Created.");
 });
 
 /* Admin Control Panel Page */

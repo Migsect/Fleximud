@@ -217,8 +217,9 @@
       if (request.status >= 200 && request.status < 400)
       {
         /* Forward to next page */
-        var message = request.responseText;
-        console.log("Response :", message);
+        // var message = request.responseText;
+        // console.log("Response :", message);
+        window.location.replace("/account");
       }
       else
       {

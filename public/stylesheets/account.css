@@ -1,112 +1,18 @@
-div.attribute {
-  width: 100px;
-  padding: 0px;
-  text-shadow: 0px 0px 8px rgba(0, 0, 0, 1.0);
-  text-align: center;
-}
-
-div.attribute-family {
-  padding: 0px;
+div.character-list {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  width: auto;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, .4);
-  border-color: transparent;
-  border-style: solid;
-  border-width: 3px;
+  flex-wrap: wrap;
 }
 
-div.attribute-family:hover {
-  border-left-color: white;
-  border-right-color: white;
+.character-item {
+  flex: 1 1;
+  min-width: 500px;
 }
 
-div.attribute-family.selected {
-  border-color: white;
-}
-
-div.attribute-tree {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  right: 0;
-  left: 0
-}
-
-#species-sex-selection {
-  max-height: 30%;
-  overflow-y: auto;
-}
-
-div.species-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin: 2px;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 3px;
-}
-
-div.species-item-sexes {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
-div.species-item-sexes div {
-  box-sizing: border-box;
-  width: 70px;
-  text-align: center;
-  margin: 1px;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 3px;
-}
-
-div.species-item-sexes div:hover {
-  border-left-color: white;
-  border-right-color: white;
-}
-
-div.species-item-sexes div.selected {
-  border-color: white;
-}
-
-div.species-item .title {
-  flex: 0;
-}
-
-div.classification-item:hover {
-  border-left-color: white;
-  border-right-color: white;
-}
-
-div.descriptor {
-  display: flex;
-  padding: 2px;
-  flex-direction: row;
-}
-
-div.descriptor+div.descriptor {
-  border-top-style: solid;
-  border-top-width: 1px;
-}
-
-div.descriptor-title {
-  min-width: 60px;
-  flex: 1;
-}
-
-div.descriptor select {
-  min-width: 60px;
-  flex: 1;
-}
-
-div.descriptor input {
-  min-width: 40px;
-  flex: .5;
+@media (min-width: 1000px) {
+  div.character-list {
+    column-count: 2;
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+  }
 }

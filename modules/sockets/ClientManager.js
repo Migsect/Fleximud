@@ -1,16 +1,16 @@
 "use strict";
 
 var Client = require("./Client");
+var Account = require("../model/Account");
 
 var ClientManager = function()
 {
   var self = this;
   Object.defineProperties(self,
   {
-    /** @type {Map<AccountId, Client[]>} 
-     * 			A mapping of accounts to their currently active client instances.
-     * 			This overall allows access and tracking of the clients in the case
-     * 			That something needs to be done to all-of-them
+    /** @type {Map<SocketId, Client[]>} 
+     *      A mapping of Socket ids to their client object.
+     *      This is used to keep track of clients.
      */
     clients:
     {
@@ -28,14 +28,35 @@ Object.defineProperties(ClientManager.prototype,
   },
   onConnection:
   {
-    value: function(socket) {
-
+    value: function(socket)
+    {
+      var self = this;
+      socket.on("disconnect", function()
+      {
+        self.onDisconnection(socket);
+      });
+      console.log("Account", socket.handshake.session.account, "connected");
     }
   },
   onDisconnection:
   {
-    value: function(socket) {
-
+    value: function(socket)
+    {
+      console.log("Account", socket.handshake.session.account, "disconnected");
+    }
+  },
+  onCommand:
+  {
+    value: function()
+    {
+      /* Passes a command to the client. */
+    }
+  },
+  onRegister:
+  {
+    value: function()
+    {
+      /* Registers the character if it exists, creates a client */
     }
   }
 });

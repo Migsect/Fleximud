@@ -6,8 +6,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session');
-var sharedsession = require("express-socket.io-session");
+var session = require("express-session");
 var engines = require('consolidate');
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
@@ -17,18 +16,10 @@ var auth = require('./routes/auth');
 var client = require('./routes/client');
 var account = require('./routes/account');
 
-var clientManager = new require("./modules/sockets/ClientManager");
-
 var app = express();
-var server = require("http").Server(app);
-server.listen(80);
 
-/* Socket.io Setup */
-var io = require("socket.io")(server);
-io.on("Connection", function(socket)
-{
-  clientManager.onConnection(socket);
-});
+/* Variable for storing all middleware */
+app.locals.middleware = {};
 
 /* Database setup */
 /* Creating the database connection */
@@ -63,26 +54,23 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 /* Session setup */
-app.use(session(
+var appSession = session(
 {
   store: new MongoStore(
   {
     /* TODO make this configurable */
-    url: 'mongodb://localhost/devtest'
+    url: "mongodb://localhost/devtest"
   }),
-  secret: 'macro dogs',
+  secret: "macro dogs",
   cookie:
   {
     maxAge: 24 * 60 * 60 * 1000
   },
   resave: true,
   saveUninitialized: true
-}));
-/* Setting up socket to have access to the session variable */
-io.use(sharedsession(session,
-{
-  autoSave: true
-}));
+});
+app.use(appSession);
+app.locals.middleware.session = appSession;
 
 app.use('/', index);
 app.use('/auth', auth);

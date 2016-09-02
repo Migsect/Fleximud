@@ -2,8 +2,9 @@
 
 var uuid = require("node-uuid");
 
-var Mongoose = require('mongoose');
+var Mongoose = require("mongoose");
 var Schema = Mongoose.Schema;
+var dbUtils = require(process.cwd() + "/modules/DatabaseUtil");
 
 var Attributes = require("./DataModels/Attributes");
 var SpeciesSex = require("./DataModels/SpeciesSex");
@@ -60,8 +61,10 @@ var CharacterSchema = Schema(
   {
     type: String
   }
-
 });
+
+/* Defining listeners on the database */
+dbUtils.defineObserverPattern(CharacterSchema, "change");
 
 /**
  * Retrieves the location object for the character.
@@ -72,7 +75,7 @@ var CharacterSchema = Schema(
 CharacterSchema.method.getLocation = function()
 {
   /* TODO Get the location object */
-}
+};
 
 var Character = Mongoose.model("Character", CharacterSchema);
 

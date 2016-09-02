@@ -65,8 +65,8 @@ var Location = function(json)
       writable: true,
       value: null
     },
-    /** @type {CharacterId} A list of all the characters that are currently at this location */
-    characters:
+    /** @type {Client} A list of all the clients at this location */
+    clients:
     {
       value: []
     }

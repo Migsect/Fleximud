@@ -64,7 +64,11 @@ var CharacterSchema = Schema(
 });
 
 /* Defining listeners on the database */
-dbUtils.defineObserverPattern(CharacterSchema, "change");
+/* Too complicated for now, going to instead do a check on each tick
+ * If tick rates become too slow, we'll revert this back to the original
+ * but that may wish to make a wrapper class around the data models when we do.
+ */
+// dbUtils.defineObserverPattern(CharacterSchema, "change");
 
 /**
  * Retrieves the location object for the character.

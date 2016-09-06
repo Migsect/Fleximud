@@ -8,9 +8,11 @@ var ClientManager = function()
   var self = this;
   Object.defineProperties(self,
   {
-    /** @type {Map<SocketId, Client[]>} 
-     *      A mapping of Socket ids to their client object.
-     *      This is used to keep track of clients.
+    /** 
+     * A mapping of Socket ids to their client object.
+     * This is used to keep track of clients.
+     * 
+     * @type {Map<SocketId, Client[]>} 
      */
     clients:
     {
@@ -31,18 +33,33 @@ Object.defineProperties(ClientManager.prototype,
     value: function(socket)
     {
       var self = this;
+      var accountId = socket.handshake.session.account;
+      console.log("Account", accountId, "connected to a socket.");
       socket.on("disconnect", function()
       {
+        console.log("Account", accountId, "disconnected from a socket.");
         self.onDisconnection(socket);
       });
-      console.log("Account", socket.handshake.session.account, "connected");
+      socket.on("register", function(characterId)
+      {
+        self.onRegister(socket, characterId);
+      });
+      socket.on("command", function() {
+
+      });
     }
   },
   onDisconnection:
   {
     value: function(socket)
     {
-      console.log("Account", socket.handshake.session.account, "disconnected");
+      var client = this.clients.get(socket.client.id);
+      if (!client)
+      {
+        return;
+      }
+      this.clients.delete(client);
+      console.log("Client Disconnected:", client.toString());
     }
   },
   onCommand:
@@ -54,9 +71,27 @@ Object.defineProperties(ClientManager.prototype,
   },
   onRegister:
   {
-    value: function()
+    value: function(socket, characterId)
     {
-      /* Registers the character if it exists, creates a client */
+      var self = this;
+      var accountId = socket.handshake.session.account;
+      /* TODO validate that accountID is correct */
+      Account.getAccountById(accountId).then(function(account)
+      {
+        var character = account.characters.find(function(element)
+        {
+          return element.id === characterId;
+        });
+        /* TODO check if character is null */
+        console.log("Registering:", accountId + " for character " + characterId);
+
+        var socketId = socket.client.id;
+        var client = new Client(socket, account, character);
+        self.clients.set(socketId, client);
+
+        console.log("Registered:", client.toString());
+      });
+
     }
   }
 });

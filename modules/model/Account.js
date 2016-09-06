@@ -1,8 +1,6 @@
 "use strict";
 
 /* Includes */
-var fs = require("fs");
-var path = require("path");
 
 var passwordHash = require("password-hash");
 var uuid = require("node-uuid");
@@ -68,98 +66,118 @@ AccountSchema.methods.verify = function(password)
 
 var Account = Mongoose.model('Account', AccountSchema);
 
-module.exports = {
-  createAccount: function(name, email, plainPassword)
+Object.defineProperties(module.exports,
+{
+  createAccount:
   {
-    var password = passwordHash.generate(plainPassword);
-    var id = uuid.v4();
-    var account = new Account(
+    value: function(name, email, plainPassword)
     {
-      id: id,
-      name: name,
-      email: email,
-      password: password,
-      characters: []
-    });
-    account.save(function(err, document)
-    {
-      if (err) return console.error(err);
-      console.log("Saved Account to Database:", document);
-    });
-
-    return account;
-
-  },
-  accountExists: function(query)
-  {
-    return new Promise(function(resolve, reject)
-    {
-      Account.find(query, function(error, result)
+      var password = passwordHash.generate(plainPassword);
+      var id = uuid.v4();
+      var account = new Account(
       {
-        if (error)
-        {
-          reject(error);
-        }
-        else
-        {
-          resolve(result.length > 0);
-        }
-      })
-
-    });
-  },
-  getAccounts: function()
-  {
-    return new Promise(function(resolve, reject)
-    {
-      Account.find(
-      {}, function(error, result)
-      {
-        if (error)
-        {
-          reject(error);
-          console.log(error)
-        }
-        else
-        {
-          resolve(result);
-        }
+        id: id,
+        name: name,
+        email: email,
+        password: password,
+        characters: []
       });
-    });
-  },
-  getAccountByQuery: function(query)
-  {
-    return new Promise(function(resolve, reject)
-    {
-      Account.findOne(query).populate("characters").exec(function(error, result)
+      account.save(function(err, document)
       {
-        if (error)
-        {
-          reject(error);
-          console.log(error);
-        }
-        else
-        {
-          resolve(result);
-        }
+        if (err) return console.error(err);
+        console.log("Saved Account to Database:", document);
       });
-    });
+
+      return account;
+
+    }
   },
-  getAccountByEmail: function(email)
+  accountExists:
   {
-    return this.getAccountByQuery(
+    value: function(query)
     {
-      email: email
-    });
+      return new Promise(function(resolve, reject)
+      {
+        Account.find(query, function(error, result)
+        {
+          if (error)
+          {
+            reject(error);
+          }
+          else
+          {
+            resolve(result.length > 0);
+          }
+        });
+
+      });
+    }
   },
-  getAccountById: function(id)
+  getAccounts:
   {
-    return this.getAccountByQuery(
+    value: function()
     {
-      id: id
-    });
+      return new Promise(function(resolve, reject)
+      {
+        Account.find(
+        {}, function(error, result)
+        {
+          if (error)
+          {
+            reject(error);
+            console.log(error);
+          }
+          else
+          {
+            resolve(result);
+          }
+        });
+      });
+    }
   },
-};
+  getAccountByQuery:
+  {
+    value: function(query)
+    {
+      return new Promise(function(resolve, reject)
+      {
+        /* Finding the account and populating all its characters */
+        Account.findOne(query).populate("characters").exec(function(error, result)
+        {
+          if (error)
+          {
+            reject(error);
+            console.log(error);
+          }
+          else
+          {
+            resolve(result);
+          }
+        });
+      });
+    }
+  },
+  getAccountByEmail:
+  {
+    value: function(email)
+    {
+      return this.getAccountByQuery(
+      {
+        email: email
+      });
+    }
+  },
+  getAccountById:
+  {
+    value: function(id)
+    {
+      return this.getAccountByQuery(
+      {
+        id: id
+      });
+    }
+  },
+});
 
 /* Making some basic accounts for administration */
 

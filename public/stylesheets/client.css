@@ -1,0 +1,25 @@
+div.info-item-title {
+  width: 60px;
+}
+
+progress[value] {
+  -webkit-appearance: none;
+  appearance: none;
+  s
+}
+
+progress#healthBar::-webkit-progress-value {
+  background: #FF0000;
+}
+
+progress#staminaBar::-webkit-progress-value {
+  background: #00FF00;
+}
+
+progress#focusBar::-webkit-progress-value {
+  background: #FFFF00;
+}
+
+progress#manaBar::-webkit-progress-value {
+  background: #0000FF;
+}

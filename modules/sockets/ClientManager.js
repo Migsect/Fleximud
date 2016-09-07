@@ -58,6 +58,7 @@ Object.defineProperties(ClientManager.prototype,
       {
         return;
       }
+      client.onDisconnection();
       this.clients.delete(client);
       console.log("Client Disconnected:", client.toString());
     }

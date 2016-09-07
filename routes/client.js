@@ -23,9 +23,15 @@ router.get('/', accountGrabber, function(request, response)
     return;
   }
 
+  /* Rendering the base client */
   response.render("client",
   {
     account: account,
+    fullName: character.name.fullName,
+    shortName: character.name.shortName,
+    species: character.speciesSex.species,
+    sex: character.speciesSex.sex,
+    character: character,
     topBar: templates("topBar")(
     {
       account: account,

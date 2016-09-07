@@ -8,8 +8,36 @@
 
   <body>
     <div class="view column" background="grey_1">
+      <!-- The top bar display -->
       {{{topBar}}}
+
+      <!-- Character stats and information -->
+      <div id="info-panel" class="box section" background="grey_2">
+        <div id="name-info" class="section row tight">
+          {{fullName}} ({{shortName}})
+        </div>
+        <div id="species-sex-info" class="section row tight">
+          {{species}} - {{sex}}
+        </div>
+        <div id="health-info" class="section row tight">
+          <div class="info-item-title">Health</div>
+          <progress class="stat-bar" id="healthBar" value="100" max="100"></progress>
+        </div>
+        <div id="stamina-info" class="section row tight">
+          <div class="info-item-title">Stamina</div>
+          <progress class="stat-bar" id="staminaBar" value="50" max="100"></progress>
+        </div>
+        <div id="focus-info" class="section row tight">
+          <div class="info-item-title">Focus</div>
+          <progress class="stat-bar" id="focusBar" value="25" max="100"></progress>
+        </div>
+        <div id="mana-info" class="section row tight">
+          <div class="info-item-title">Mana</div>
+          <progress class="stat-bar" id="manaBar" value="10" max="100"></progress>
+        </div>
+      </div>
     </div>
+
     <!-- loading the neccessary javascripts -->
     <script type="text/javascript" src="javascripts/auth.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>

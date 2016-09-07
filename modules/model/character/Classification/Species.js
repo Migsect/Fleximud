@@ -43,6 +43,8 @@ var Species = function(json)
     }
     return subspeciesMap;
   });
+
+  this.startingLocation = json.startingLocation ? json.startingLocation : "";
 };
 
 Species.prototype = Object.create(Classification.prototype);

@@ -16,6 +16,9 @@ var auth = require('./routes/auth');
 var client = require('./routes/client');
 var account = require('./routes/account');
 
+/* Loading universals */
+require("./modules/location/Location");
+
 var app = express();
 
 /* Variable for storing all middleware */

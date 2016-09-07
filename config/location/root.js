@@ -1,3 +1,5 @@
+"use strict";
+
 /* Making use of javascript configuration */
 module.exports = {
   localId: "root",

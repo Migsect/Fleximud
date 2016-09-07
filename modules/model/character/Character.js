@@ -106,7 +106,9 @@ module.exports = {
       speciesSex: SpeciesSex.createLiteral(JSON.species, JSON.sex),
       descriptors: Descriptors.createLiteral()
     });
-    /* Performing attribute and descriptor adding */
+    /* Performing attribute, location, and descriptor adding */
+    var species = character.speciesSex.speciesType;
+    character.location = species.startingLocation;
 
     /* Saving the character */
     character.save(function(err, document)

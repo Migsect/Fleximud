@@ -1,7 +1,12 @@
 "use strict";
 
+var uuid = require("node-uuid");
+
 /** @type {Location} The root location that all locations will be made in by default */
 var root = null;
+/** @type {Map} All the locations, this uses a global Id as a key */
+var locations = new Map();
+
 /**
  * @constructor
  * @param {String} localId The id of the location that differeniates it from its siblings
@@ -14,15 +19,28 @@ var Location = function(json)
     /** @type {String} An id that will be used to differeniate the location from its siblings */
     localId:
     {
+      enumerable: true,
       value: (function()
       {
         /* Validating/cleaning of the localId happens here */
         return json.localId;
       })()
     },
+    /** @type {String} An id that will be used to uniquely identify this location from others 
+     *                This will be automatically generated if not supplied.
+     */
+    globalId:
+    {
+      enumerable: true,
+      value: (function()
+      {
+        return json.globalId ? json.globalId : uuid.v4();
+      })()
+    },
     /** @type {Map<String, Location>} The locations that exist within this location */
     children:
     {
+      enumerable: true,
       value: (function()
       {
         /* The map of all the children */
@@ -48,6 +66,7 @@ var Location = function(json)
     /** @type {Connection[]} A list of all the connections at this location */
     connections:
     {
+      enumerable: true,
       value: []
     },
     /** @type {Function(character)} A function that takes in a character and
@@ -57,11 +76,13 @@ var Location = function(json)
      */
     limitations:
     {
+      enumerable: true,
       value: []
     },
     /** @type {String} The parent path of this location */
     parent:
     {
+      enumerable: true,
       writable: true,
       value: null
     },
@@ -71,10 +92,12 @@ var Location = function(json)
       value: []
     }
   });
-
+  if (locations.has(this.globalId))
+  {
+    /* TODO Throw an error for when there is a globalId clash */
+  }
+  locations.set(this.globalId, this);
 };
-/* Setting the root to the universe */
-var root = new Location("universe");
 
 Object.defineProperties(Location.prototype,
 {
@@ -87,23 +110,33 @@ Object.defineProperties(Location.prototype,
   {
     value: function(path)
     {
-      /* Getting the first localId*/
+      /* Getting the first localId, splitting into two elements at most */
       var split = path.split(/\./, 2);
-      var descendant = this.children.has(split[0]);
+      /* Returning self if the first split has nothing */
+      if (split[0].length === 0)
+      {
+        return this;
+      }
+      /* Grabbing and checking if the descendant exists*/
+      var descendant = this.children.get(split[0]);
       if (!descendant)
       {
         return null;
       }
+      /* If we have a descendant and there is only one split element */
       if (split.length === 1)
       {
         return descendant;
       }
-      /* Returning the next descendant based on the*/
+      /* Returning the next descendant based on the */
       return descendant.getDescendant(split[1]);
     }
   },
   /**
-   * [getPath description]
+   * Returns the path of the location going up to a root.
+   * This does not mean that it will be under the main root and as such may be
+   * under an orphaned location.
+   * 
    * @return {String} The path of this location from the perspective of the root
    *                      location.  This means that if this path was called with
    *                      The "getDescendants" function from that root element, then
@@ -255,12 +288,32 @@ Object.defineProperties(Location.prototype,
       }
       return true;
     }
+  },
+  delete:
+  {
+    /**
+     * Will delete the location by removing all references to it.
+     * 
+     * If there are characters at the location, however, this will fail.
+     * 
+     * This removes the location from global mapping as well as from its
+     * parents.  It will also call delete on its sub locations.
+     * 
+     * Furthermore this will remove all connections to the location.
+     */
+    value: function()
+    {
+      /* TODO implement this shit yo s*/
+    }
   }
 });
 
+/* Setting the root to the universe */
+var rootJSON = require(process.cwd() + "/config/location/root");
+var root = new Location(rootJSON);
+
 Object.defineProperties(module.exports,
 {
-
   constructor:
   {
     value: Location
@@ -279,6 +332,12 @@ Object.defineProperties(module.exports,
     {
       /* Basically makes use of the getDescendant function */
       return root.getDescendant(path);
+    }
+  },
+  getLocationByGlobalId:
+  {
+    value: function(globalId) {
+
     }
   }
 });

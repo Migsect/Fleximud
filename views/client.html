@@ -7,33 +7,36 @@
   <link rel="stylesheet" href="stylesheets/client.css" type="text/css" />
 
   <body>
-    <div class="view column" background="grey_1">
+    <div class="view" background="grey_1">
       <!-- The top bar display -->
       {{{topBar}}}
 
       <!-- Character stats and information -->
-      <div id="info-panel" class="box section" background="grey_2">
-        <div id="name-info" class="section row tight">
+      <div id="info-panel" class="info-panel" background="grey_3">
+        <div id="name-info" class="section tight">
           {{fullName}} ({{shortName}})
         </div>
-        <div id="species-sex-info" class="section row tight">
+        <div id="species-sex-info" class="section tight">
           {{species}} - {{sex}}
         </div>
-        <div id="health-info" class="section row tight">
-          <div class="info-item-title">Health</div>
-          <progress class="stat-bar" id="healthBar" value="100" max="100"></progress>
-        </div>
-        <div id="stamina-info" class="section row tight">
-          <div class="info-item-title">Stamina</div>
-          <progress class="stat-bar" id="staminaBar" value="50" max="100"></progress>
-        </div>
-        <div id="focus-info" class="section row tight">
-          <div class="info-item-title">Focus</div>
-          <progress class="stat-bar" id="focusBar" value="25" max="100"></progress>
-        </div>
-        <div id="mana-info" class="section row tight">
-          <div class="info-item-title">Mana</div>
-          <progress class="stat-bar" id="manaBar" value="10" max="100"></progress>
+        <!-- Contains the stats -->
+        <div id="stat-panel">
+          <div id="health-info" class="section tight">
+            <div class="info-item-title">Health</div>
+            <progress class="stat-bar" id="healthBar" value="100" max="100"></progress>
+          </div>
+          <div id="stamina-info" class="section tight">
+            <div class="info-item-title">Stamina</div>
+            <progress class="stat-bar" id="staminaBar" value="50" max="100"></progress>
+          </div>
+          <div id="focus-info" class="section tight">
+            <div class="info-item-title">Focus</div>
+            <progress class="stat-bar" id="focusBar" value="25" max="100"></progress>
+          </div>
+          <div id="mana-info" class="section tight">
+            <div class="info-item-title">Mana</div>
+            <progress class="stat-bar" id="manaBar" value="10" max="100"></progress>
+          </div>
         </div>
       </div>
     </div>

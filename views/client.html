@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <title>Client - Nexus Mud</title>
+  <title>{{fullName}} - Nexus Mud</title>
   <link rel="stylesheet" href="stylesheets/global.css" type="text/css" />
   <link rel="stylesheet" href="stylesheets/auth.css" type="text/css" />
   <link rel="stylesheet" href="stylesheets/client.css" type="text/css" />
@@ -10,34 +10,45 @@
     <div class="view" background="grey_1">
       <!-- The top bar display -->
       {{{topBar}}}
+      <!-- Contains the stats -->
+      <div id="stat-panel" class="box section tight" background="grey_2">
+        <div id="health-info" class="stat-item section tight">
+          <div class="stat-item-title">Health</div>
+          <progress class="stat-bar" id="healthBar" value="100" max="100"></progress>
+        </div>
+        <div id="stamina-info" class="stat-item section tight">
+          <div class="stat-item-title">Stamina</div>
+          <progress class="stat-bar" id="staminaBar" value="100" max="100"></progress>
+        </div>
+        <div id="focus-info" class="stat-item section tight">
+          <div class="stat-item-title">Focus</div>
+          <progress class="stat-bar" id="focusBar" value="100" max="100"></progress>
+        </div>
+        <div id="mana-info" class="stat-item section tight">
+          <div class="stat-item-title">Mana</div>
+          <progress class="stat-bar" id="manaBar" value="100" max="100"></progress>
+        </div>
+      </div>
+      <!-- Holds all of the main UI elements -->
+      <div id="main-panel" class="box tight" background="grey_2">
+        <div id="main-left-panel">
+          <div id="chat-panel" class="">
+            <div id="chat-history">
+            </div>
+            <div id="chat-input" class="">
+              <div id="chat-input-text" class="section" background="white">Sample Text</div>
+              <div id="chat-input-button" class="section" background="blue">Send</div>
+            </div>
+          </div>
+        </div>
+        <div id="main-right-panel">
+          <div id="location-panel" class=""></div>
+          <div id="action-panel" class=""></div>
+        </div>
+      </div>
+      <!-- Holds buttons that bring up windows (such as inventory) -->
+      <div id="bottom-bar">
 
-      <!-- Character stats and information -->
-      <div id="info-panel" class="info-panel" background="grey_3">
-        <div id="name-info" class="section tight">
-          {{fullName}} ({{shortName}})
-        </div>
-        <div id="species-sex-info" class="section tight">
-          {{species}} - {{sex}}
-        </div>
-        <!-- Contains the stats -->
-        <div id="stat-panel">
-          <div id="health-info" class="section tight">
-            <div class="info-item-title">Health</div>
-            <progress class="stat-bar" id="healthBar" value="100" max="100"></progress>
-          </div>
-          <div id="stamina-info" class="section tight">
-            <div class="info-item-title">Stamina</div>
-            <progress class="stat-bar" id="staminaBar" value="50" max="100"></progress>
-          </div>
-          <div id="focus-info" class="section tight">
-            <div class="info-item-title">Focus</div>
-            <progress class="stat-bar" id="focusBar" value="25" max="100"></progress>
-          </div>
-          <div id="mana-info" class="section tight">
-            <div class="info-item-title">Mana</div>
-            <progress class="stat-bar" id="manaBar" value="10" max="100"></progress>
-          </div>
-        </div>
       </div>
     </div>
 

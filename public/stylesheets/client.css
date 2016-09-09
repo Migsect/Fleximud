@@ -1,14 +1,63 @@
-div.info-item-title {
-  width: 100%;
+div#main-panel {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1;
+}
+
+div#main-left-panel {
+  flex: 1 1;
+  display: flex;
+}
+
+div#main-right-panel {
+  flex: 1 1;
+  display: flex;
+}
+
+div.stat-item-title {
   text-align: center;
 }
 
-div.info-panel {}
-
-div.stat-panel {
+div#stat-panel {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
+
+div.stat-item {
+  flex: 0 0 content;
+}
+
+div#chat-panel {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+}
+
+div#chat-history {
+  flex: 1 1;
+}
+
+div.chat-history-item {}
+
+div.chat-history-source {}
+
+div.chat-history-content {}
+
+div#chat-input {
+  flex: 0 0;
+  display: flex;
+}
+
+div#chat-input-text {
+  flex: 1 1;
+}
+
+div#location-panel {}
+
+div#item-panel {}
+
+div#bottom-bar {}
 
 progress[value] {
   -webkit-appearance: none;

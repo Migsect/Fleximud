@@ -1,4 +1,7 @@
 "use strict";
+
+require("../auth.js");
+
 /* global io, decodeURIComponent */
 
 var getParameterByName = function(name, url)

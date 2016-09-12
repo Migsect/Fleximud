@@ -1,5 +1,7 @@
 "use strict";
 
+require("../auth.js")();
+
 /* global Utils */
 
 (function()

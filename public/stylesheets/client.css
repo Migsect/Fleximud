@@ -45,7 +45,6 @@ div.chat-history-source {}
 div.chat-history-content {}
 
 div#chat-input {
-  flex: 0 0;
   display: flex;
 }
 

@@ -3,3 +3,4 @@ node_modules/
 .settings/org.eclipse.wst.jsdt.ui.superType.name
 data/
 npm-debug.log.*
+public/javascripts/built/

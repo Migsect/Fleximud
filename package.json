@@ -34,7 +34,10 @@
     "gulp-nodemon": "^2.1.0",
     "gulp-shell": "^0.5.2",
     "gulp-spawn": "^0.3.0",
+    "gulp-webpack": "^1.5.0",
     "jshint": "^2.9.2",
-    "require-dir": "^0.3.0"
+    "require-dir": "^0.3.0",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^1.13.2"
   }
 }

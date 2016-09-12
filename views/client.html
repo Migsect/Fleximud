@@ -31,17 +31,17 @@
       </div>
       <!-- Holds all of the main UI elements -->
       <div id="main-panel" class="box tight" background="grey_2">
-        <div id="main-left-panel">
+        <div id="main-left-panel" class="section compact">
           <div id="chat-panel" class="">
-            <div id="chat-history">
+            <div id="chat-history" background="grey_4">
             </div>
             <div id="chat-input" class="">
-              <div id="chat-input-text" class="section" background="white">Sample Text</div>
-              <div id="chat-input-button" class="section" background="blue">Send</div>
+              <div id="chat-input-text" contenteditable class="section" background="white">Sample Text</div>
+              <div id="chat-input-button" class="section clickable" background="blue">Send</div>
             </div>
           </div>
         </div>
-        <div id="main-right-panel">
+        <div id="main-right-panel" class="section compact">
           <div id="location-panel" class=""></div>
           <div id="action-panel" class=""></div>
         </div>
@@ -53,9 +53,13 @@
     </div>
 
     <!-- loading the neccessary javascripts -->
-    <script type="text/javascript" src="javascripts/auth.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <!--
+    <script type="text/javascript" src="javascripts/auth.js"></script>
     <script type="text/javascript" src="javascripts/client.js"></script>
+    -->
+    <script type="text/javascript" src="javascripts/built/client.js"></script>
+
   </body>
 
 </html>

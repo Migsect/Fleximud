@@ -15,6 +15,14 @@ gulp.task('start-webpack', function()
     .pipe(webpack(
     {
       watch: true,
+      module:
+      {
+        loaders: [
+        {
+          test: /\.html$/,
+          loader: "handlebars-loader"
+        }, ],
+      },
     }))
     .pipe(gulp.dest(process.cwd() + "/public/javascripts/built"));
 });

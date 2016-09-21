@@ -1,6 +1,6 @@
 "use strict";
 
-require("../auth")();
+var Auth = require("../auth");
 var Utils = require("../utils");
 
 var selectedAttributes = [];

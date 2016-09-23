@@ -28,6 +28,7 @@
     "sqlite3": "*"
   },
   "devDependencies": {
+    "css-loader": "^0.25.0",
     "gulp": "^3.9.1",
     "gulp-jsbeautifier": "^2.0.3",
     "gulp-jshint": "^2.0.1",
@@ -38,7 +39,9 @@
     "handlebars-loader": "^1.4.0",
     "jshint": "^2.9.2",
     "require-dir": "^0.3.0",
+    "style-loader": "^0.13.1",
     "vinyl-named": "^1.1.0",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "webpack-stream": "^3.2.0"
   }
 }

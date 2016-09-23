@@ -3,6 +3,8 @@
 require("../auth");
 var Utils = require("../utils");
 
+var Chat = require("../components/chat/chat");
+
 /* global io */
 
 var characterId = Utils.getParameterByName("character");
@@ -52,3 +54,6 @@ socket.on("update", function(message)
 });
 /* Registering a new client */
 socket.emit("register", characterId);
+
+/* Initializing all the components */
+var chatComponent = new Chat("chat-panel", socket);

@@ -1,9 +1,9 @@
 "use strict";
 
 var gulp = require("gulp");
-var named = require('vinyl-named');
-var webpack = require('gulp-webpack');
-gulp.task('start-webpack', function()
+var named = require("vinyl-named");
+var webpack = require("webpack-stream");
+gulp.task("start-webpack", function()
 {
   return gulp.src([
       process.cwd() + "/web_modules/entry/account.js",
@@ -21,7 +21,11 @@ gulp.task('start-webpack', function()
         {
           test: /\.html$/,
           loader: "handlebars-loader"
-        }, ],
+        },
+        {
+          test: /\.css$/,
+          loader: "style!css"
+        }],
       },
     }))
     .pipe(gulp.dest(process.cwd() + "/public/javascripts/built"));

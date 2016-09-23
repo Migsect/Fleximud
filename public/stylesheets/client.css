@@ -34,24 +34,6 @@ div#chat-panel {
   flex-direction: column;
 }
 
-div#chat-history {
-  flex: 1 1;
-}
-
-div.chat-history-item {}
-
-div.chat-history-source {}
-
-div.chat-history-content {}
-
-div#chat-input {
-  display: flex;
-}
-
-div#chat-input-text {
-  flex: 1 1;
-}
-
 div#location-panel {}
 
 div#item-panel {}

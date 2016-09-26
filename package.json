@@ -7,6 +7,7 @@
     "database": "mongod --dbpath ./data"
   },
   "dependencies": {
+    "animate.css": "^3.5.2",
     "body-parser": "~1.15.1",
     "connect-mongo": "*",
     "consolidate": "0.14.1",

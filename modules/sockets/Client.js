@@ -55,8 +55,9 @@ Object.defineProperties(Client.prototype,
     /**
      * Handles a command which is contained within the event object passed in.
      */
-    value: function(event) {
-
+    value: function(commandEvent)
+    {
+      console.log("Command Type:", commandEvent.command, ", Command Data:", commandEvent.data);
     }
   },
   toString:

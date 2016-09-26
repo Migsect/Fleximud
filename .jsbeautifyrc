@@ -21,6 +21,7 @@
     "indent_char": " ",
     "indent_size": 2,
     "newline_between_rules": true,
+    "max_preserve_newlines": 2,
     "selector_separator": " ",
     "selector_separator_newline": true
   },

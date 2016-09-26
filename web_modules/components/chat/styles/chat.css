@@ -4,17 +4,37 @@ div.chat-view {
   flex-direction: column;
 }
 
-div.chat-history {
+div.chat-content {
   flex: 1 1;
+  overflow-y: auto;
 }
 
-div.chat-history-item {}
+div.chat-history {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
 
-div.chat-history-source {}
+div.chat-history-item {
+  flex: 0 0 auto;
+  margin: 1px;
+  display: flex;
+  flex-direction: row;
+  transition: opacity 500ms;
+}
 
-div.chat-history-content {}
+div.chat-history-source {
+  flex: 2 1;
+  text-align: center;
+}
+
+div.chat-history-content {
+  flex: 8 1;
+}
 
 div.chat-input {
+  margin: 1px;
   display: flex;
 }
 

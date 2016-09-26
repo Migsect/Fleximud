@@ -44,8 +44,9 @@ Object.defineProperties(ClientManager.prototype,
       {
         self.onRegister(socket, characterId);
       });
-      socket.on("command", function() {
-
+      socket.on("command", function(command)
+      {
+        self.onCommand(socket, command);
       });
     }
   },
@@ -65,9 +66,16 @@ Object.defineProperties(ClientManager.prototype,
   },
   onCommand:
   {
-    value: function()
+    value: function(socket, command)
     {
-      /* Passes a command to the client. */
+      var socketId = socket.client.id;
+      if (!this.clients.has(socketId))
+      {
+        /* TODO throw a proper error message or something*/
+        return;
+      }
+      var client = this.clients.get(socketId);
+      client.handleCommand(command);
     }
   },
   onRegister:

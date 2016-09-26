@@ -4,6 +4,7 @@ var Utils = require("../../utils");
 
 var mainTemplate = require("./templates/chat.html");
 var historyItemTemplate = require("./templates/history-item.html");
+
 require("./styles/chat.css");
 
 /**
@@ -14,7 +15,7 @@ require("./styles/chat.css");
  * @param {Socket} socket The socket that will be used to send messages over.
  * @param {Integer} historyMax The maximum number of history items to keep.
  */
-var Chat = function(divId, socket, historyMax)
+var Chat = function(divId, socketHandler, historyMax)
 {
   var self = this;
   /* Defining the main properties */
@@ -24,13 +25,22 @@ var Chat = function(divId, socket, historyMax)
     {
       value: document.getElementById(divId)
     },
-    socket:
+    socketHandler:
     {
-      value: socket
+      value: socketHandler
     },
     historyMax:
     {
       value: historyMax
+    },
+    messages:
+    {
+      value: []
+    },
+    messageNumber:
+    {
+      writable: true,
+      value: 0
     }
   });
 
@@ -39,6 +49,10 @@ var Chat = function(divId, socket, historyMax)
 
   Object.defineProperties(self,
   {
+    content:
+    {
+      value: self.view.querySelector("div.chat-content")
+    },
     history:
     {
       value: self.view.querySelector("div.chat-history")
@@ -53,6 +67,22 @@ var Chat = function(divId, socket, historyMax)
     }
   });
 
+  /* Setting up the listener for the inputButton */
+  self.inputButton.addEventListener("click", function()
+  {
+    self.sendMessage();
+  });
+
+  /* Setting up key listener for the inputContent */
+  self.inputContent.addEventListener("keydown", function(event)
+  {
+    if (event.keyCode == 13)
+    {
+      self.sendMessage();
+      event.preventDefault();
+    }
+  });
+
 };
 
 Object.defineProperties(Chat.prototype,
@@ -63,8 +93,24 @@ Object.defineProperties(Chat.prototype,
      * Sends a message.
      * @param  {[type]} message The message object to send. Does not need all info.
      */
-    value: function(message) {
+    value: function()
+    {
+      var content = this.inputContent.innerHTML;
+      this.inputContent.innerHTML = "";
 
+      if (content.trim().length <= 0)
+      {
+        return;
+      }
+      this.socketHandler.sendCommand("chat",
+      {
+        content: content
+      });
+      // this.addMessage(
+      // {
+      //   source: "Self",
+      //   content: content
+      // });
     }
   },
   receiveMessage:
@@ -75,6 +121,52 @@ Object.defineProperties(Chat.prototype,
      */
     value: function(message) {
 
+    }
+  },
+  removeMessage:
+  {
+    /**
+     * Removes the specified message from the message list.
+     * This removes both the element in the DOM as well as removes it from
+     * the memory.
+     * 
+     * @param  {Integer} number The number-id of the message to remove.
+     */
+    value: function(number)
+    {
+      var element = self.view.querySelector("#history-item-" + number);
+    }
+  },
+  addMessage:
+  {
+    /**
+     * Adds a message to the chat history.
+     * This will also add a "messageCount" variable to the message. This will be
+     * an identifier for the message when it is in the history.
+     *
+     * @param {Object} message The message to add to the history
+     */
+    value: function(message)
+    {
+      /* Setting the messages number before adding it to the list and then incrementing it */
+      message.number = this.messageNumber++;
+      /* Adding the message to the list */
+      this.messages.push(message);
+
+      /* Creating the html node */
+      var historyItemNode = Utils.htmlToElement(historyItemTemplate(
+      {
+        hideSource: typeof message.hideSource === "undefined" ? false : message.hideSource,
+        source: message.source,
+        content: message.content,
+        number: message.number,
+      }));
+
+      /* Adding the history item to the history */
+      this.history.appendChild(historyItemNode);
+
+      /* Automatically scrolling the view to the new element when a message is added */
+      this.content.scrollTop = this.content.scrollHeight;
     }
   }
 });

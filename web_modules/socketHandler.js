@@ -60,14 +60,17 @@ Object.defineProperties(SocketHandler.prototype,
   {
     value: function(updateEvent)
     {
+      /* Checking to see if the update has a type (needs to have a type) */
       if (!this.updateHandlers.has(updateEvent.type))
       {
         return;
       }
+      /* Getting and looping throw all the handlers */
       var handlers = this.updateHandlers.get(updateEvent.type);
       handlers.forEach(function(handler)
       {
-        handler(updateEvent);
+        /* Passing all the handlers the data sent with the update */
+        handler(updateEvent.data);
       });
     }
   },

@@ -59,9 +59,15 @@ var NullError = function(argument)
 {
   Error.call(this, "Argument " + i + " was found null.");
   this.argument = argument;
-}
+};
 
 module.exports = {
+  /**
+   * Checks to see if the value is Null
+   * 
+   * @param  {Object}  value The value to check
+   * @return {Boolean}       True if the value is null
+   */
   isNull: function(value)
   {
     return (value === null) || (value === undefined);
@@ -90,7 +96,7 @@ module.exports = {
   },
   isNumber: function(value)
   {
-    return (typeof value === 'number' || value instanceof Number)
+    return (typeof value === 'number' || value instanceof Number);
   },
   assertNumber: function(value)
   {

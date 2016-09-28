@@ -10,6 +10,7 @@ var Attributes = require("./DataModels/Attributes");
 var SpeciesSex = require("./DataModels/SpeciesSex");
 var Descriptors = require("./DataModels/Descriptors");
 var Name = require("./DataModels/Name");
+var Location = require(process.cwd() + "/modules/location/Location");
 
 /**
  * The character schema is represented by a character id and the character's data.
@@ -76,9 +77,9 @@ var CharacterSchema = Schema(
  * 
  * @return {Location} The location object the character is in.
  */
-CharacterSchema.method.getLocation = function()
+CharacterSchema.methods.getLocation = function()
 {
-  /* TODO Get the location object */
+  return Location.getLocation(this.locationPath);
 };
 
 var Character = Mongoose.model("Character", CharacterSchema);

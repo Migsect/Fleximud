@@ -1,6 +1,7 @@
 "use strict";
 
 var uuid = require("node-uuid");
+var Utils = require("../Util");
 
 /** @type {Location} The root location that all locations will be made in by default */
 var root = null;
@@ -87,8 +88,9 @@ var Location = function(json)
       value: null
     },
     /** @type {Client} A list of all the clients at this location */
-    clients:
+    characters:
     {
+      writable: true,
       value: []
     }
   });
@@ -101,13 +103,73 @@ var Location = function(json)
 
 Object.defineProperties(Location.prototype,
 {
-  /**
-   * Retrieves a descendant by using a relative path stirng
-   * 
-   * @param {String} path The path string to get the child by
-   */
+  addCharacter:
+  {
+    /**
+     * Adds a client to the location.
+     * This will not add the client to the location if the client is already at
+     * the location.
+     *
+     * @param  {CharacterID} characterId The characterId to add to the location.
+     */
+    value: function(characterId)
+    {
+      console.log("Adding character to a location");
+      if (this.characters.findIndex(function(element)
+        {
+          return element === characterId;
+        }) >= 0)
+      {
+        return;
+      }
+      /* pushing the client onto the list */
+      this.characters.push(characterId);
+    }
+  },
+  removeCharacter:
+  {
+    /**
+     * Removes the client from the location if it is in the location.
+     * Will silent fail if there is no client in the location since the contract
+     * is the make sure the client is not in this location.
+     * 
+     * @param  {CharacterID} characterId The characterId to remove.
+     */
+    value: function(characterId)
+    {
+      /* Getting the client's index */
+      var characterIndex = this.characters.findIndex(function(element)
+      {
+        return element === characterId;
+      });
+      /* If the index is less than 0 then the client is not in the list */
+      if (characterIndex < 0)
+      {
+        return;
+      }
+      /* Splicing the client out */
+      this.characters.splice(characterIndex, 1);
+
+    }
+  },
+  clearCharacter:
+  {
+    /**
+     * Removes all the clients from the location.
+     * This is a pure reset of the location's client array.
+     */
+    value: function()
+    {
+      this.characters = [];
+    }
+  },
   getDescendant:
   {
+    /**
+     * Retrieves a descendant by using a relative path stirng
+     * 
+     * @param {String} path The path string to get the child by
+     */
     value: function(path)
     {
       /* Getting the first localId, splitting into two elements at most */
@@ -330,6 +392,10 @@ Object.defineProperties(module.exports,
   {
     value: function(path)
     {
+      if (Utils.isNull(path))
+      {
+        return root;
+      }
       /* Basically makes use of the getDescendant function */
       return root.getDescendant(path);
     }

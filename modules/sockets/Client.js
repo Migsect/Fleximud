@@ -1,5 +1,7 @@
 "use strict";
 
+var commands = require("./commands/commands");
+
 /**
  * The Client class is used to abstract a socket connection.
  * 
@@ -9,26 +11,68 @@
  * A Client will generally be identified by an account id and a character id.
  *
  * @constructor
+ * @param {ClientManager} manager The client's manager
  * @param {Socket} socket The socket the client is attached to.
  * @param {Account} account The account of the client.
  * @param {Character} character The character of the client.
  */
-var Client = function(socket, account, character)
+var Client = function(manager, socket, account, character)
 {
+  console.log("Creating a client");
   var self = this;
   Object.defineProperties(self,
   {
+    /**
+     * The manager of this client session
+     * 
+     * @type {ClientManager}
+     */
+    manager:
+    {
+      value: manager
+    },
+    /**
+     * The socket for this client session
+     * 
+     * @type {Socket}
+     */
     socket:
     {
       value: socket
     },
+    /**
+     * The account for this client session
+     * 
+     * @type {Account}
+     */
     account:
     {
       value: account
     },
+    /**
+     * The character for this client session
+     * 
+     * @type {Character}
+     */
     character:
     {
       value: character
+    },
+    /**
+     * The family of this client.  This are all the clients that share the
+     * same account and charater but do not share the same socket.  As such
+     * they are not the same client but will receive the same data.
+     *
+     * This will return a list including this client.
+     * 
+     * @type {Client[]}
+     */
+    family:
+    {
+      get: function()
+      {
+        return this.manager.characters.get(character.id);
+      }
     }
   });
   self.onConnection();
@@ -40,14 +84,35 @@ Object.defineProperties(Client.prototype,
   {
     value: function()
     {
-      /* TODO handle diconnection stuff */
+      /* Removing the character of this client from the location */
+      this.character.getLocation().removeCharacter(this.character.id);
     }
   },
   onConnection:
   {
     value: function()
     {
-      /* TODO handle connection stuff (aka initialization stuff) */
+      /* Adding the character of this client to the location */
+      this.character.getLocation().addCharacter(this.character.id);
+    }
+  },
+  sendUpdate:
+  {
+    /**
+     * Sends an update to the client. This will include the type of update as
+     * well as the data in the update.  The socket message will be of type 
+     * "update".
+     * 
+     * @param {String} type The type of the update.
+     * @param {Object} data The data to send in the update.
+     */
+    value: function(type, data)
+    {
+      var message = {
+        type: type,
+        data: data
+      };
+      this.socket.emit("update", message);
     }
   },
   handleCommand:
@@ -58,6 +123,14 @@ Object.defineProperties(Client.prototype,
     value: function(commandEvent)
     {
       console.log("Command Type:", commandEvent.command, ", Command Data:", commandEvent.data);
+      if (!commands.has(commandEvent.command))
+      {
+        console.log("WARNING - Could not find command '" + commandEvent.command + "'");
+        return;
+      }
+      var command = commands.get(commandEvent.command);
+      var data = commandEvent.data;
+      command.execute(this, data);
     }
   },
   toString:

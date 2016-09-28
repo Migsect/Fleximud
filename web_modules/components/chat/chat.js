@@ -83,6 +83,12 @@ var Chat = function(divId, socketHandler, historyMax)
     }
   });
 
+  /* Setting up this to receive a message from the "chat" update */
+  socketHandler.addHandler("chat", function(data)
+  {
+    self.receiveMessage(data);
+  });
+
 };
 
 Object.defineProperties(Chat.prototype,
@@ -106,21 +112,19 @@ Object.defineProperties(Chat.prototype,
       {
         content: content
       });
-      // this.addMessage(
-      // {
-      //   source: "Self",
-      //   content: content
-      // });
     }
   },
   receiveMessage:
   {
     /**
      * Receives a message and renders it in the chat history.
+     * Also can be used to perform other stuff.
+     * 
      * @param  {[type]} message A message object received from the server.
      */
-    value: function(message) {
-
+    value: function(message)
+    {
+      this.addMessage(message);
     }
   },
   removeMessage:

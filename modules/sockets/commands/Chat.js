@@ -1,0 +1,55 @@
+"use strict";
+
+var Command = require("../Command");
+var Location = require("../../location/Location");
+
+var Chat = function()
+{
+  Command.call(this, "chat");
+  var self = this;
+  Object.defineProperties(self,
+  {});
+};
+
+Chat.prototype = Object.create(Command.prototype);
+Object.defineProperties(Chat.prototype,
+{
+  constructor:
+  {
+    value: Chat
+  },
+  execute:
+  {
+    value: function(client, data)
+    {
+      /* Getting the location of the client's character */
+      var location = client.character.getLocation();
+
+      /* Message construction */
+      var message = {
+        source: client.character.name.shortName,
+        content: data.content
+      };
+
+      /* Getting the client's manager */
+      var clientManager = client.manager;
+
+      /* Looping through all the characters at the location to send them the message */
+      var characters = location.characters;
+      characters.forEach(function(charactrId)
+      {
+        var clients = clientManager.characters.get(charactrId);
+        if (clients === null)
+        {
+          throw new Error("Clients returned null when there should be clients.");
+        }
+        clients.forEach(function(client)
+        {
+          client.sendUpdate("chat", message);
+        });
+      });
+    }
+  }
+});
+
+module.exports = new Chat();

@@ -16,7 +16,6 @@ Object.defineProperties(Command.prototype,
 {
   execute:
   {
-    writable: true,
     /**
      * Executing a command requires the client that called the command
      * 

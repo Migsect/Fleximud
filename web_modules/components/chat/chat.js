@@ -108,10 +108,30 @@ Object.defineProperties(Chat.prototype,
       {
         return;
       }
-      this.socketHandler.sendCommand("chat",
+
+      /* Checking to see if the content is a chat command*/
+      if (content.startsWith("/"))
       {
-        content: content
-      });
+        var splitCommand = content.substr(1).split(/ /);
+        var command = splitCommand[0];
+        var args = splitCommand.slice(1);
+
+        this.socketHandler.sendCommand("chatcommand",
+        {
+          command: command,
+          arguments: args
+        }, function(results)
+        {
+          /* TODO handle the returned results and display them */
+        });
+      }
+      else
+      {
+        this.socketHandler.sendCommand("chat",
+        {
+          content: content
+        });
+      }
     }
   },
   receiveMessage:

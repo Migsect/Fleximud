@@ -41,7 +41,7 @@ Object.defineProperties(SocketHandler.prototype,
       {
         command: command,
         data: data
-      });
+      }, callback ? callback : null);
     }
   },
   addHandler:

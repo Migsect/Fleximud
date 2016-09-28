@@ -64,9 +64,9 @@ Object.defineProperties(ClientManager.prototype,
       {
         self.onRegister(socket, characterId);
       });
-      socket.on("command", function(command)
+      socket.on("command", function(command, callback)
       {
-        self.onCommand(socket, command);
+        self.onCommand(socket, command, callback);
       });
     }
   },
@@ -105,7 +105,7 @@ Object.defineProperties(ClientManager.prototype,
      * @param  {Socket} socket  The socket that emitted the command.
      * @param  {Object} command A command object
      */
-    value: function(socket, command)
+    value: function(socket, command, callback)
     {
       var socketId = socket.client.id;
       if (!this.clients.has(socketId))
@@ -114,7 +114,7 @@ Object.defineProperties(ClientManager.prototype,
         return;
       }
       var client = this.clients.get(socketId);
-      client.handleCommand(command);
+      client.handleCommand(command, callback);
     }
   },
   onRegister:

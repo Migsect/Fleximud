@@ -1,7 +1,6 @@
 "use strict";
 
 var Command = require("../Command");
-var Location = require("../../location/Location");
 
 var Chat = function()
 {
@@ -48,6 +47,8 @@ Object.defineProperties(Chat.prototype,
           client.sendUpdate("chat", message);
         });
       });
+
+      return 0;
     }
   }
 });

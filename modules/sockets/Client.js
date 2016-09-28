@@ -120,7 +120,7 @@ Object.defineProperties(Client.prototype,
     /**
      * Handles a command which is contained within the event object passed in.
      */
-    value: function(commandEvent)
+    value: function(commandEvent, callback)
     {
       console.log("Command Type:", commandEvent.command, ", Command Data:", commandEvent.data);
       if (!commands.has(commandEvent.command))
@@ -130,7 +130,15 @@ Object.defineProperties(Client.prototype,
       }
       var command = commands.get(commandEvent.command);
       var data = commandEvent.data;
-      command.execute(this, data);
+
+      /* executing the command */
+      var result = command.execute(this, data);
+
+      /* Calling the callback if there is a callback */
+      if (typeof callback == "function")
+      {
+        callback(result);
+      }
     }
   },
   toString:

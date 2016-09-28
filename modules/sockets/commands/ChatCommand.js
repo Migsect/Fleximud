@@ -1,6 +1,7 @@
 "use strict";
 
 var Command = require("../Command");
+var commands = require("./commands");
 
 var ChatCommand = function()
 {
@@ -16,6 +17,14 @@ Object.defineProperties(ChatCommand.prototype,
   constructor:
   {
     value: ChatCommand
+  },
+  execute:
+  {
+    value: function(client, data)
+    {
+      var command = data.command;
+      var args = data.args;
+    }
   }
 });
 

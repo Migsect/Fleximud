@@ -53,13 +53,17 @@ div.header_4 {
   font-variant: small-caps;
 }
 
+div.gradiented {
+  background: linear-gradient(to top right, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0) 100%);
+  box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
 
 /* Black Backgrounds */
 
 div[background=black] {
   background-color: #000000;
   color: white;
-  border-color: grey_1;
 }
 
 div.clickable[background=black]:hover {
@@ -72,7 +76,6 @@ div.clickable[background=black]:hover {
 div[background=grey_1] {
   background-color: #1a1a1a;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=grey_1]:hover {
@@ -85,7 +88,6 @@ div.clickable[background=grey_1]:hover {
 div[background=grey_2] {
   background-color: #262626;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=grey_2]:hover {
@@ -98,7 +100,6 @@ div.clickable[background=grey_2]:hover {
 div[background=grey_3] {
   background-color: #4d4d4d;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=grey_3]:hover {
@@ -111,7 +112,6 @@ div.clickable[background=grey_3]:hover {
 div[background=grey_4] {
   background-color: #cccccc;
   color: black;
-  border-color: black;
 }
 
 div.clickable[background=grey_4]:hover {
@@ -124,7 +124,6 @@ div.clickable[background=grey_4]:hover {
 div[background=white] {
   background-color: #ffffff;
   color: black;
-  border-color: #cccccc;
 }
 
 div.clickable[background=white]:hover {
@@ -137,7 +136,6 @@ div.clickable[background=white]:hover {
 div[background=blue] {
   background-color: #0066ff;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=blue]:hover {
@@ -150,7 +148,6 @@ div.clickable[background=blue]:hover {
 div[background=bluegrey] {
   background-color: #4073bf;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=bluegrey]:hover {
@@ -163,7 +160,6 @@ div.clickable[background=bluegrey]:hover {
 div[background=green] {
   background-color: #33cc33;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=green]:hover {
@@ -176,7 +172,6 @@ div.clickable[background=green]:hover {
 div[background=red] {
   background-color: #ff0000;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=red]:hover {
@@ -189,7 +184,6 @@ div.clickable[background=red]:hover {
 div[background=yellow] {
   background-color: #ffff00;
   color: black;
-  border-color: black;
 }
 
 div.clickable[background=yellow]:hover {
@@ -202,7 +196,6 @@ div.clickable[background=yellow]:hover {
 div[background=orange] {
   background-color: #ff8000;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=orange]:hover {
@@ -215,7 +208,6 @@ div.clickable[background=orange]:hover {
 div[background=purple] {
   background-color: #9900cc;
   color: white;
-  border-color: black;
 }
 
 div.clickable[background=purple]:hover {
@@ -257,24 +249,38 @@ div.box {
   margin: 8px;
 }
 
-div.box.compact {
+div.box.compact,
+div.box-compact {
   margin: 4px;
 }
 
-div.box.tight {
+div.box.tight,
+div.box-tight {
   margin: 2px;
+}
+
+div.box.packed,
+div.box-packed {
+  margin: 1px;
 }
 
 div.section {
   padding: 8px;
 }
 
-div.section.compact {
+div.section.compact,
+div.section-compact {
   padding: 4px;
 }
 
-div.section.tight {
+div.section.tight,
+div.section-tight {
   padding: 2px;
+}
+
+div.section.packed,
+div.section-packed {
+  padding: 1px;
 }
 
 
@@ -346,6 +352,8 @@ div:hover>.dropdown {
 
 /* Containers seperating items */
 
+
+/*
 div.sectioned>div {
   border-width: 1px;
 }
@@ -361,10 +369,13 @@ div.column.sectioned>div {
 div.sectioned>div:last-child {
   border-style: none;
 }
+*/
 
 
 /* Manual Sectioning*/
 
+
+/*
 div.seperated {
   border-width: 1px;
 }
@@ -380,6 +391,7 @@ div.column div.seperated {
 div.seperated:last-child {
   border-style: none;
 }
+*/
 
 
 /* Hidden class */

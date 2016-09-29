@@ -51,19 +51,19 @@ var Chat = function(divId, socketHandler, historyMax)
   {
     content:
     {
-      value: self.view.querySelector("div.chat-content")
+      value: self.view.querySelector(".chat-content")
     },
     history:
     {
-      value: self.view.querySelector("div.chat-history")
+      value: self.view.querySelector(".chat-history")
     },
     inputContent:
     {
-      value: self.view.querySelector("div.chat-input-text")
+      value: self.view.querySelector(".chat-input-text")
     },
     inputButton:
     {
-      value: self.view.querySelector("div.chat-input-button")
+      value: self.view.querySelector(".chat-input-button")
     }
   });
 
@@ -101,8 +101,10 @@ Object.defineProperties(Chat.prototype,
      */
     value: function()
     {
-      var content = this.inputContent.innerHTML;
-      this.inputContent.innerHTML = "";
+      var self = this;
+
+      var content = this.inputContent.value;
+      this.inputContent.value = "";
 
       if (content.trim().length <= 0)
       {
@@ -122,7 +124,12 @@ Object.defineProperties(Chat.prototype,
           arguments: args
         }, function(results)
         {
-          /* TODO handle the returned results and display them */
+          self.addMessage(
+          {
+            source: "Server",
+            content: results,
+            hideSource: true
+          });
         });
       }
       else
@@ -177,13 +184,25 @@ Object.defineProperties(Chat.prototype,
       /* Adding the message to the list */
       this.messages.push(message);
 
+      var setupContent = function(content)
+      {
+        return Utils.escapeHTML(content).replace(/([^\s-]{5})([^\s-]{5})/g, "$1&shy;$2");
+      };
+
+      /* If the element is an array, we need to setup each element and then join with newlines*/
+      var content = message.content.constructor === Array ? content = message.content.map(function(element)
+      {
+        return setupContent(element);
+      }).join("<br>") : setupContent(message.content);
+
       /* Creating the html node */
       var historyItemNode = Utils.htmlToElement(historyItemTemplate(
       {
-        hideSource: typeof message.hideSource === "undefined" ? false : message.hideSource,
+        hideSource: typeof message.hideSource == "undefined" ? false : message.hideSource,
+        isSelf: typeof message.isSelf == "undefined" ? false : message.isSelf,
         source: message.source,
-        content: message.content,
-        number: message.number,
+        content: content,
+        number: message.number
       }));
 
       /* Adding the history item to the history */

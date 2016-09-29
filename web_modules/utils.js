@@ -93,6 +93,18 @@ Object.defineProperties(Utils,
       template.innerHTML = html;
       return template.content.firstChild;
     }
+  },
+  escapeHTML:
+  {
+    value: function(str)
+    {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+    }
   }
 });
 

@@ -3,6 +3,7 @@
 var fs = require("fs");
 
 var commands = new Map();
+module.exports = commands;
 
 fs.readdirSync(__dirname).forEach(function(file)
 {
@@ -18,5 +19,3 @@ fs.readdirSync(__dirname).forEach(function(file)
   }
   commands.set(command.name, command);
 });
-
-module.exports = commands;

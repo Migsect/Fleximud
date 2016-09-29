@@ -1,47 +1,53 @@
+<!-- The entire top bar is split into right and left sides -->
 <div class="row" background="grey_3">
+  <!-- The left side bar -->
   <div class="row sectioned" style="justify-content:flex-start;">
+    <!-- Display all this if there is an account -->
     {{#if account}}
     <a href="/">
-      <div class="section seperated" background="blue">
+      <div class="gradiented clickable section" background="blue">
         Home
       </div>
     </a>
+    <!-- If we have a character then -->
     {{#if character}}
-    <div class="section" background="green">
+    <div class="gradiented section" background="green">
       {{character.name.fullName}}
     </div>
     {{/if}}
-    <div class="section clickable" background="blue">
+    <!-- Always display the character selection dropdown -->
+    <div class="gradiented section clickable" background="blue">
       <div>
         Character Select
       </div>
       <div class="column dropdown">
         {{#each account.characters}}
         <a href="/client?character={{id}}">
-          <div class="section clickable" background="blue">{{{this.name.fullName}}}</div>
+          <div class="gradiented section clickable" background="blue">{{{this.name.fullName}}}</div>
         </a>
         {{/each}}
       </div>
     </div>
     {{else}} {{/if}}
   </div>
+  <!-- The right side bar -->
   <div class="row sectioned" style="justify-content:flex-end;">
     {{#if account}}
     <a href='/account'>
-      <div class="section clickable seperated" background="green">
+      <div class="gradiented section clickable seperated" background="green">
         {{account.name}}
       </div>
     </a>
     <a href='/auth/logout'>
-      <div class="section clickable" background="blue">
+      <div class="gradiented section clickable" background="blue">
         Logout
       </div>
     </a>
     {{else}}
-    <div class="section clickable" id="toggleCreateAccount" background="blue">
+    <div class="gradiented section clickable" id="toggleCreateAccount" background="blue">
       Create Account
     </div>
-    <div class="section clickable" id="toggleLogin" background="blue">
+    <div class="gradiented section clickable" id="toggleLogin" background="blue">
       Login
     </div>
     {{/if}}

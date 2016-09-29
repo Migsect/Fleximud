@@ -1,18 +1,17 @@
 div#main-panel {
+  flex: 1 1;
+  display: flex;
+}
+
+div.panel {
+  flex: 1 1 0px;
   display: flex;
   flex-direction: row;
-  flex: 1 1;
 }
 
-div#main-left-panel {
-  flex: 1 1;
-  display: flex;
-}
+div#main-left-panel {}
 
-div#main-right-panel {
-  flex: 1 1;
-  display: flex;
-}
+div#main-right-panel {}
 
 div.stat-item-title {
   text-align: center;

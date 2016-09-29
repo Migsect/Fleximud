@@ -128,7 +128,7 @@ Object.defineProperties(Client.prototype,
         console.log("WARNING - Could not find command '" + commandEvent.command + "'");
         return;
       }
-      var command = commands.get(commandEvent.command);
+      var command = commands.get(commandEvent.command.toLowerCase());
       var data = commandEvent.data;
 
       /* executing the command */

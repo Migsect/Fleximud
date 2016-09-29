@@ -1,4 +1,6 @@
 <div id="history-item-{{number}}" class="chat-history-item" background="white">
-  <div class="chat-history-source{{#if hideSource}} hidden{{/if}} section tight" background="blue">{{source}}</div>
-  <div class="chat-history-content section tight">{{content}}</div>
+  <div class="gradiented chat-history-source{{#if hideSource}} hidden{{/if}}" background="{{#if isSelf}}green{{else}}blue{{/if}}">{{source}}</div>
+  <div class="chat-history-content">
+    {{{content}}}
+  </div>
 </div>

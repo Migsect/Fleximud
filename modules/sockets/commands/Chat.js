@@ -24,20 +24,22 @@ Object.defineProperties(Chat.prototype,
       /* Getting the location of the client's character */
       var location = client.character.getLocation();
 
-      /* Message construction */
-      var message = {
-        source: client.character.name.shortName,
-        content: data.content
-      };
-
       /* Getting the client's manager */
       var clientManager = client.manager;
 
       /* Looping through all the characters at the location to send them the message */
       var characters = location.characters;
-      characters.forEach(function(charactrId)
+      characters.forEach(function(characterId)
       {
-        var clients = clientManager.characters.get(charactrId);
+        /* Message construction */
+        var message = {
+          source: client.character.name.shortName,
+          content: data.content,
+          isSelf: client.character.id == characterId,
+          hideSource: false
+        };
+
+        var clients = clientManager.characters.get(characterId);
         if (clients === null)
         {
           throw new Error("Clients returned null when there should be clients.");

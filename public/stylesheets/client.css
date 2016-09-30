@@ -11,7 +11,10 @@ div.panel {
 
 div#main-left-panel {}
 
-div#main-right-panel {}
+div#main-right-panel {
+  display: flex;
+  flex-direction: column;
+}
 
 div.stat-item-title {
   text-align: center;
@@ -33,7 +36,17 @@ div#chat-panel {
   flex-direction: column;
 }
 
-div#location-panel {}
+div#location-panel {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+}
+
+div#action-panel {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+}
 
 div#item-panel {}
 

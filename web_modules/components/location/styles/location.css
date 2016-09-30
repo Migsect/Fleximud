@@ -1,0 +1,15 @@
+div.location-view {
+  flex: 1 1 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+div.location-information {}
+
+div.location-connections {}
+
+div.location-connection {}
+
+div.location-connection-name {}
+
+div.location-connection-toName {}

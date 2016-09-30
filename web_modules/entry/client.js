@@ -4,7 +4,8 @@ require("../auth");
 var Utils = require("../utils");
 
 var SocketHandler = require("../socketHandler");
-var Chat = require("../components/chat/chat");
+var chatComponent = require("../components/chat/chat");
+var LocationComponent = require("../components/location/location");
 
 /* global io */
 
@@ -16,4 +17,5 @@ var socketHandler = new SocketHandler(socket);
 socketHandler.register(characterId);
 
 /* Initializing all the components */
-var chatComponent = new Chat("chat-panel", socketHandler);
+var chatComponent = new chatComponent("chat-panel", socketHandler);
+var locationComponent = new LocationComponent("location-panel", socketHandler);

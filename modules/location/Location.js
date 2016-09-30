@@ -17,6 +17,10 @@ var Location = function(json)
   var self = this;
   Object.defineProperties(self,
   {
+    displayName:
+    {
+      value: json.displayName ? json.displayName : "Unknown Location"
+    },
     /** @type {String} An id that will be used to differeniate the location from its siblings */
     localId:
     {

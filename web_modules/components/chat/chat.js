@@ -8,14 +8,14 @@ var historyItemTemplate = require("./templates/history-item.html");
 require("./styles/chat.css");
 
 /**
- * Creates a chat object to be used by the user to send messages to the server.
+ * Creates a chatcomponent object to be used by the user to send messages to the server.
  * Needs a div to reside in as well as a socket to send its messages through.
  * 
  * @param {String} divId  The div to construct the chat component in.
  * @param {Socket} socket The socket that will be used to send messages over.
  * @param {Integer} historyMax The maximum number of history items to keep.
  */
-var Chat = function(divId, socketHandler, historyMax)
+var ChatComponent = function(divId, socketHandler, historyMax)
 {
   var self = this;
   /* Defining the main properties */
@@ -47,6 +47,7 @@ var Chat = function(divId, socketHandler, historyMax)
   /* Setting up the div element */
   self.view.appendChild(Utils.htmlToElement(mainTemplate()));
 
+  /* Setting up the references to the gui elements */
   Object.defineProperties(self,
   {
     content:
@@ -91,7 +92,7 @@ var Chat = function(divId, socketHandler, historyMax)
 
 };
 
-Object.defineProperties(Chat.prototype,
+Object.defineProperties(ChatComponent.prototype,
 {
   sendMessage:
   {
@@ -221,4 +222,4 @@ Object.defineProperties(Chat.prototype,
   }
 });
 
-module.exports = Chat;
+module.exports = ChatComponent;

@@ -15,6 +15,7 @@ var Connection = function(name, destination)
     destination:
     {
       value: destination
+
     },
     /** @type {Function[]} A list of predicate functions that take in a character */
     limitations:

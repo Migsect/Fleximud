@@ -1,4 +1,19 @@
 {
+  "database":
+  {
+    "url": "mongodb://localhost/devtest"
+  },
+  "sessions":
+  {
+    "secret": "macro dogos",
+    "maxAge": 86400000
+  },
+  "admin":
+  {
+    "email": "radmin",
+    "username": "radmin",
+    "password": "radmin"
+  },
   "sizeBase": 1.7,
   "sizeUnit":
   {

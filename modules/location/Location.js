@@ -42,27 +42,7 @@ var Location = function(json)
     children:
     {
       enumerable: true,
-      value: (function()
-      {
-        /* The map of all the children */
-        var childrenMap = new Map();
-        /* Adding all the children */
-        json.children.forEach(function(childJSON)
-        {
-          /* Creating the child and adding it */
-          try
-          {
-            var child = new Location(childJSON);
-            self.addChild(child);
-          }
-          catch (error)
-          {
-            /* TODO adding error logging */
-          }
-        });
-        /* Returning the children map */
-        return childrenMap;
-      })()
+      value: new Map()
     },
     /** @type {Connection[]} A list of all the connections at this location */
     connections:
@@ -94,11 +74,27 @@ var Location = function(json)
       value: []
     }
   });
+
   if (locations.has(this.globalId))
   {
     /* TODO Throw an error for when there is a globalId clash */
   }
   locations.set(this.globalId, this);
+
+  /* Adding all the children */
+  json.children.forEach(function(childJSON)
+  {
+    /* Creating the child and adding it */
+    try
+    {
+      var child = new Location(childJSON);
+      self.addChild(child);
+    }
+    catch (error)
+    {
+      console.log(error);
+    }
+  });
 };
 
 Object.defineProperties(Location.prototype,
@@ -114,7 +110,6 @@ Object.defineProperties(Location.prototype,
      */
     value: function(characterId)
     {
-      console.log("Adding character to a location");
       if (this.characters.findIndex(function(element)
         {
           return element === characterId;
@@ -255,13 +250,13 @@ Object.defineProperties(Location.prototype,
       /* Checking if the child has a parent already, if it does then we
        * should not be adding it since that will create a break.
        */
-      if (child.parent === null)
+      if (child.parent !== null)
       {
         throw new Error("addChild Error, Temponrary message. Child not orphan");
       }
       /* Otherwise we're going to add the child to this location */
       child.parent = this;
-      this.chilren.set(child.localId, child);
+      this.children.set(child.localId, child);
     }
   },
   /**

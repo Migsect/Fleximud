@@ -129,7 +129,7 @@ Object.defineProperties(Chat.prototype,
             source: "Server",
             content: results,
             hideSource: true
-          });
+          }, true);
         });
       }
       else
@@ -176,8 +176,11 @@ Object.defineProperties(Chat.prototype,
      * an identifier for the message when it is in the history.
      *
      * @param {Object} message The message to add to the history
+     * @param {Boolean} dirty This means to add to the history an element that 
+     *                        won't be cleaned of html. This will default to false.
+     *                        This is useful for some commands that want HTML formatting.
      */
-    value: function(message)
+    value: function(message, dirty)
     {
       /* Setting the messages number before adding it to the list and then incrementing it */
       message.number = this.messageNumber++;
@@ -186,6 +189,10 @@ Object.defineProperties(Chat.prototype,
 
       var setupContent = function(content)
       {
+        if (dirty)
+        {
+          return content.replace(/([^\s-]{5})([^\s-]{5})/g, "$1&shy;$2");
+        }
         return Utils.escapeHTML(content).replace(/([^\s-]{5})([^\s-]{5})/g, "$1&shy;$2");
       };
 

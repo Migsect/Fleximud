@@ -1,6 +1,7 @@
 "use strict";
 
 var commands = require("./commands/commands");
+var Util = require(process.cwd() + "/modules/Util");
 
 /**
  * The Client class is used to abstract a socket connection.
@@ -137,7 +138,20 @@ Object.defineProperties(Client.prototype,
       /* Calling the callback if there is a callback */
       if (typeof callback == "function")
       {
-        callback(result);
+        /* If the result doesn't have a then member, then it isn't a promise*/
+        if (Util.isNull(result.then) && typeof result.then != "function")
+        {
+          callback(result);
+        }
+        else
+        {
+          /* If the result is a promise, then we'll wait before calling the callback */
+          result.then(function(promiseResult)
+          {
+            callback(promiseResult);
+          });
+        }
+
       }
     }
   },

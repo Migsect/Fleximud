@@ -6,6 +6,8 @@ var passwordHash = require("password-hash");
 var uuid = require("node-uuid");
 var Promise = require("promise");
 
+var config = require(process.cwd() + "/config/general.json");
+
 var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
@@ -186,5 +188,8 @@ module.exports.accountExists(
   name: "radmin"
 }).then(function(result)
 {
-  if (!result) module.exports.createAccount("radmin", "radmin", "radmin");
+  if (!result) module.exports.createAccount(
+    config.admin.username ? config.admin.username : "radmin",
+    config.admin.email ? config.admin.email : "radmin",
+    config.admin.password ? config.admin.password : "radmin");
 });

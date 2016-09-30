@@ -16,6 +16,8 @@ var auth = require('./routes/auth');
 var client = require('./routes/client');
 var account = require('./routes/account');
 
+var config = require("./config/general.json");
+
 /* Loading universals */
 require("./modules/location/Location");
 
@@ -26,7 +28,7 @@ app.locals.middleware = {};
 
 /* Database setup */
 /* Creating the database connection */
-var databaseURL = 'mongodb://localhost/devtest';
+var databaseURL = config.database.url;
 mongoose.connect(databaseURL);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -61,13 +63,12 @@ var appSession = session(
 {
   store: new MongoStore(
   {
-    /* TODO make this configurable */
-    url: "mongodb://localhost/devtest"
+    url: config.database.url
   }),
-  secret: "macro dogs",
+  secret: config.sessions.secret ? config.sessions.secret : "secrety secret",
   cookie:
   {
-    maxAge: 24 * 60 * 60 * 1000
+    maxAge: config.sessions.maxAge ? config.sessions.maxAge : 3600000 /* An hour */
   },
   resave: true,
   saveUninitialized: true

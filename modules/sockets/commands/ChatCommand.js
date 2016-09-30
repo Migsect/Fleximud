@@ -37,7 +37,7 @@ Object.defineProperties(ChatCommand.prototype,
       {
         return commandNotFound();
       }
-      var args = data.args;
+      var args = data.arguments;
 
       /* Executing the command and getting the result */
       var result = command.executeWithArray(client, args);

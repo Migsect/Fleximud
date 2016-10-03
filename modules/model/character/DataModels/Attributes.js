@@ -39,7 +39,7 @@ AttributesSchema.methods.getValue = function(attribute)
     type.children.forEach(function(child)
     {
       sum += attributes.getValue(child.id);
-    })
+    });
     return sum / type.children.length;
   }
   else

@@ -182,6 +182,19 @@ CharacterSchema.methods.getDescriptorData = function(key)
   return result.value;
 };
 
+/**
+ * Retrieves all the stat transformations fro the character's different data-holding
+ * objects.  For example, species and descriptors.
+ *
+ * This will order the transforms in the order that they should occur.
+ * 
+ * @param  {String} key The stat to get the transforms for.
+ * @return {Transform[]} A list of the transforms.
+ */
+CharacterSchema.methods.getStatTransforms = function(key) {
+
+};
+
 var Character = Mongoose.model("Character", CharacterSchema);
 
 module.exports = {

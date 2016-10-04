@@ -32,6 +32,7 @@
     "css-loader": "^0.25.0",
     "gulp": "^3.9.1",
     "gulp-jsbeautifier": "^2.0.3",
+    "gulp-jsbeautify": "^0.1.1",
     "gulp-jshint": "^2.0.1",
     "gulp-nodemon": "^2.1.0",
     "gulp-sass": "^2.3.2",

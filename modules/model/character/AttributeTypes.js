@@ -1,17 +1,44 @@
 "use strict";
 
+var Util = require(process.cwd() + "/modules/Util");
 // var Promise = require("promise");
 
 var templates = require(process.cwd() + "/templates/templates");
 
-/* Defining the attribute type class */
+/**
+ * Attribute types store information on attributes, such as sub-attributes as well
+ * as help text.  They also determine implementation of some stats.
+ * 
+ * @param {[type]} json Configuration object the attribute type is based on.
+ */
 var AttributeType = function(json)
 {
-  this.name = json.name;
-  this.id = json.id;
-  this.tag = json.tag;
-  this.children = json.children;
-  this.color = json.color ? json.color : "#4444444";
+  Util.assertNotNull(json, json.name, json.id, json.tag);
+
+  var self = this;
+  Object.defineProperties(self,
+  {
+    name:
+    {
+      value: json.name
+    },
+    id:
+    {
+      value: json.id
+    },
+    tag:
+    {
+      value: json.tag
+    },
+    children:
+    {
+      value: Util.isNull(json.children) ? [] : json.children
+    },
+    color:
+    {
+      value: Util.isNull(json.color) ? "#444444" : json.color
+    }
+  });
 };
 
 AttributeType.prototype = {

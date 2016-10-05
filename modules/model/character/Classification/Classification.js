@@ -1,8 +1,9 @@
 "use strict";
 
 var fs = require("fs");
-var Descriptors = require("./Descriptor");
+var Descriptor = require("./Descriptor");
 var templates = require(process.cwd() + "/templates/templates");
+var Util = require(process.cwd() + "/modules/Util");
 
 /**
  * A classification is a way of classifying a character.
@@ -12,73 +13,126 @@ var templates = require(process.cwd() + "/templates/templates");
  */
 var Classification = function(json)
 {
-  this.id = json.id;
-  this.name = json.name;
-  this.attributes = json.attributes;
-  /* Grabbing the infoText from file */
-  this.documentation = (function()
-  {
-    if (!json.documentation)
-    {
-      return "";
-    }
-    var path = process.cwd() + '/config/documentation/' + json.documentation;
-    var documentation = fs.readFileSync(path, "utf-8");
-    return documentation;
-  })();
+  Util.assertNotNull(json, json.id, json.name);
 
-  /* Constructing all the descriptors*/
-  this.descriptors = (function()
+  var self = this;
+  Object.defineProperties(self,
   {
-    var descriptorMap = new Map();
-    json.descriptors.forEach(function(descriptorJSON)
+    id:
     {
-      var descriptor = Descriptors.getDescriptor(descriptorJSON);
-      if (!descriptor)
+      value: json.id
+    },
+    name:
+    {
+      value: json.name
+    },
+    attributes:
+    {
+      value: Util.isNull(json.attributes) ? [] : json.attributes
+    },
+    /* Grabbing the infoText from file */
+    documentation:
+    {
+      value: (function()
       {
-        return;
-      }
-      descriptorMap.set(descriptor.id, descriptor);
-    });
-    return descriptorMap;
-  }());
+        if (Util.isNull(json.documentation))
+        {
+          return "";
+        }
+        var path = process.cwd() + '/config/documentation/' + json.documentation;
+        var documentation = fs.readFileSync(path, "utf-8");
+        return documentation;
+      })()
+    },
+    /* Constructing all the descriptors*/
+    descriptors:
+    {
+      value: (function()
+      {
+        var descriptorMap = new Map();
+        json.descriptors.forEach(function(descriptorJSON)
+        {
+          var descriptor = Descriptor.getDescriptor(descriptorJSON);
+          if (!descriptor)
+          {
+            return;
+          }
+          descriptorMap.set(descriptor.id, descriptor);
+        });
+        return descriptorMap;
+      }())
+    }
+  });
 };
 
-Classification.prototype = {
-  /**
-   * Returns a list of all the descriptor objects on this classification
-   * @return {[type]} [description]
-   */
-  getDescriptors: function()
+Object.defineProperties(Classification.prototype,
+{
+  getDescriptors:
   {
-    var list = [];
-    this.descriptors.forEach(function(descriptor)
+    /**
+     * Returns a list of all the descriptor objects on this classification
+     * @return {[type]} [description]
+     */
+    value: function()
     {
-      list.push(descriptor);
-    });
-    return list;
+      var list = [];
+      this.descriptors.forEach(function(descriptor)
+      {
+        list.push(descriptor);
+      });
+      return list;
+    },
+    writable: true
   },
-  getDescriptor: function(id)
+  getDescriptor:
   {
-    return this.descriptors.get(id);
-  },
-  getItemHTML: function()
-  {
-    var template = templates("characterCreation/classification/classificationItem");
-    return template(
+    /**
+     * Returns the descriptor with the ID, this is not a descriptor value but
+     * rather the actual configuration of the descriptor.
+     * 
+     * @param  {String}     id The id of the descriptor to retrieve.
+     * @return {Descriptor} The Descriptor object with the specified id
+     */
+    value: function(id)
     {
-      classification: this
-    });
-
+      return this.descriptors.get(id);
+    },
+    writable: true
   },
-  getInfoHTML: function()
+  getItemHTML:
   {
-    var template = templates("characterCreation/classification/classificationInfo");
-    return template(
+    /**
+     * Generates the HTML for classification.
+     * 
+     * @return {HTMLString} The HTML string that was generated.
+     */
+    value: function()
     {
-      classification: this
-    });
+      var template = templates("characterCreation/classification/classificationItem");
+      return template(
+      {
+        classification: this
+      });
+    },
+    writable: true
+  },
+  getInfoHTML:
+  {
+    /**
+     * Retrieves HTML that depicts the info of the classification.
+     * 
+     * @return {HTMLString} The HTML string that was generated.
+     */
+    value: function()
+    {
+      var template = templates("characterCreation/classification/classificationInfo");
+      return template(
+      {
+        classification: this
+      });
+    },
+    writable: true
   }
-};
+});
 
 module.exports = Classification;

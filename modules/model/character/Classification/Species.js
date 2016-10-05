@@ -5,7 +5,7 @@ var Fuzzy = Util.Fuzzy;
 var Classification = require("./Classification");
 var templates = require(process.cwd() + "/templates/templates");
 
-var speciesJSON = require(process.cwd() + '/config/species.json');
+var speciesJSON = require(process.cwd() + "/config/species");
 
 /**
  * A species generally includes different sexes a character can have as well as races.

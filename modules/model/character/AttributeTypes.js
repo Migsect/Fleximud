@@ -1,7 +1,7 @@
 "use strict";
 
 var Util = require(process.cwd() + "/modules/Util");
-// var Promise = require("promise");
+var Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 
 var templates = require(process.cwd() + "/templates/templates");
 
@@ -9,10 +9,11 @@ var templates = require(process.cwd() + "/templates/templates");
  * Attribute types store information on attributes, such as sub-attributes as well
  * as help text.  They also determine implementation of some stats.
  * 
- * @param {[type]} json Configuration object the attribute type is based on.
+ * @param {Object} json Configuration object the attribute type is based on.
  */
 var AttributeType = function(json)
 {
+  /* Validating the inputs */
   Util.assertNotNull(json, json.name, json.id, json.tag);
 
   var self = this;
@@ -32,6 +33,7 @@ var AttributeType = function(json)
     },
     children:
     {
+      writable: true,
       value: Util.isNull(json.children) ? [] : json.children
     },
     color:
@@ -41,80 +43,154 @@ var AttributeType = function(json)
   });
 };
 
-AttributeType.prototype = {
-  /**
-   * Populates the children of the attribute type given a json array
-   * @param  {JSON} typeMapping A Json of all the children
-   */
-  populateChildren: function(typeMapping)
+Object.defineProperties(AttributeType.prototype,
+{
+  populateChildren:
   {
-    this.children = this.children.map(function(id)
+    /**
+     * Populates the children of the attribute type given a json array
+     * @param  {JSON} typeMapping A Json of all the children
+     */
+    value: function(typeMapping)
     {
-      var type = typeMapping.get(id);
-      if (!type)
+      this.children = this.children.map(function(id)
       {
-        console.log("WARNING - '" + id + "' did not have a type object defined.");
-        return null;
-      }
-      return type;
-    });
+        var type = typeMapping.get(id);
+        if (!type)
+        {
+          console.log("WARNING - '" + id + "' did not have a type object defined.");
+          return null;
+        }
+        return type;
+      });
+    }
   },
-  /**
-   * Returns the HTML for this AttributeType (includes all the children's html as well)
-   * @return {String} An HTML string
-   */
-  getHTML: function()
+  getHTML:
   {
-    var template = templates("characterCreation/attribute");
-    return template(
+    /**
+     * Returns the HTML for this AttributeType (includes all the children's html as well)
+     * @return {String} An HTML string
+     */
+    value: function()
     {
-      id: this.id,
-      name: this.name,
-      children: this.children.map(function(child)
+      var template = templates("characterCreation/attribute");
+      return template(
       {
-        return child.getHTML();
-      }).join(""),
-      color: this.color ? this.color : "#333333"
-    });
-  }
-};
-
-/* Getting the list of attributes */
-var typesJSON = require('../../../config/attributes.json');
-/* Mapping the jsons to objects */
-var types = new Map();
-typesJSON.forEach(function(json)
-{
-  var type = new AttributeType(json);
-  types.set(type.id, type);
-});
-types.forEach(function(type)
-{
-  type.populateChildren(types);
-});
-
-/* Creating a list of types*/
-var typeList = [];
-types.forEach(function(type)
-{
-  typeList.push(type);
-});
-/* Calculating the top level type */
-var tops = typeList.filter(function(type)
-{
-  return !typeList.some(function(t)
+        id: this.id,
+        name: this.name,
+        children: this.children.map(function(child)
+        {
+          return child.getHTML();
+        }).join(""),
+        color: this.color ? this.color : "#333333"
+      });
+    }
+  },
+  getStatTransform:
   {
-    return t.children.includes(type);
-
-  });
+    /**
+     * Returns a Transform object that will retrieve the attribute value of the
+     * character and return the value.
+     * @return {Transform} The resulting transform.
+     */
+    value: function()
+    {
+      var self = this;
+      return Transform.createTransform(function(value, character)
+      {
+        return value + character.attributes.getValue(self.id);
+      });
+    }
+  }
 });
-/* We should only have one top level attribute */
-if (tops.length > 1)
-{
-  console.log("WARNING - the number of root attributes is greater than 1.");
-}
 
-module.exports = {
-  top: tops[0],
-  map: types
-};
+Object.defineProperty(module.exports, "map",
+{
+  /**
+   * Map of the attribute ids to their attribute object.
+   * This should include all attributes.
+   * 
+   * @type {[Map<String, AttributeType>}
+   */
+  value: (function()
+  {
+    /* Getting the list of attributes */
+    var typesJSON = require("../../../config/attributes.json");
+
+    /* Mapping the jsons to objects */
+    var types = new Map();
+
+    /* Creating all the AttributeTypes from the JSONs */
+    typesJSON.forEach(function(json)
+    {
+      var type = new AttributeType(json);
+      types.set(type.id, type);
+    });
+
+    /* Populating the children of each type */
+    types.forEach(function(type)
+    {
+      type.populateChildren(types);
+    });
+
+    /* Returning the type */
+    return types;
+  })()
+});
+
+Object.defineProperties(module.exports,
+{
+  top:
+  {
+    /**
+     * The top level attribute.
+     * 
+     * @type {AttributeType}
+     */
+    value: (function()
+    {
+      /* Creating a list of types*/
+      var typeList = [];
+      module.exports.map.forEach(function(type)
+      {
+        typeList.push(type);
+      });
+
+      /* Calculating the top level type */
+      var tops = typeList.filter(function(type)
+      {
+        return !typeList.some(function(t)
+        {
+          return t.children.includes(type);
+
+        });
+      });
+
+      /* We should only have one top level attribute */
+      if (tops.length > 1)
+      {
+        console.log("WARNING - the number of root attributes is greater than 1.");
+      }
+
+      return tops[0];
+    })()
+  },
+  transforms:
+  {
+    /**
+     * A mapping of attribute names to transforms. This mapping will allow 
+     * attributes to work as stats.
+     * 
+     * @type {Map<String, Transform>}
+     */
+    value: (function()
+    {
+      var transformMap = new Map();
+      module.exports.map.forEach(function(type)
+      {
+        transformMap.set(type.id, type.getStatTransform());
+      });
+      return transformMap;
+    })()
+  }
+});

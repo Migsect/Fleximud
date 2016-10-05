@@ -1,20 +1,20 @@
 "use strict";
 
-var express = require('express');
-var path = require('path');
+var express = require("express");
+var path = require("path");
 // var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var logger = require("morgan");
+var cookieParser = require("cookie-parser");
+var bodyParser = require("body-parser");
 var session = require("express-session");
-var engines = require('consolidate');
-var MongoStore = require('connect-mongo')(session);
-var mongoose = require('mongoose');
+var engines = require("consolidate");
+var MongoStore = require("connect-mongo")(session);
+var mongoose = require("mongoose");
 
-var index = require('./routes/index');
-var auth = require('./routes/auth');
-var client = require('./routes/client');
-var account = require('./routes/account');
+var index = require("./routes/index");
+var auth = require("./routes/auth");
+var client = require("./routes/client");
+var account = require("./routes/account");
 
 var config = require("./config/general.json");
 
@@ -31,12 +31,12 @@ app.locals.middleware = {};
 var databaseURL = config.database.url;
 mongoose.connect(databaseURL);
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.on('connected', function()
+db.on("error", console.error.bind(console, "connection error:"));
+db.on("connected", function()
 {
   console.log("Connected to the database!");
 });
-db.on('disconnected', function()
+db.on("disconnected", function()
 {
   console.log("Disconnected from the database!");
 });

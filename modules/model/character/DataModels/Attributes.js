@@ -18,8 +18,7 @@ var AttributesSchema = Schema(
 });
 
 /**
- * @param attribute
- *            The attribute you wish to retrieve.
+ * @param attribute The attribute you wish to retrieve.
  */
 AttributesSchema.methods.getValue = function(attribute)
 {

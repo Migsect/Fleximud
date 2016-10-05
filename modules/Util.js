@@ -8,9 +8,9 @@
  */
 var TypeCheckError = function(argIndex, value)
 {
-  Error.call(this, value + " was not found to be of a correct type.");
+  Error.call(this, "Argument " + argIndex + " with value " + value + " was not found to be of a correct type.");
+  this.argIndex = argIndex;
   this.value = value;
-  this.type = type;
 };
 TypeCheckError.prototype = Object.create(Error.prototype);
 TypeCheckError.prototype.constructor = TypeCheckError;
@@ -76,7 +76,7 @@ Object.defineProperties(module.exports,
       {
         throw new Error("Error was not defined correctly for assert.");
       }
-      if (!Array.isArray(values))
+      if (this.isNull(values))
       {
         throw new Error("Values was not defined correctly for assert.");
       }

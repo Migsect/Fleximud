@@ -28,11 +28,12 @@ Object.defineProperties(Transform.prototype,
     /**
      * Performs a transformation on the value.
      * This needs to be implemented by each different transform.
-     * 
-     * @param  {Value} value The value to transform.
-     * @return {}      The result of the transformation.
+     *
+     * @param  {Object} source A datasource for the transform.
+     * @param  {Value}  value The value to transform.
+     * @return {Object}       The result of the transformation.
      */
-    value: function(value)
+    value: function(value, source)
     {
       return value;
     },
@@ -71,7 +72,7 @@ Object.defineProperties(CompositeTransform.prototype,
 {
   transform:
   {
-    value: function(value)
+    value: function(value, source)
     {
       var transformedValue = value;
       this.transforms.forEach(function(transform)
@@ -110,9 +111,9 @@ Object.defineProperties(DirectTransform.prototype,
 {
   transform:
   {
-    value: function(value)
+    value: function(value, source)
     {
-      return this.directFunction(value);
+      return this.directFunction(value, source);
       /* Possibility: Add a check to make sure there isn't an outrageous transform */
     }
   }
@@ -159,7 +160,7 @@ Object.defineProperties(ConfiguredTransform.prototype,
 {
   transform:
   {
-    value: function(value)
+    value: function(value, source)
     {
       return ((Math.exp(value, this.exponent) * this.add) / this.divide) + this.add;
     }

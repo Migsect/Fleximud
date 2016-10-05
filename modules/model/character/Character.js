@@ -1,6 +1,7 @@
 "use strict";
 
 var uuid = require("node-uuid");
+var Promise = require("promise");
 
 var Mongoose = require("mongoose");
 var Schema = Mongoose.Schema;
@@ -204,9 +205,11 @@ module.exports = {
    *
    * @param  {Account} account The account that the character is being made under.
    * @param  {JSON} JSON An object literal to represent the character data to use.
+   * @param  {Callback} callback Called when the character is successfully saved.
+   * @param  {Callback} errorCallback Called if there was an error with the creation
    * @return {CharacterModel} The character model that was created.
    */
-  createCharacter: function(account, JSON)
+  createCharacter: function(account, JSON, callback, errorCallback)
   {
     /* Generating information */
     var id = uuid.v4();
@@ -227,20 +230,83 @@ module.exports = {
     /* Saving the character */
     character.save(function(err, document)
     {
-      if (err) return console.error(err);
+      if (err)
+      {
+        if (typeof errorCallback == "function")
+        {
+          errorCallback(err);
+        }
+        return console.error(err);
+      }
       console.log("Saved Character to Database:", document);
+      if (typeof callback == "function")
+      {
+        callback(character);
+      }
     });
     /* Adding the character to an account */
     account.addCharacter(character);
     return character;
   },
-  getCharacter: function(query) {
+  deleteCharacter: function(query)
+  {
+    return new Promise(function(resolve, reject)
+    {
+      Character.find(query).remove().exec(function(error, result)
+      {
+        if (error)
+        {
+          reject(error);
+        }
+        else
+        {
+          resolve(result);
+        }
+      });
 
+    });
   },
-  getChatacterByName: function(name) {
-
+  characterExists: function(query)
+  {
+    return new Promise(function(resolve, reject)
+    {
+      Character.find(query).exec(function(error, result)
+      {
+        if (error)
+        {
+          reject(error);
+        }
+        else
+        {
+          resolve(result.length > 0);
+        }
+      });
+    });
   },
-  getCharacterById: function(id) {
-
+  getCharacterByQuery: function(query)
+  {
+    return new Promise(function(resolve, reject)
+    {
+      /* Finding the character and populating all its characters */
+      Character.findOne(query).exec(function(error, result)
+      {
+        if (error)
+        {
+          reject(error);
+          console.log(error);
+        }
+        else
+        {
+          resolve(result);
+        }
+      });
+    });
+  },
+  getCharacterById: function(id)
+  {
+    return this.getCharacterByQuery(
+    {
+      id: id
+    });
   }
 };

@@ -67,16 +67,18 @@ router.get("/create", accountGrabber, function(request, response)
   });
 
 });
+
 /* Creates a character */
 router.post("/createCharacter", accountGrabber, function(request, response)
 {
+  /* Grabbing the account */
   var account = request.account;
   /* Getting the data */
   var data = request.body;
 
   /* ==== Validating the received data ==== */
   /* Checking if there is a fullname or if the fullname is no empty */
-  if (!data.fullName && data.fullName.length <= 0)
+  if (!data.fullName || data.fullName.length <= 0)
   {
     response.status(400).send("No full name provided.");
     return;
@@ -123,9 +125,50 @@ router.post("/createCharacter", accountGrabber, function(request, response)
   /* ==== End Data Validation ==== */
 
   /* Creating the character */
-  Character.createCharacter(account, data);
+  Character.createCharacter(account, data, function()
+  {
+    response.status(200).send("Charcter Created.");
+  }, function()
+  {
+    response.status(500).send("Character failed to save.");
+  });
 
-  response.status(200).send("Charcter Created.");
+});
+
+/* Deletes a character, character must be in account otherwise it errors */
+router.post("/deleteCharacter", accountGrabber, function(request, response)
+{
+  /* Grabbing the account */
+  var account = request.account;
+  /* Getting the data */
+  var data = request.body;
+  console.log(data);
+
+  if (!data.character)
+  {
+    response.status(400).send("Failed to specify a character id.");
+    return;
+  }
+
+  var characterId = data.character;
+  if (account.characters.some(function(character)
+    {
+      return characterId == character.id;
+    }))
+  {
+    Character.deleteCharacter(
+    {
+      id: characterId
+    }).then(function()
+    {
+      response.status(200).send("Character Deleted.");
+    });
+  }
+  else
+  {
+    response.status(400).send("Character specified was not listed under this account");
+    return;
+  }
 });
 
 /* Admin Control Panel Page */

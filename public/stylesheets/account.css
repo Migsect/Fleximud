@@ -1,18 +1,48 @@
 div.character-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  overflow-y: auto;
 }
 
 .character-item {
-  flex: 1 1;
-  min-width: 500px;
+  flex: 1 1 0px;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
 }
 
-@media (min-width: 1000px) {
+.character-navigate {
+  flex: 1 1 0px;
+}
+
+.character-delete {
+  align-content: center;
+}
+
+div.section {
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+@media (min-width: 700px) {
   div.character-list {
     column-count: 2;
     -webkit-column-count: 2;
     -moz-column-count: 2;
+  }
+}
+
+@media (min-width: 1050px) {
+  div.character-list {
+    column-count: 3;
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+  }
+}
+
+@media (min-width: 1400px) {
+  div.character-list {
+    column-count: 4;
+    -webkit-column-count: 4;
+    -moz-column-count: 4;
   }
 }

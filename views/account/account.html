@@ -36,12 +36,17 @@
       <!-- The list of all the character elements -->
       <div class="character-list">
         {{#account.characters}}
-        <a class="character-item" href="/client?character={{id}}">
-          <div class="box section clickable" background="grey_3">
-            <div class="header_2">{{name.fullName}}</div>
-            <div class="">{{speciesSex.species}} - {{speciesSex.sex}}</div>
+        <div class="character-item" id="character-{{id}}">
+          <a class="character-navigate" href="/client?character={{id}}">
+            <div class="gradiented section clickable" background="grey_3">
+              <div class="header_2">{{name.fullName}}</div>
+              <div class="">{{speciesSex.species}} - {{speciesSex.sex}}</div>
+            </div>
+          </a>
+          <div class="character-delete gradiented section clickable" background="grey_3" data-character-id="{{id}}">
+            <span>X</span>
           </div>
-        </a>
+        </div>
         {{/account.characters}}
       </div>
     </div>

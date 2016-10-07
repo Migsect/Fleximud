@@ -51,4 +51,4 @@ Object.defineProperties(ChatCommand.prototype,
   }
 });
 
-module.exports = new ChatCommand();
+module.exports = ChatCommand;

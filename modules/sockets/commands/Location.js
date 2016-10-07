@@ -53,4 +53,4 @@ Object.defineProperties(Location.prototype,
   }
 });
 
-module.exports = new Location();
+module.exports = Location;

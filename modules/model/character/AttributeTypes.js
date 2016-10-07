@@ -39,6 +39,29 @@ var AttributeType = function(json)
     color:
     {
       value: Util.isNull(json.color) ? "#444444" : json.color
+    },
+    transforms:
+    {
+      /**
+       * Transforms for the AttributeType
+       */
+      value: (function()
+      {
+        var map = Util.isNull(json.transforms) ? new Map() : Transform.parseDirectedTransforms(json.transforms);
+        /* Adding the descriptor id if it is not in there*/
+        if (!map.has(json.id))
+        {
+          map.set(json.id, []);
+        }
+
+        /* Getting the base attribute off */
+        map.get(json.id).push(Transform.createTransform(function(value, character)
+        {
+          return value + character.attributes.getValue(json.id);
+        }));
+
+        return map;
+      })()
     }
   });
 };
@@ -83,22 +106,6 @@ Object.defineProperties(AttributeType.prototype,
           return child.getHTML();
         }).join(""),
         color: this.color ? this.color : "#333333"
-      });
-    }
-  },
-  getStatTransform:
-  {
-    /**
-     * Returns a Transform object that will retrieve the attribute value of the
-     * character and return the value.
-     * @return {Transform} The resulting transform.
-     */
-    value: function()
-    {
-      var self = this;
-      return Transform.createTransform(function(value, character)
-      {
-        return value + character.attributes.getValue(self.id);
       });
     }
   }
@@ -177,18 +184,21 @@ Object.defineProperties(module.exports,
   },
   transforms:
   {
-    /**
-     * A mapping of attribute names to transforms. This mapping will allow 
-     * attributes to work as stats.
-     * 
-     * @type {Map<String, Transform>}
-     */
     value: (function()
     {
       var transformMap = new Map();
       module.exports.map.forEach(function(type)
       {
-        transformMap.set(type.id, type.getStatTransform());
+        type.transforms.forEach(function(transformArray, key)
+        {
+          /* Initializing empty array if it doesn't have the key */
+          if (!transformMap.has(key))
+          {
+            transformMap.set(key, []);
+          }
+          /* Combining the two lists */
+          Array.prototype.push.apply(transformMap.get(key), transformArray);
+        });
       });
       return transformMap;
     })()

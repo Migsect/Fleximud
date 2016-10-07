@@ -21,7 +21,7 @@ var StatSchema = Schema(
  * may result in the value spinning out of control.
  * 
  * @param {String} key  The key of the stat to retrieve
- * @param {Value} 			value the value retrieved
+ * @param {Value}       value the value retrieved
  */
 StatSchema.methods.setStat = function(key, value)
 {
@@ -60,6 +60,43 @@ StatSchema.methods.getStat = function(character, key)
   return transformedStat;
 };
 
-module.exports = {
-  schema: StatSchema
+/**
+ * Retrieves all the static stat keys. These are the stats that have been defined.
+ * 
+ * @return {String[]} The static stat keys.
+ */
+StatSchema.methods.getStaticKeys = function()
+{
+  return Object.keys(this.values);
 };
+
+/**
+ * Retrieves all the possible stat keys for the specified character.  Even though this has to
+ * have a character to begin with, in the future this may be better done.
+ * 
+ * @param  {Character} character The character
+ * @return {String[]}            The list of stats
+ */
+StatSchema.methods.getKeys = function(character)
+{
+  console.log(this);
+  return this.getStaticKeys().concat(character.getStatTransformsKeys());
+};
+
+Object.defineProperties(module.exports,
+{
+  schema:
+  {
+    value: StatSchema
+  },
+  createLiteral:
+  {
+    value: function()
+    {
+      return {
+        values:
+        {}
+      };
+    }
+  }
+});

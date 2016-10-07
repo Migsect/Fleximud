@@ -4,8 +4,6 @@ var DisplayName = require("../DisplayName");
 
 var templates = require(process.cwd() + "/templates/templates");
 
-var DescriptorTypes = require("../DescriptorTypes");
-
 var typeMapping = new Map();
 
 /** MainDescriptor */
@@ -99,7 +97,6 @@ Object.defineProperties(RangeDescriptor.prototype,
   {
     value: function(other)
     {
-      console.log('r merge called');
       var value = Descriptor.prototype.merge.call(this, other);
       if (value === null)
       {

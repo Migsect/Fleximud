@@ -1,6 +1,7 @@
 "use strict";
 
 var Command = require("../Command");
+var Util = require(process.cwd() + "/modules/Util");
 
 var Chat = function()
 {
@@ -10,13 +11,9 @@ var Chat = function()
   {});
 };
 
-Chat.prototype = Object.create(Command.prototype);
+Util.inherit(Command, Chat);
 Object.defineProperties(Chat.prototype,
 {
-  constructor:
-  {
-    value: Chat
-  },
   execute:
   {
     value: function(client, data)
@@ -55,4 +52,4 @@ Object.defineProperties(Chat.prototype,
   }
 });
 
-module.exports = new Chat();
+module.exports = Chat;

@@ -118,10 +118,20 @@ AttributesSchema.methods.setValue = function(attribute, value)
   }
 };
 
-module.exports = {
-  schema: AttributesSchema,
-  createLiteral: function()
+Object.defineProperties(module.exports,
+{
+  schema:
   {
-    return {};
+    value: AttributesSchema
+  },
+  createLiteral:
+  {
+    value: function()
+    {
+      return {
+        values:
+        {}
+      };
+    }
   }
-};
+});

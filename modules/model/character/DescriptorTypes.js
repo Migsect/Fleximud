@@ -17,35 +17,56 @@ var DescriptorType = function(json)
   {
     id:
     {
-      value: json.id
+      value: json.id,
+      enumerable: true
     },
     type:
     {
-      value: json.type
+      value: json.type,
+      enumerable: true
     },
     name:
     {
-      value: Util.isNull(json.name) ? null : json.name
+      value: Util.isNull(json.name) ? null : json.name,
+      enumerable: true
     },
     transforms:
     {
-      value: Util.isNull(json.transforms) ? [] : json.transforms.forEach(function(element)
+      value: (function()
       {
-        return Transform.createTransform(element);
-      })
+        var map = Util.isNull(json.transforms) ? new Map() : Transform.parseDirectedTransforms(json.transforms);
+
+        /* Adding the descriptor id if it is not in there*/
+        if (!map.has(json.id))
+        {
+          map.set(json.id, []);
+        }
+
+        /* Getting the base attribute off */
+        map.get(json.id).push(Transform.createTransform(function(value, character)
+        {
+          /* We'll add onto it if it is a number */
+          if (Util.isNumber(value))
+          {
+            return value + character.descriptors.get(json.id);
+          }
+          /* Otherwise we'll just return the character's current value for it */
+          else
+          {
+            return character.descriptors.get(json.id);
+          }
+        }));
+
+        return map;
+      })(),
+      enumerable: true
     }
   });
 };
 
 Object.defineProperties(DescriptorType.prototype,
-{
-  getStatTransform:
-  {
-    value: function() {
+{});
 
-    }
-  }
-});
 /* Defining the map of all the types */
 Object.defineProperty(module.exports, "map",
 {
@@ -74,7 +95,16 @@ Object.defineProperties(module.exports,
       var transformMap = new Map();
       module.exports.map.forEach(function(type)
       {
-        transformMap.set(type.id, type.getStatTransform());
+        type.transforms.forEach(function(transformArray, key)
+        {
+          /* Initializing empty array if it doesn't have the key */
+          if (!transformMap.has(key))
+          {
+            transformMap.set(key, []);
+          }
+          /* Combining the two lists */
+          Array.prototype.push.apply(transformMap.get(key), transformArray);
+        });
       });
       return transformMap;
     })()

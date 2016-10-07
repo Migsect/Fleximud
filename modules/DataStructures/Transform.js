@@ -167,33 +167,97 @@ Object.defineProperties(ConfiguredTransform.prototype,
   }
 });
 
-module.exports = {
-  createTransform: function(baseObject)
+Object.defineProperties(module.exports,
+{
+  createTransform:
   {
-    if (Util.isNull(baseObject))
+    /**
+     * Creates a transform based on an object.
+     * This can construct a transform from:
+     * - Configuration
+     * - Function
+     * - Array of Objects (Composite)
+     * - String (Not yet Implemented)
+     * 
+     * @param  {Object} baseObject The base object to parse for a transform.
+     * @return {Transform}         The resulting transform.
+     */
+    value: function(baseObject)
     {
-      throw new Error("Attempted to create a transform when the baseObject is null or undefined");
+      if (Util.isNull(baseObject))
+      {
+        throw new Error("Attempted to create a transform when the baseObject is null or undefined");
+      }
+      else if (Array.isArray(baseObject))
+      {
+        return new CompositeTransform(baseObject);
+      }
+      else if (typeof baseObject == "function")
+      {
+        return new DirectTransform(baseObject);
+      }
+      else if (typeof baseObject == "string")
+      {
+        /* TODO make use of a MATH parser */
+        throw new Error("Attempted to create a transform with a string, this type of transform is not yet supported");
+      }
+      else if (typeof baseObject == "object")
+      {
+        return new ConfiguredTransform(baseObject);
+      }
+      else
+      {
+        throw new Error("Attempeted to create a transform with an unrecognized object.");
+      }
     }
-    else if (Array.isArray(baseObject))
+  },
+  parseDirectedTransforms:
+  {
+    /**
+     * Generates a map of transforms that are directed to certain keywords.
+     * Directed transforms contain a normal transform definition as well as a target keyword.
+     * This is useful for Stat situations.
+     * 
+     * @param  {Object[]} directedTransforms The object to parse for transforms.
+     * @return {Map<String, Transform[]>}    Map of the directed transforms.
+     */value: function(directedTransforms)
+
     {
-      return new CompositeTransform(baseObject);
-    }
-    else if (typeof baseObject == "function")
-    {
-      return new DirectTransform(baseObject);
-    }
-    else if (typeof baseObject == "string")
-    {
-      /* TODO make use of a MATH parser */
-      throw new Error("Attempted to create a transform with a string, this type of transform is not yet supported");
-    }
-    else if (typeof baseObject == "object")
-    {
-      return new ConfiguredTransform(baseObject);
-    }
-    else
-    {
-      throw new Error("Attempeted to create a transform with an unrecognized object.");
+      /* Getting the export object */
+      var self = this;
+
+      /* Checking to see if it is an array and is not null */
+      if (Util.isNull(directedTransforms) || !Array.isArray(directedTransforms))
+      {
+        throw new Error("Invalid DirectedTransforms configuration.");
+      }
+
+      /* Map of the resulting transforms */
+      var map = new Map();
+
+      directedTransforms.forEach(function(directedTransform)
+      {
+        /* Checking to see if the individual direcred transforms are valid */
+        if (Util.isNull(directedTransform.transform, directedTransform.target) || !Util.isString(directedTransform.target))
+        {
+          throw new Error("Invalid DirectedTransform inside DirectedTransforms configuration.");
+        }
+
+        /* Getting the members */
+        var target = directedTransform.target;
+        var transform = self.createTransform(directedTransform.transform);
+
+        /* Creating an array in the map if it is not yet defined */
+        if (!map.has(target))
+        {
+          map.set(target, []);
+        }
+        /* pushing the transform onto the new array inside the map */
+        map.get(target).push(transform);
+      });
+
+      /* Returning the map of keys to transform lists */
+      return map;
     }
   }
-};
+});

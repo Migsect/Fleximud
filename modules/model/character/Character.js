@@ -1,19 +1,29 @@
 "use strict";
 
+/* General Node Modules */
 var uuid = require("node-uuid");
 var Promise = require("promise");
 
+/* Database */
 var Mongoose = require("mongoose");
 var Schema = Mongoose.Schema;
 var dbUtils = require(process.cwd() + "/modules/DatabaseUtil");
 
+/* General Utilities or DataStructures*/
 var Util = require(process.cwd() + "/modules/Util");
-var Attributes = require("./DataModels/Attributes");
+
+/* Type Configurations */
 var AttributeTypes = require("./AttributeTypes");
+var DescriptorTypes = require("./DescriptorTypes");
+
+/* Model Schemas */
+var Attributes = require("./DataModels/Attributes");
 var SpeciesSex = require("./DataModels/SpeciesSex");
 var Descriptors = require("./DataModels/Descriptors");
 var Stats = require("./DataModels/Stats");
 var Name = require("./DataModels/Name");
+
+/* Locations */
 var Location = require(process.cwd() + "/modules/location/Location");
 
 /**
@@ -199,9 +209,62 @@ CharacterSchema.methods.getLocation = function()
  * @param  {String} key The stat to get the transforms for.
  * @return {Transform[]} A list of the transforms.
  */
-CharacterSchema.methods.getStatTransforms = function(key) {
+CharacterSchema.methods.getStatTransforms = function(key)
+{
+  /* The main list to return */
+  var transforms = [];
+  var combineArray = Array.prototype.push.apply;
 
+  /* Collecting Transforms from Attributes */
+  combineArray(transforms, AttributeTypes.transfroms.get(key));
+
+  /* Collecting Transforms from Descriptors */
+  combineArray(transforms, DescriptorTypes.transfroms.get(key));
+
+  /* Collecting Transforms from Species and sex */
+  combineArray(transforms, this.speciesSex.speciesType.transforms.get(key));
+  combineArray(transforms, this.speciesSex.sexType.transforms.get(key));
+
+  /* Collecting Transforms from Effects*/
+  /* TODO when effects are properly implemented */
+
+  /* Returning the compiled list */
+  return transforms;
 };
+
+/**
+ * Compiles a list of all the keys of the stat transforms.
+ * This is useful for commands that want to know all the stats.
+ * 
+ * @return {String[]} The list of keys from the transforms. 
+ */
+CharacterSchema.methods.getStatTransformsKeys = function()
+{
+  var keys = [];
+
+  /* Collecting Transforms from Attributes */
+  Array.prototype.push.apply(keys, AttributeTypes.transforms.keys());
+
+  /* Collecting Transforms from Descriptors */
+  Array.prototype.push.apply(keys, DescriptorTypes.transforms.keys());
+
+  /* Collecting Transforms from Species and sex */
+  Array.prototype.push.apply(keys, this.speciesSex.speciesType.transforms.keys());
+  Array.prototype.push.apply(keys, this.speciesSex.sexType.transforms.keys());
+
+  /* Returning the compiled list of keys */
+  return keys;
+};
+
+/* Hooks for validating on loading */
+
+/* Migration ensuring */
+CharacterSchema.post("init", function(document)
+{
+  document.attributes = dbUtils.migrate(document.attributes, Attributes.createLiteral());
+  document.descriptors = dbUtils.migrate(document.descriptors, Descriptors.createLiteral());
+  document.stats = dbUtils.migrate(document.stats, Stats.createLiteral());
+});
 
 var Character = Mongoose.model("Character", CharacterSchema);
 
@@ -234,7 +297,8 @@ Object.defineProperties(module.exports,
         name: Name.createLiteral(JSON.fullName, JSON.shortName),
         attributes: Attributes.createLiteral(),
         speciesSex: SpeciesSex.createLiteral(JSON.species, JSON.sex),
-        descriptors: Descriptors.createLiteral()
+        descriptors: Descriptors.createLiteral(),
+        stats: Stats.createLiteral()
       });
       /* Performing attribute, location, and descriptor adding */
       var species = character.speciesSex.speciesType;

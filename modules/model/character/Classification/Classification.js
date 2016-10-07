@@ -3,7 +3,9 @@
 var fs = require("fs");
 var Descriptor = require("./Descriptor");
 var templates = require(process.cwd() + "/templates/templates");
+
 var Util = require(process.cwd() + "/modules/Util");
+var Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 
 /**
  * A classification is a way of classifying a character.
@@ -29,6 +31,20 @@ var Classification = function(json)
     attributes:
     {
       value: Util.isNull(json.attributes) ? [] : json.attributes
+    },
+    transforms:
+    {
+      value: (function()
+      {
+        var map = Util.isNull(json.transforms) ? new Map() : Transform.parseDirectedTransforms(json.transforms);
+        /* Adding the descriptor id if it is not in there*/
+        if (!map.has(json.id))
+        {
+          map.set(json.id, []);
+        }
+
+        return map;
+      })()
     },
     /* Grabbing the infoText from file */
     documentation:

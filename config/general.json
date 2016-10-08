@@ -23,6 +23,7 @@
   "characterCreation":
   {
     "maxAttributeChoices": 5,
+    "attributeChoiceMultiplier": 1.2,
     "minimumLongNameLength": 6
   }
 }

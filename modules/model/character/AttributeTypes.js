@@ -147,6 +147,13 @@ Object.defineProperty(module.exports, "map",
 
 Object.defineProperties(module.exports,
 {
+  list:
+  {
+    value: (function()
+    {
+      return Array.from(module.exports.map.keys());
+    })()
+  },
   top:
   {
     /**

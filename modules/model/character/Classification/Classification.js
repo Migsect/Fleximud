@@ -4,8 +4,11 @@ var fs = require("fs");
 var Descriptor = require("./Descriptor");
 var templates = require(process.cwd() + "/templates/templates");
 
+var AttributeType = require("../AttributeTypes");
+
 var Util = require(process.cwd() + "/modules/Util");
 var Transform = require(process.cwd() + "/modules/DataStructures/Transform");
+var Fuzzy = require(process.cwd() + "/modules/DataStructures/Fuzzy");
 
 /**
  * A classification is a way of classifying a character.
@@ -30,6 +33,17 @@ var Classification = function(json)
     },
     attributes:
     {
+      /**
+       * Will be a list of objects with an id, a center, and a range (for fuzzies)
+       * An ID of default will apply to all attributes.
+       * Other the ID will generally be an attribute.
+       * 
+       * These are the initial attribute variations of a character and are 
+       * different from transforms. This will be balanced in character creation
+       * based on totality.
+       * 
+       * @type {Object}
+       */
       value: Util.isNull(json.attributes) ? [] : json.attributes
     },
     transforms:
@@ -143,6 +157,31 @@ Object.defineProperties(Classification.prototype,
       });
     },
     writable: true
+  },
+  applyInitialAttributes:
+  {
+    /**
+     * Goes over all the attributes and randomly changes them based on the
+     * configured attributes.  This will not set the top attribute to be 1, this
+     * should be handled outside of the function since this may be called by other
+     * classifications.
+     * 
+     * @param  {Character} character The character whose attributes will be changed.
+     */
+    value: function(character)
+    {
+      this.attributes.forEach(function(attribute)
+      {
+        var fuzzy = new Fuzzy(attribute.center, attribute.range);
+        /* Determining which attributes to change */
+        var attributes = attribute.id == "default" ? AttributeType.list : [attribute.id];
+        attributes.forEach(function(attribute)
+        {
+          var value = character.attributes.getAttribute(attribute);
+          character.attributes.setAttribute(attribute, value * fuzzy.fuzzy());
+        });
+      });
+    }
   }
 });
 

@@ -15,6 +15,7 @@ var Util = require(process.cwd() + "/modules/Util");
 /* Type Configurations */
 var AttributeTypes = require("./AttributeTypes");
 var DescriptorTypes = require("./DescriptorTypes");
+var config = require(process.cwd() + "/config/general");
 
 /* Model Schemas */
 var Attributes = require("./DataModels/Attributes");
@@ -310,10 +311,10 @@ Object.defineProperties(module.exports,
         stats: Stats.createLiteral()
       });
 
-      /* Species-Sex Setting */
+      /*** Species-Sex Setting ***/
       var species = character.speciesSex.speciesType;
 
-      /* Descriptor Setting */
+      /*** Descriptor Setting ***/
       if (!Util.isNull(JSON.descriptors))
       {
         Object.keys(JSON.descriptors).forEach(function(key)
@@ -323,12 +324,32 @@ Object.defineProperties(module.exports,
       }
       console.log(character.descriptors);
 
-      /* Attribute Setting */
+      /*** Attribute Setting ***/
 
-      /* Location Setting*/
+      /* Setting the species and the sex attributes */
+      character.speciesSex.speciesType.applyInitialAttributes(character);
+      character.speciesSex.sexType.applyInitialAttributes(character);
+
+      /* Scaling specific attributes as selected by the character */
+      /* TODO proper configuration for this */
+      if (!Util.isNull(JSON.attributes))
+      {
+        JSON.attributes.forEach(function(attribute)
+        {
+          var currentValue = character.attributes.getAttribute(attribute);
+          var multiplier = config.characterCreation.attributeChoiceMultiplier;
+          character.attributes.setAttribute(attribute, currentValue * multiplier);
+        });
+      }
+
+      /* Setting the top level attribute to 1 */
+      var topKey = AttributeTypes.top.id;
+      character.attributes.setAttribute(topKey, 1);
+
+      /*** Location Setting ***/
       character.location = species.startingLocation;
 
-      /* Saving the character */
+      /*** Saving the character ***/
       character.save(function(err, document)
       {
         if (err)

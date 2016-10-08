@@ -67,7 +67,7 @@ AttributesSchema.methods.scaleAttribute = function(attribute, scalar)
     var attributes = this;
     type.children.forEach(function(child)
     {
-      attributes.scaleValue(child.id, scalar);
+      attributes.scaleAttribute(child.id, scalar);
     });
   }
   else
@@ -109,7 +109,7 @@ AttributesSchema.methods.setAttribute = function(attribute, value)
     var attributes = this;
     type.children.forEach(function(child)
     {
-      attributes.scaleValue(child.id, valueRatio);
+      attributes.scaleAttribute(child.id, valueRatio);
     });
   }
   else

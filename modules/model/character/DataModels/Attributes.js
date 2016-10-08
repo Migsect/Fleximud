@@ -20,13 +20,13 @@ var AttributesSchema = Schema(
 /**
  * @param attribute The attribute you wish to retrieve.
  */
-AttributesSchema.methods.getValue = function(attribute)
+AttributesSchema.methods.getAttribute = function(attribute)
 {
   /* We need to know if the request attribute is a type first */
   var type = AttributeTypes.map.get(attribute);
   if (!type)
   {
-    console.log("Attempted to getValue of untyped attribute: '" + attribute + "'");
+    console.log("Attempted to getAttribute of untyped attribute: '" + attribute + "'");
     return null;
   }
 
@@ -37,7 +37,7 @@ AttributesSchema.methods.getValue = function(attribute)
     var attributes = this;
     type.children.forEach(function(child)
     {
-      sum += attributes.getValue(child.id);
+      sum += attributes.getAttribute(child.id);
     });
     return sum / type.children.length;
   }
@@ -52,12 +52,12 @@ AttributesSchema.methods.getValue = function(attribute)
     return value;
   }
 };
-AttributesSchema.methods.scaleValue = function(attribute, scalar)
+AttributesSchema.methods.scaleAttribute = function(attribute, scalar)
 {
   var type = AttributeTypes.map.get(attribute);
   if (!type)
   {
-    console.log("Attempted to setValue of untyped attribute: '" + attribute + "'");
+    console.log("Attempted to setAttribute of untyped attribute: '" + attribute + "'");
     return null;
   }
 
@@ -91,7 +91,7 @@ AttributesSchema.methods.scaleValue = function(attribute, scalar)
  * @param value
  *            The value to set the attribute to
  */
-AttributesSchema.methods.setValue = function(attribute, value)
+AttributesSchema.methods.setAttribute = function(attribute, value)
 {
   var type = AttributeTypes.map.get(attribute);
   if (!type)
@@ -103,7 +103,7 @@ AttributesSchema.methods.setValue = function(attribute, value)
   /* If there are children we'll need to scale up all the children as well */
   if (type.children.length > 0)
   {
-    var currentValue = this.getValue(attribute);
+    var currentValue = this.getAttribute(attribute);
     var valueRatio = value / currentValue;
 
     var attributes = this;

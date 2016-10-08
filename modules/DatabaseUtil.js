@@ -17,7 +17,10 @@ Object.defineProperties(module.exports,
       Object.keys(expected).forEach(function(key)
       {
         /* Recursing over everything */
-        actual[key] = module.exports.migrate(actual[key], expected[key]);
+        Object.defineProperty(actual, key,
+        {
+          value: module.exports.migrate(actual[key], expected[key])
+        });
       });
 
       /* actual did not change */

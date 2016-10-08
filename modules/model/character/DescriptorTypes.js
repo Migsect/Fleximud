@@ -45,15 +45,16 @@ var DescriptorType = function(json)
         /* Getting the base attribute off */
         map.get(json.id).push(Transform.createTransform(function(value, character)
         {
+          var storedValue = character.descriptors.getDescriptor(json.id);
           /* We'll add onto it if it is a number */
-          if (Util.isNumber(value))
+          if (Util.isNumber(value) && Util.isNumber(storedValue))
           {
-            return value + character.descriptors.get(json.id);
+            return value + storedValue;
           }
           /* Otherwise we'll just return the character's current value for it */
           else
           {
-            return character.descriptors.get(json.id);
+            return storedValue;
           }
         }));
 

@@ -213,17 +213,16 @@ CharacterSchema.methods.getStatTransforms = function(key)
 {
   /* The main list to return */
   var transforms = [];
-  var combineArray = Array.prototype.push.apply;
 
   /* Collecting Transforms from Attributes */
-  combineArray(transforms, AttributeTypes.transfroms.get(key));
+  Array.prototype.push.apply(transforms, AttributeTypes.transforms.get(key));
 
   /* Collecting Transforms from Descriptors */
-  combineArray(transforms, DescriptorTypes.transfroms.get(key));
+  Array.prototype.push.apply(transforms, DescriptorTypes.transforms.get(key));
 
   /* Collecting Transforms from Species and sex */
-  combineArray(transforms, this.speciesSex.speciesType.transforms.get(key));
-  combineArray(transforms, this.speciesSex.sexType.transforms.get(key));
+  Array.prototype.push.apply(transforms, this.speciesSex.speciesType.transforms.get(key));
+  Array.prototype.push.apply(transforms, this.speciesSex.sexType.transforms.get(key));
 
   /* Collecting Transforms from Effects*/
   /* TODO when effects are properly implemented */
@@ -240,20 +239,30 @@ CharacterSchema.methods.getStatTransforms = function(key)
  */
 CharacterSchema.methods.getStatTransformsKeys = function()
 {
-  var keys = [];
+  var keys = new Set();
+  var addToKeys = function(list)
+  {
+    Array.from(list).forEach(function(element)
+    {
+      keys.add(element);
+    });
+  };
 
   /* Collecting Transforms from Attributes */
-  Array.prototype.push.apply(keys, AttributeTypes.transforms.keys());
+  addToKeys(AttributeTypes.transforms.keys());
 
   /* Collecting Transforms from Descriptors */
-  Array.prototype.push.apply(keys, DescriptorTypes.transforms.keys());
+  addToKeys(DescriptorTypes.transforms.keys());
 
   /* Collecting Transforms from Species and sex */
-  Array.prototype.push.apply(keys, this.speciesSex.speciesType.transforms.keys());
-  Array.prototype.push.apply(keys, this.speciesSex.sexType.transforms.keys());
+  addToKeys(this.speciesSex.speciesType.transforms.keys());
+  addToKeys(this.speciesSex.sexType.transforms.keys());
 
   /* Returning the compiled list of keys */
-  return keys;
+  return Array.from(keys.entries()).map(function(element)
+  {
+    return element[0];
+  });
 };
 
 /* Hooks for validating on loading */
@@ -300,8 +309,23 @@ Object.defineProperties(module.exports,
         descriptors: Descriptors.createLiteral(),
         stats: Stats.createLiteral()
       });
-      /* Performing attribute, location, and descriptor adding */
+
+      /* Species-Sex Setting */
       var species = character.speciesSex.speciesType;
+
+      /* Descriptor Setting */
+      if (!Util.isNull(JSON.descriptors))
+      {
+        Object.keys(JSON.descriptors).forEach(function(key)
+        {
+          character.descriptors.setDescriptor(key, JSON.descriptors[key]);
+        });
+      }
+      console.log(character.descriptors);
+
+      /* Attribute Setting */
+
+      /* Location Setting*/
       character.location = species.startingLocation;
 
       /* Saving the character */
@@ -315,7 +339,7 @@ Object.defineProperties(module.exports,
           }
           return console.error(err);
         }
-        console.log("Saved Character to Database:", document);
+        console.log("Saved Character to Database:", document.id);
         if (typeof callback == "function")
         {
           callback(character);

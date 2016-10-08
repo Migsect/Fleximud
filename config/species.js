@@ -77,17 +77,22 @@ module.exports = [
   {
     id: "male",
     name: "male",
-    attributes: [
+    transforms: [
     {
-      id: "processing",
-      center: 1.1,
-      range: 0.1
+      target: "processing",
+      transform: function(value)
+      {
+        return value * 1.1;
+      }
     },
     {
-      id: "strength",
-      center: 1.1,
-      range: 0.1
+      target: "strength",
+      transform: function(value)
+      {
+        return value * 1.1;
+      }
     }],
+    attributes: [],
     descriptors: [
     {
       id: "height",
@@ -99,17 +104,22 @@ module.exports = [
   {
     id: "female",
     name: "female",
-    attributes: [
+    transforms: [
     {
-      id: "instincts",
-      center: 1.1,
-      range: 0.1
+      target: "instincts",
+      transform: function(value)
+      {
+        return value * 1.1;
+      }
     },
     {
-      id: "charisma",
-      center: 1.1,
-      range: 0.1
+      target: "charisma",
+      transform: function(value)
+      {
+        return value * 1.1;
+      }
     }],
+    attributes: [],
     descriptors: [
     {
       id: "height",

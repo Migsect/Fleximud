@@ -37,11 +37,6 @@ var Classification = function(json)
       value: (function()
       {
         var map = Util.isNull(json.transforms) ? new Map() : Transform.parseDirectedTransforms(json.transforms);
-        /* Adding the descriptor id if it is not in there*/
-        if (!map.has(json.id))
-        {
-          map.set(json.id, []);
-        }
 
         return map;
       })()

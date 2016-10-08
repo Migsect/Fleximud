@@ -57,7 +57,7 @@ var AttributeType = function(json)
         /* Getting the base attribute off */
         map.get(json.id).push(Transform.createTransform(function(value, character)
         {
-          return value + character.attributes.getValue(json.id);
+          return value + character.attributes.getAttribute(json.id);
         }));
 
         return map;

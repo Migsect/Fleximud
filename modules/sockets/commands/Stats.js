@@ -25,10 +25,12 @@ Object.defineProperties(Stats.prototype,
     {
       var character = client.character;
       var stats = character.stats.getKeys(character);
-      console.log(stats);
       if (args.length === 0)
       {
-        return stats;
+        return stats.map(function(stat)
+        {
+          return stat + ": " + character.stats.getStat(character, stat);
+        });
       }
     }
   }

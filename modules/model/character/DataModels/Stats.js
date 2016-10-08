@@ -3,6 +3,8 @@
 var Mongoose = require("mongoose");
 var Schema = Mongoose.Schema;
 
+var Util = require(process.cwd() + "/modules/Util");
+
 /* Represents a collection of static values that can be transformed by other models */
 var StatSchema = Schema(
 {
@@ -51,11 +53,12 @@ StatSchema.methods.getStatStatic = function(key)
  */
 StatSchema.methods.getStat = function(character, key)
 {
-  var transformedStat = this.getStatStatic(key); /* The starting place is the stored data */
-  var transforms = character.getTransforms(key);
+  /* The starting place is the stored data */
+  var transformedStat = Util.isNull(this.getStatStatic(key)) ? 0 : this.getStatStatic(key);
+  var transforms = character.getStatTransforms(key);
   transforms.forEach(function(transform)
   {
-    transformedStat = transform.transform(transformedStat);
+    transformedStat = transform.transform(transformedStat, character);
   });
   return transformedStat;
 };

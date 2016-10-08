@@ -54,7 +54,7 @@ AccountSchema.methods.addCharacter = function(character)
   this.save(function(err, document)
   {
     if (err) return console.error(err);
-    console.log("Updated Account", document, "with new character:", character);
+    console.log("Updated Account", document.id, "with new character:", character.id);
   });
 };
 AccountSchema.methods.removeCharacter = function(character)

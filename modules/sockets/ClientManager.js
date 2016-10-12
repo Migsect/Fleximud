@@ -1,5 +1,7 @@
 "use strict";
 
+var Util = require(process.cwd() + "/modules/Util");
+
 var Client = require("./Client");
 var Account = require("../model/Account");
 
@@ -60,9 +62,11 @@ Object.defineProperties(ClientManager.prototype,
         console.log("Account", accountId, "disconnected from a socket.");
         self.onDisconnection(socket);
       });
-      socket.on("register", function(characterId)
+      socket.on("register", function(characterId, callback)
       {
-        self.onRegister(socket, characterId);
+        console.log("registering character");
+        callback(true);
+        self.onRegister(socket, characterId, callback);
       });
       socket.on("command", function(command, callback)
       {
@@ -126,22 +130,55 @@ Object.defineProperties(ClientManager.prototype,
      * @param  {Socket} socket      The socket to be registered with
      * @param  {CharacterID} characterId The character ID that wishes to be registered
      */
-    value: function(socket, characterId)
+    value: function(socket, characterId, callback)
     {
       var self = this;
       var accountId = socket.handshake.session.account;
-      /* TODO validate that accountID is correct */
+      /* Checking if the character ID or account ID are not null (and therefore exist */
+      if (Util.isNull(accountId) || Util.isNull(characterId))
+      {
+        console.log("WARNING - Socket attempted to register with:");
+        console.log("  accoundId:", accountId);
+        console.log("  characterId:", characterId);
+        console.log("  but one was null.");
+        callback(false);
+      }
+
+      /* Grabbing the account from the database */
       Account.getAccountById(accountId).then(function(account)
       {
+        /* If the account is null, then the account doesn't exist */
+        if (Util.isNull(account))
+        {
+          console.log("WARNING - Socket attempted to register with:");
+          console.log("  accoundId:", accountId);
+          console.log("  characterId:", characterId);
+          console.log("  but the account query returned null.");
+          callback(false);
+        }
+
+        /* Getting the character object from the account object returned */
         var character = account.characters.find(function(element)
         {
           return element.id === characterId;
         });
-        /* TODO check if character is null */
+        /* Checking if the character returned exists*/
+        if (Util.isNull(character))
+        {
+          console.log("WARNING - Socket attempted to register with:");
+          console.log("  accoundId:", accountId);
+          console.log("  characterId:", characterId);
+          console.log("  but the character query returned null.");
+          callback(false);
+        }
+
+        /* Now to actually start registration */
         console.log("Registering:", accountId + " for character " + characterId);
 
+        /* Creating the client instance */
         var socketId = socket.client.id;
         var client = new Client(self, socket, account, character);
+
         /* Adding the client to the socket mapping */
         self.clients.set(socketId, client);
         /* Adding the client to the character mapping */
@@ -151,7 +188,13 @@ Object.defineProperties(ClientManager.prototype,
         }
         self.characters.get(characterId).push(client);
 
+        /* Registration was sucess */
         console.log("Registered:", client.toString());
+        callback(true);
+      }, function()
+      {
+        /* If there is an issue with the server, then we're going to callback false */
+        callback(false);
       });
 
     }

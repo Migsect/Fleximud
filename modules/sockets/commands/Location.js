@@ -19,7 +19,29 @@ Object.defineProperties(Location.prototype,
   },
   execute:
   {
-    value: function(client, data) {}
+    value: function(client)
+    {
+      /* The location of the character */
+      var location = client.character.getLocation();
+
+      /* Building the update data to send */
+      var updateData = {
+        path: location.getPath(),
+        localId: location.localId,
+        characters: location.characters,
+        connections: [] /* TODO actually calculate the connection IDs */
+      };
+
+      /* Sending the update to all the clients */
+      client.family.forEach(function(element)
+      {
+        element.sendUpdate("location", updateData);
+      });
+
+      /* Update should handle updating but the command should return this */
+      return updateData;
+
+    }
   },
   executeWithArray:
   {

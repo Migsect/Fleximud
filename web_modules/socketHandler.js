@@ -1,5 +1,7 @@
 "use strict";
 
+var Promise = require("promise/lib/es6-extensions");
+
 var SocketHandler = function(socket)
 {
   var self = this;
@@ -46,6 +48,14 @@ Object.defineProperties(SocketHandler.prototype,
   },
   addHandler:
   {
+    /**
+     * Adds a handler for the update type.  This will call the callback when
+     * the update occurs.
+     * 
+     * @param  {String}   updateType The type of the update that it will listen
+     *                               in on.
+     * @param  {Function} callback   The callback that takes a data argument.
+     */
     value: function(updateType, callback)
     {
       if (!this.updateHandlers.has(updateType))
@@ -58,6 +68,12 @@ Object.defineProperties(SocketHandler.prototype,
   },
   onUpdate:
   {
+    /**
+     * To be called whenever there is an update.  This is generally called by
+     * the socket handler itself by the inner socket it wraps.
+     * 
+     * @param  {Object} updateEvent The update event that was received by the socket.
+     */
     value: function(updateEvent)
     {
       /* Checking to see if the update has a type (needs to have a type) */
@@ -76,11 +92,34 @@ Object.defineProperties(SocketHandler.prototype,
   },
   register:
   {
+    /**
+     * Registers the character ID.  This will only work if this is the correct
+     * session for the character, otherwise this 
+     * @param  {String} characterId The id of the character to register.
+     * @return {Promose}            Will error if the character cannot be registered.
+     */
     value: function(characterId)
     {
+      var self = this;
+      return new Promise(function(resolve, reject)
+      {
+        /* Registering a new client */
+        self.socket.emit("register", characterId, function(result)
+        {
+          console.log("Result:", result);
+          if (result)
+          {
+            /* If the result is true or anything other than false, then it was a sucess */
+            resolve();
+            return;
+          }
+          else
+          {
+            reject();
+          }
+        });
+      });
 
-      /* Registering a new client */
-      this.socket.emit("register", characterId);
     }
   }
 });

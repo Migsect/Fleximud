@@ -373,6 +373,12 @@ Object.defineProperties(module.exports,
   },
   deleteCharacter:
   {
+    /**
+     * Deletes a character based on the Query object.
+     * 
+     * @param  {Object} query  The query for the character to delete.
+     * @return {Promise}       A promise depicting whether the deletion was a sucess.
+     */
     value: function(query)
     {
       return new Promise(function(resolve, reject)
@@ -394,6 +400,12 @@ Object.defineProperties(module.exports,
   },
   characterExists:
   {
+    /**
+     * Checks to see if the character exists.
+     * 
+     * @param  {String} query  Query object to search a character on.
+     * @return {Promise}       A promise for the result of the question (true|false)
+     */
     value: function(query)
     {
       return new Promise(function(resolve, reject)
@@ -414,6 +426,12 @@ Object.defineProperties(module.exports,
   },
   getCharacterByQuery:
   {
+    /**
+     * Attempts to retrived the character by a query.
+     * 
+     * @param  {Object} query  The query object to search a character on.
+     * @return {Promise}       A promise for the result of the character.
+     */
     value: function(query)
     {
       return new Promise(function(resolve, reject)
@@ -436,6 +454,12 @@ Object.defineProperties(module.exports,
   },
   getCharacterById:
   {
+    /**
+     * Retrives the character based on the character ID.
+     * 
+     * @param  {String} id The character's ID
+     * @return {Promise}   Promise of the character
+     */
     value: function(id)
     {
       return this.getCharacterByQuery(

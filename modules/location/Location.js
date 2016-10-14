@@ -1,7 +1,10 @@
 "use strict";
 
 var uuid = require("node-uuid");
-var Utils = require("../Util");
+var Util = require("../Util");
+
+var Limitation = require("./Limitation");
+var Connection = require("./Connection");
 
 /** @type {Location} The root location that all locations will be made in by default */
 var root = null;
@@ -19,7 +22,8 @@ var Location = function(json)
   {
     displayName:
     {
-      value: json.displayName ? json.displayName : "Unknown Location"
+      enumerable: true,
+      value: Util.isNull(json.displayName) ? "Unknown Location" : json.displayName
     },
     /** @type {String} An id that will be used to differeniate the location from its siblings */
     localId:
@@ -52,7 +56,7 @@ var Location = function(json)
     connections:
     {
       enumerable: true,
-      value: []
+      value: Connection.parseJSONList(json.connections)
     },
     /** @type {Function(character)} A function that takes in a character and
      *           returns true or false based on some contrait speicifed by the
@@ -62,7 +66,7 @@ var Location = function(json)
     limitations:
     {
       enumerable: true,
-      value: []
+      value: Limitation.parseJSONList(json.limitations)
     },
     /** @type {String} The parent path of this location */
     parent:
@@ -391,7 +395,7 @@ Object.defineProperties(module.exports,
   {
     value: function(path)
     {
-      if (Utils.isNull(path))
+      if (Util.isNull(path))
       {
         return root;
       }

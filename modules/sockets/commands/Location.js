@@ -1,6 +1,7 @@
 "use strict";
 
 var Command = require("../Command");
+var LocationModule = require(process.cwd() + "/modules/location/Location");
 
 var Location = function()
 {
@@ -29,14 +30,22 @@ Object.defineProperties(Location.prototype,
         path: location.getPath(),
         localId: location.localId,
         characters: location.characters,
-        connections: [] /* TODO actually calculate the connection IDs */
+        connections: location.connections.map(function(connection)
+        {
+          return {
+            name: connection.name,
+            id: connection.id,
+            destination: LocationModule.getLocation(connection.destination).displayName
+          };
+        })
       };
 
-      /* Sending the update to all the clients */
-      client.family.forEach(function(element)
-      {
-        element.sendUpdate("location", updateData);
-      });
+      // console.log("sending update");
+      /* Sending the update to all the clients (NOT NEEDED) */
+      // client.family.forEach(function(element)
+      // {
+      //   element.sendUpdate("location", updateData);
+      // });
 
       /* Update should handle updating but the command should return this */
       return updateData;
@@ -68,7 +77,10 @@ Object.defineProperties(Location.prototype,
             }
             return childKeys;
           })().join(", ") + "'",
-          "- connections: TODO"
+          "- connections: '" + location.connections.map(function(connection)
+          {
+            return connection.name + "-->" + connection.destination;
+          }).join(", ") + "'",
         ];
       }
     }

@@ -106,6 +106,21 @@ Object.defineProperties(Limitation.prototype,
 
 /* Global functions */
 Object.defineProperties(Limitation,
-{});
+{
+  parseJSONList:
+  {
+    value: function(jsonList)
+    {
+      if (Util.isNull(jsonList) || !Array.isArray(jsonList))
+      {
+        return [];
+      }
+      return jsonList.map(function(json)
+      {
+        return new Limitation(json);
+      });
+    }
+  }
+});
 
 module.exports = Limitation;

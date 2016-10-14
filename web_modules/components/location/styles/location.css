@@ -4,12 +4,81 @@ div.location-view {
   flex-direction: column;
 }
 
-div.location-information {}
+div.location-content {
+  flex: 1 1 0px;
+  display: flex;
+  flex-direction: row;
+}
 
-div.location-connections {}
+div.location-information {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0px;
+}
 
-div.location-connection {}
+div.location-information-container {
+  flex: 1 1 0px;
+  overflow-y: auto;
+}
 
-div.location-connection-name {}
+div.location-information-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-content: flex-end;
+  margin: 1px;
+  display: flex;
+  flex-direction: row;
+  padding: 2px;
+  flex: 7 1 0px;
+  min-width: 0px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
 
-div.location-connection-destination {}
+div.location-connections {
+  flex: 1 1 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+div.location-connections-list {
+  flex: 1 1 0px;
+  overflow-y: auto;
+}
+
+div.location-connections-list-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-content: flex-end;
+}
+
+div.location-connection {
+  flex: 0 0 auto;
+  margin: 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+div.location-connection-name {
+  flex: 3 0 auto;
+  padding: 2px;
+  padding-right: 8px;
+  padding-left: 8px;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0px;
+}
+
+div.location-connection-information {
+  display: none;
+  position: absolute;
+  margin-top: 24px;
+}
+
+div.location-connection:hover>div.location-connection-information {
+  display: block;
+}

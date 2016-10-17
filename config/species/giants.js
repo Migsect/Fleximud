@@ -34,6 +34,7 @@ module.exports = {
     name: "Body Type",
     variations: ["ectomorph", "ecto-mesomorph", "mesomorph", "meso-endomorph", "endomorph"]
   }],
+  documentation: "Giants are rather big.",
   slots: [
   {
     type: "head",

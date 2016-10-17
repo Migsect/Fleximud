@@ -25,6 +25,11 @@ var Location = function(json)
       enumerable: true,
       value: Util.isNull(json.name) ? "Unknown Location" : json.name
     },
+    docoumentation:
+    {
+      enumerable: true,
+      value: Util.parseFileString(Util.isNull(json.documentation) ? "" : json.documentation, process.cwd() + "/config/docoumentation/")
+    },
     /** @type {String} An id that will be used to differeniate the location from its siblings */
     localId:
     {
@@ -382,9 +387,10 @@ Object.defineProperties(Location.prototype,
     {
       var self = this;
       return {
+        name: self.name,
+        documentation: self.documentation,
         path: self.getPath(),
         localId: self.localId,
-        characters: self.characters,
         connections: self.connections.map(function(connection)
         {
           return {

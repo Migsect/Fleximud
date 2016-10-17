@@ -58,16 +58,17 @@ var Classification = function(json)
     /* Grabbing the infoText from file */
     documentation:
     {
-      value: (function()
-      {
-        if (Util.isNull(json.documentation))
-        {
-          return "";
-        }
-        var path = process.cwd() + '/config/documentation/' + json.documentation;
-        var documentation = fs.readFileSync(path, "utf-8");
-        return documentation;
-      })()
+      value: Util.parseFileString(Util.isNull(json.documentation) ? "" : json.documentation, process.cwd() + "/config/documentation/")
+        // (function()
+        // {
+        //   if (Util.isNull(json.documentation))
+        //   {
+        //     return "";
+        //   }
+        //   var path = process.cwd() + '/config/documentation/' + json.documentation;
+        //   var documentation = fs.readFileSync(path, "utf-8");
+        //   return documentation;
+        // })()
     },
     /* Constructing all the descriptors*/
     descriptors:

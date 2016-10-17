@@ -1,5 +1,7 @@
 "use strict";
 
+var fs = require("fs");
+
 /**
  * Error thrown when a value is not a specified type when it is expected to be.
  *
@@ -180,6 +182,43 @@ Object.defineProperties(module.exports,
       {
         return !self.isNumber(value);
       }, TypeCheckError, arguments);
+    }
+  },
+  parseFileString:
+  {
+    /**
+     * Checks to see if the string is a file in the root, if it is it will
+     * read that file syncronously and then return its content as a string.
+     * Otherwise it will simply return the input string.
+     *
+     * By default it will use root as a basis to search for the file in.
+     * Otherwise it will just use prcoess.cwd() as the root.
+     *
+     * @param {String} str [description]
+     * @param {String} root The file basis to use.
+     * @return {String} The returned content.
+     */
+    value: function(str, root)
+    {
+      if (this.isNull(root))
+      {
+        root = process.cwd() + "/";
+      }
+      var path = root + str;
+      try
+      {
+        var stats = fs.lstatSync(path);
+        if (!stats.isFile())
+        {
+          return str;
+        }
+        return fs.readFileSync(path, "utf-8");
+      }
+      catch (e)
+      {
+        return str;
+      }
+
     }
   }
 });

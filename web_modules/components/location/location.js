@@ -94,6 +94,8 @@ Object.defineProperties(LocationComponent.prototype,
         self.addConnection(connection);
       });
 
+      self.setInformation(data);
+
       /* Rendering the location information */
       /* TODO */
     }

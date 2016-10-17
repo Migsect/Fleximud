@@ -27,13 +27,20 @@ div.location-information-content {
   justify-content: flex-end;
   align-content: flex-end;
   margin: 1px;
-  display: flex;
-  flex-direction: row;
   padding: 2px;
   flex: 7 1 0px;
   min-width: 0px;
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+div.location-information-content-name {
+  text-align: center;
+  flex: 1 1 auto;
+}
+
+div.location-information-content-documentation {
+  flex: 1 1 0px;
 }
 
 div.location-connections {

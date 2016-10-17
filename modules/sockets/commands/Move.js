@@ -1,9 +1,10 @@
 "use strict";
 
+var Util = require(process.cwd() + "/modules/Util");
 var Command = require("../Command");
 var LocationModule = require(process.cwd() + "/modules/location/Location");
 
-var Location = function()
+var Move = function()
 {
   Command.call(this, "move");
   var self = this;
@@ -11,44 +12,53 @@ var Location = function()
   {});
 
 };
-Location.prototype = Object.create(Command.prototype);
-Object.defineProperties(Location.prototype,
+
+Util.inherit(Command, Move);
+Object.defineProperties(Move.prototype,
 {
-  constructor:
-  {
-    value: Location
-  },
   execute:
   {
-    value: function(client)
+    value: function(client, data)
     {
       /* The location of the character */
-      var location = client.character.getLocation();
+      var character = client.character;
+      var location = character.getLocation();
+      var connections = location.connections;
 
-      /* Building the update data to send */
-      var updateData = {
-        path: location.getPath(),
-        localId: location.localId,
-        characters: location.characters,
-        connections: location.connections.map(function(connection)
+      if (Util.isNull(data.target))
+      {
+        return "Command did not have a target.";
+      }
+
+      /* Getting the connection */
+      var foundConnection = connections.find(function(connection)
+      {
+        return connection.id == data.target;
+      });
+      if (Util.isNull(foundConnection))
+      {
+        return "Location does not have the specified connection.";
+      }
+      /* Getting the new location based on the destination */
+      var newLocation = LocationModule.getLocation(foundConnection.destination);
+
+      /* Updating the character's location */
+      character.moveToLocation(newLocation);
+
+      /* Updating all the character clients */
+      client.family.forEach(function(familyClient)
+      {
+        familyClient.sendUpdate("location", newLocation.getUpdateData());
+        familyClient.sendUpdate("chat",
         {
-          return {
-            name: connection.name,
-            id: connection.id,
-            destination: LocationModule.getLocation(connection.destination).name
-          };
-        })
-      };
+          source: "Server",
+          content: "You traveled through the " + foundConnection.name,
+          isSelf: false,
+          hideSource: true
+        });
+      });
 
-      // console.log("sending update");
-      /* Sending the update to all the clients (NOT NEEDED) */
-      // client.family.forEach(function(element)
-      // {
-      //   element.sendUpdate("location", updateData);
-      // });
-
-      /* Update should handle updating but the command should return this */
-      return updateData;
+      return "Success";
 
     }
   },
@@ -56,35 +66,9 @@ Object.defineProperties(Location.prototype,
   {
     value: function(client, args)
     {
-      var location = client.character.getLocation();
-      if (args.length === 0)
-      {
-        return ["Location",
-          "- path: '" + location.getPath() + "'",
-          "- localId: " + location.localId,
-          "- globalId: " + location.globalId,
-          "- characters: " + location.characters.join(", "),
-          "- parent: '" + location.parent + "'",
-          "- children: '" + (function()
-          {
-            var childKeys = [];
-            var keyIterator = location.children.keys();
-            var current = keyIterator.next();
-            while (!current.done)
-            {
-              childKeys.push(current.value);
-              current = keyIterator.next();
-            }
-            return childKeys;
-          })().join(", ") + "'",
-          "- connections: '" + location.connections.map(function(connection)
-          {
-            return connection.name + "-->" + connection.destination;
-          }).join(", ") + "'",
-        ];
-      }
+      return -1;
     }
   }
 });
 
-module.exports = Location;
+module.exports = Move;

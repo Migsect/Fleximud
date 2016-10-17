@@ -370,6 +370,31 @@ Object.defineProperties(Location.prototype,
     {
       /* TODO implement this shit yo s*/
     }
+  },
+  getUpdateData:
+  {
+    /**
+     * Creates an object that contains the data for a location update.
+     * 
+     * @return {Object} The update data.
+     */
+    value: function()
+    {
+      var self = this;
+      return {
+        path: self.getPath(),
+        localId: self.localId,
+        characters: self.characters,
+        connections: self.connections.map(function(connection)
+        {
+          return {
+            name: connection.name,
+            id: connection.id,
+            destination: module.exports.getLocation(connection.destination).name
+          };
+        })
+      };
+    }
   }
 });
 

@@ -21,21 +21,33 @@ module.exports = {
   {
     localId: "alpha",
     name: "Alpha Point",
-    connections: [],
+    connections: [
+    {
+      name: "Root Connection",
+      destination: ""
+    }],
     children: [],
     limitations: []
   },
   {
     localId: "beta",
     name: "Beta Point",
-    connections: [],
+    connections: [
+    {
+      name: "Root Connection",
+      destination: ""
+    }],
     children: [],
     limitations: []
   },
   {
     localId: "gamma",
     name: "Gamma Point",
-    connections: [],
+    connections: [
+    {
+      name: "Root Connection",
+      destination: ""
+    }],
     children: [],
     limitations: []
   }]

@@ -1,7 +1,7 @@
 "use strict";
 
 /* Includes */
-
+var Util = require(process.cwd() + "/modules/Util");
 var passwordHash = require("password-hash");
 var uuid = require("node-uuid");
 var Promise = require("promise");
@@ -72,6 +72,18 @@ Object.defineProperties(module.exports,
 {
   createAccount:
   {
+    /**
+     * Creates a new account.  This requires that the account has a username,
+     * an email, and a plainPassword to be supplied.  The plainpassword will not
+     * be stored as a plain password but will be hashed.
+     *
+     * This will save the account to the database upon a successful creation.
+     * 
+     * @param  {String} name          The name of the account's user.
+     * @param  {String} email         The email of the account's user.
+     * @param  {String} plainPassword The plaintext password of the account's user.
+     * @return {Account}              The created account.
+     */
     value: function(name, email, plainPassword)
     {
       var password = passwordHash.generate(plainPassword);
@@ -96,6 +108,13 @@ Object.defineProperties(module.exports,
   },
   accountExists:
   {
+    /**
+     * Checks to see if the account exists based upon the query.
+     * 
+     * @param  {QueryObject} query The query that searches for the account to see
+     *                             if it exists.
+     * @return {Promise}           A promise of the result of the existance test.
+     */
     value: function(query)
     {
       return new Promise(function(resolve, reject)
@@ -117,6 +136,12 @@ Object.defineProperties(module.exports,
   },
   getAccounts:
   {
+    /**
+     * Retrieves all the accounts in the database.  This should become deprecated
+     * in the future since it can consume a lot of memory.
+     * 
+     * @return {Promise} A promise that will supply all the accounts. 
+     */
     value: function()
     {
       return new Promise(function(resolve, reject)
@@ -139,6 +164,12 @@ Object.defineProperties(module.exports,
   },
   getAccountByQuery:
   {
+    /**
+     * Retrieves an account based on the query.
+     * 
+     * @param  {QueryObject} query The query to search by.
+     * @return {Promise}           A promise of the account.
+     */
     value: function(query)
     {
       return new Promise(function(resolve, reject)
@@ -189,7 +220,7 @@ module.exports.accountExists(
 }).then(function(result)
 {
   if (!result) module.exports.createAccount(
-    config.admin.username ? config.admin.username : "radmin",
-    config.admin.email ? config.admin.email : "radmin",
-    config.admin.password ? config.admin.password : "radmin");
+    Util.isNull(config.admin.username) ? config.admin.username : "radmin",
+    Util.isNull(config.admin.email) ? config.admin.email : "radmin",
+    Util.isNull(config.admin.password) ? config.admin.password : "radmin");
 });

@@ -5,6 +5,7 @@ var Utils = require("../../utils");
 
 /* Templates */
 var mainTemplate = require("./templates/location.html");
+var informationTemplate = require("./templates/information.html");
 var connectionTemplate = require("./templates/connection.html");
 
 /* CSS styles */
@@ -97,8 +98,24 @@ Object.defineProperties(LocationComponent.prototype,
       /* TODO */
     }
   },
+  setInformation:
+  {
+    /**
+     * Sets the information using a data object.
+     * 
+     * @param  {Object} data The data to use for the information.
+     */
+    value: function(data)
+    {
+      var self = this;
+      self.information.innerHTML = informationTemplate(data);
+    }
+  },
   clearInformation:
   {
+    /**
+     * Clears the information from the information box.
+     */
     value: function()
     {
       var self = this;
@@ -107,6 +124,9 @@ Object.defineProperties(LocationComponent.prototype,
   },
   clearConnections:
   {
+    /**
+     * Clears all the connections.
+     */
     value: function()
     {
       var self = this;
@@ -115,6 +135,11 @@ Object.defineProperties(LocationComponent.prototype,
   },
   addConnection:
   {
+    /**
+     * Adds a connection to the UI.
+     * 
+     * @param  {Object} connectionData The connection data
+     */
     value: function(connectionData)
     {
       var self = this;
@@ -123,8 +148,15 @@ Object.defineProperties(LocationComponent.prototype,
       self.connections.appendChild(connectionNode);
       connectionNode.addEventListener("click", function()
       {
-        console.log(connectionData.name + " was clicked.");
-        /* TODO send the command to change to that location */
+        var target = connectionNode.dataset.target;
+        console.log(connectionData.name + " was clicked.", target);
+        self.socketHandler.sendCommand("move",
+        {
+          target: target
+        }, function(results)
+        {
+          console.log(results);
+        });
       });
     }
   }

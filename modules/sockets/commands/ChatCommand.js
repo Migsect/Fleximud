@@ -30,6 +30,12 @@ Object.defineProperties(ChatCommand.prototype,
           "Use '/help' for a list of commands."
         ];
       };
+      var commandImproper = function()
+      {
+        return ["The command '" + data.command.toLowerCase() + "' was improperly executed.",
+          "Use '/help " + data.command.toLowerCase() + "' for the command's usage."
+        ];
+      };
 
       var commands = require("./commands");
       var command = commands.get(data.command.toLowerCase());
@@ -42,9 +48,21 @@ Object.defineProperties(ChatCommand.prototype,
       /* Executing the command and getting the result */
       var result = command.executeWithArray(client, args);
       /* If the result is null or less than 0 then it says the command doesn't exist */
-      if (Util.isNull(result) || result < 0)
+      if (Util.isNull(result))
       {
         return commandNotFound();
+      }
+      else if (result < 0)
+      {
+        switch (result)
+        {
+          case -1:
+            return commandNotFound();
+          case -2:
+            return commandImproper();
+          default:
+            return commandNotFound();
+        }
       }
       return result;
     }

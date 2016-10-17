@@ -103,6 +103,31 @@ CharacterSchema.methods.getLocation = function()
 };
 
 /**
+ * Moves the character to the new location.
+ * This changes the character's current location, removes the character from
+ * their current location, and adds the character to their new location.
+ *
+ * This will save the character's data to the database.
+ *
+ * This does not send any updates to the client(s).  The updates should be handled
+ * by the clients.
+ * 
+ * @param  {Location} nextLocation [description] */
+CharacterSchema.methods.moveToLocation = function(nextLocation)
+{
+  /* Grabbing the character's current location */
+  var currentLocation = this.getLocation();
+
+  /* Removing the character from the current location and adding them to the new */
+  currentLocation.removeCharacter(this.id);
+  nextLocation.addCharacter(this.id);
+
+  /* Setting and saving the character's new path */
+  this.locationPath = nextLocation.getPath();
+  this.save();
+};
+
+/**
  * Retrieves all the stat transformations fro the character's different data-holding
  * objects.  For example, species and descriptors.
  *

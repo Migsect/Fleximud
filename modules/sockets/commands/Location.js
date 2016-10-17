@@ -25,31 +25,8 @@ Object.defineProperties(Location.prototype,
       /* The location of the character */
       var location = client.character.getLocation();
 
-      /* Building the update data to send */
-      var updateData = {
-        path: location.getPath(),
-        localId: location.localId,
-        characters: location.characters,
-        connections: location.connections.map(function(connection)
-        {
-          return {
-            name: connection.name,
-            id: connection.id,
-            destination: LocationModule.getLocation(connection.destination).name
-          };
-        })
-      };
-
-      // console.log("sending update");
-      /* Sending the update to all the clients (NOT NEEDED) */
-      // client.family.forEach(function(element)
-      // {
-      //   element.sendUpdate("location", updateData);
-      // });
-
       /* Update should handle updating but the command should return this */
-      return updateData;
-
+      return location.getUpdateData();
     }
   },
   executeWithArray:

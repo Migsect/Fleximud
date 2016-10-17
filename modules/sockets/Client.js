@@ -48,6 +48,7 @@ var Client = function(manager, socket, account, character)
      */
     account:
     {
+      enumerable: true,
       value: account
     },
     /**
@@ -57,6 +58,7 @@ var Client = function(manager, socket, account, character)
      */
     character:
     {
+      enumerable: true,
       value: character
     },
     /**

@@ -14,12 +14,6 @@
     "username": "radmin",
     "password": "radmin"
   },
-  "sizeBase": 1.7,
-  "sizeUnit":
-  {
-    "singular": "meter",
-    "plural": "meters"
-  },
   "characterCreation":
   {
     "maxAttributeChoices": 5,

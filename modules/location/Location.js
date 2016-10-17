@@ -20,10 +20,10 @@ var Location = function(json)
   var self = this;
   Object.defineProperties(self,
   {
-    displayName:
+    name:
     {
       enumerable: true,
-      value: Util.isNull(json.displayName) ? "Unknown Location" : json.displayName
+      value: Util.isNull(json.name) ? "Unknown Location" : json.name
     },
     /** @type {String} An id that will be used to differeniate the location from its siblings */
     localId:

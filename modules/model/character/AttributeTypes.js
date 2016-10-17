@@ -21,23 +21,28 @@ var AttributeType = function(json)
   {
     name:
     {
+      enumerable: true,
       value: json.name
     },
     id:
     {
+      enumerable: true,
       value: json.id
     },
     tag:
     {
+      enumerable: true,
       value: json.tag
     },
     children:
     {
+      enumerable: true,
       writable: true,
       value: Util.isNull(json.children) ? [] : json.children
     },
     color:
     {
+      enumerable: true,
       value: Util.isNull(json.color) ? "#444444" : json.color
     },
     transforms:
@@ -55,13 +60,40 @@ var AttributeType = function(json)
         }
 
         /* Getting the base attribute off */
-        map.get(json.id).push(Transform.createTransform(function(value, character)
+        var transform = Transform.createTransform(function(value, character)
         {
           return value + character.attributes.getAttribute(json.id);
+        });
+        Object.defineProperty(transform, "tag",
+        {
+          value: "attributeSource"
+        });
+        map.get(json.id).push(transform);
+
+        /* Inheritance transform (a compsite transform that uses any parent transforms. */
+        map.get(json.id).push(Transform.createTransform(function(value, character)
+        {
+          if (Util.isNull(self.parent)) return value;
+          /* Grabbing all the parent's transforms since they apply to this attribute as well. */
+          var parentId = self.parent.id;
+          var parentTransforms = character.getStatTransforms(parentId);
+          /* Folding all the transforms down. */
+          return parentTransforms.reduce(function(previous, transform)
+          {
+            /* If the transform is an attribute source, then don't apply it. */
+            if (!Util.isNull(transform.tag) && transform.tag == "attributeSource")
+            {
+              return previous;
+            }
+
+            /* Applying the transform */
+            return transform.transform(previous, character);
+          }, value);
         }));
 
         return map;
-      })()
+      })(),
+      enumerable: true
     }
   });
 };
@@ -76,6 +108,7 @@ Object.defineProperties(AttributeType.prototype,
      */
     value: function(typeMapping)
     {
+      var self = this;
       this.children = this.children.map(function(id)
       {
         var type = typeMapping.get(id);
@@ -84,6 +117,11 @@ Object.defineProperties(AttributeType.prototype,
           console.log("WARNING - '" + id + "' did not have a type object defined.");
           return null;
         }
+        /* This sets a reference to the parent of each child. This is not enumerable */
+        Object.defineProperty(type, "parent",
+        {
+          value: self
+        });
         return type;
       });
     }

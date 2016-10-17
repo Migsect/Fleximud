@@ -1,6 +1,7 @@
 "use strict";
 var Util = require(process.cwd() + "/modules/Util");
 var DisplayName = require("../DisplayName");
+var DescriptorType = require("../DescriptorTypes");
 
 var templates = require(process.cwd() + "/templates/templates");
 
@@ -16,15 +17,23 @@ var Descriptor = function(json, type)
   {
     id:
     {
+      enumberable: true,
       value: json.id
     },
     type:
     {
+      enumberable: true,
       value: Util.isNull(type) ? null : type
     },
-    displayName:
+    name:
     {
-      value: new DisplayName(Util.isNull(json.name) ? "NO NAME" : json.name)
+      enumberable: true,
+      value: Util.isNull(json.name) ? null : new DisplayName(json.name)
+    },
+    unit:
+    {
+      enumberable: true,
+      value: Util.isNull(json.unit) ? null : new DisplayName(json.unit)
     }
   });
 };
@@ -72,9 +81,36 @@ Object.defineProperties(Descriptor.prototype,
      */
     value: function()
     {
-      return this;
+      var self = this;
+      var idType = self.getIdType();
+      return {
+        id: self.id,
+        type: self.type,
+        name: Util.isNull(self.name) ? (function()
+        {
+          var idType = self.getIdType();
+          return Util.isNull(idType) ? "NO NAME" : idType.name.singular;
+        })() : self.name.singular,
+        unit: Util.isNull(self.unit) ? (function()
+        {
+          return Util.isNull(idType) ? null : (Util.isNull(idType.unit) ? null : idType.unit.singular);
+        })() : self.unit.singular
+      };
     },
     writable: true
+  },
+  getIdType:
+  {
+    /**
+     * Grabs the type of this descriptor.
+     * The type object may hold additional information about the descriptor.
+     * 
+     * @return {DescriptorType} The descriptorType configuration of this descriptor.
+     */
+    value: function()
+    {
+      return DescriptorType.map.get(this.id);
+    }
   }
 });
 /** A descriptor that has a range of states. */
@@ -88,7 +124,7 @@ RangeDescriptor.isType = function(json)
 {
   return !Util.isNull(json.range) && !Util.isNull(json.center);
 };
-typeMapping.set('RangeDescriptor', RangeDescriptor);
+typeMapping.set("RangeDescriptor", RangeDescriptor);
 Util.inherit(Descriptor, RangeDescriptor);
 
 Object.defineProperties(RangeDescriptor.prototype,
@@ -126,13 +162,12 @@ Object.defineProperties(RangeDescriptor.prototype,
   {
     value: function()
     {
-      var json = {
-        id: this.id,
-        name: this.displayName.singular,
-        max: this.getMax(),
-        min: this.getMin(),
-        average: this.getAverage()
-      };
+      var json = Descriptor.prototype.getJSON.call(this);
+
+      json.max = this.getMax();
+      json.min = this.getMin();
+      json.average = this.getAverage();
+
       return json;
     }
   },
@@ -169,7 +204,7 @@ VariationDescriptor.isType = function(json)
 {
   return !Util.isNull(json.variations);
 };
-typeMapping.set('VariationDescriptor', VariationDescriptor);
+typeMapping.set("VariationDescriptor", VariationDescriptor);
 Util.inherit(Descriptor, VariationDescriptor);
 
 Object.defineProperties(VariationDescriptor.prototype,
@@ -207,12 +242,11 @@ Object.defineProperties(VariationDescriptor.prototype,
   {
     value: function()
     {
-      var json = {
-        id: this.id,
-        name: this.displayName.singular,
-        variations: this.variations,
-        first: this.variations[0]
-      };
+      var json = Descriptor.prototype.getJSON.call(this);
+
+      json.variations = this.variations;
+      json.first = this.variations[0];
+
       return json;
     }
   }

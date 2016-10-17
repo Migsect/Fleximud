@@ -220,7 +220,8 @@ Object.defineProperties(module.exports,
      * 
      * @param  {Object[]} directedTransforms The object to parse for transforms.
      * @return {Map<String, Transform[]>}    Map of the directed transforms.
-     */value: function(directedTransforms)
+     */
+    value: function(directedTransforms)
 
     {
       /* Getting the export object */

@@ -5,7 +5,7 @@ var LocationModule = require(process.cwd() + "/modules/location/Location");
 
 var Location = function()
 {
-  Command.call(this, "location");
+  Command.call(this, "move");
   var self = this;
   Object.defineProperties(self,
   {});

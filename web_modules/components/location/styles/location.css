@@ -56,9 +56,13 @@ div.location-connections-list-content {
 
 div.location-connection {
   flex: 0 0 auto;
-  margin: 1px;
+  margin: 4px;
   display: flex;
   flex-direction: column;
+}
+
+div.location-connection + div.location-connection {
+  margin-top: 0px;
 }
 
 div.location-connection-name {

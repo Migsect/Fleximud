@@ -133,6 +133,7 @@ var onSliderChange = function(event)
 Utils.querySelectorAll(".descriptor-slider").forEach(function(element)
 {
   element.addEventListener("change", onSliderChange);
+  element.addEventListener("input", onSliderChange);
 });
 
 var onNumberChange = function(event)

@@ -2,6 +2,7 @@
 
 var Util = require(process.cwd() + "/modules/Util");
 var Transform = require(process.cwd() + "/modules/DataStructures/Transform");
+var DisplayName = require("./DisplayName");
 
 /**
  * A descriptor type is additional global definition for certain classes of
@@ -27,7 +28,12 @@ var DescriptorType = function(json)
     },
     name:
     {
-      value: Util.isNull(json.name) ? null : json.name,
+      value: Util.isNull(json.name) ? null : new DisplayName(json.name),
+      enumerable: true
+    },
+    unit:
+    {
+      value: Util.isNull(json.unit) ? null : new DisplayName(json.unit),
       enumerable: true
     },
     transforms:

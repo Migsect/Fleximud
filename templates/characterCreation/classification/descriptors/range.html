@@ -1,5 +1,5 @@
 <div class="descriptor descriptor-range" data-key="{{id}}" data-value="{{average}}">
-  <div class="descriptor-title">{{name}}</div>
+  <div class="descriptor-title">{{name}}{{#if unit}} ({{unit}}){{/if}}</div>
   <input class="descriptor-slider" type="range" min="{{min}}" max="{{max}}" step="0.01"></input>
   <input class="descriptor-number" type="number" min="{{min}}" max="{{max}}" step="0.01" value="{{average}}"></input>
 </div>

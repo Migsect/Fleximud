@@ -1,6 +1,6 @@
 "use strict";
 
-var Utils = require("../../utils");
+var WebUtils = require("../../utils");
 
 var mainTemplate = require("./templates/chat.html");
 var historyItemTemplate = require("./templates/history-item.html");
@@ -15,7 +15,7 @@ require("./styles/chat.css");
  * @param {Socket} socket The socket that will be used to send messages over.
  * @param {Integer} historyMax The maximum number of history items to keep.
  */
-var ChatComponent = function(divId, socketHandler, historyMax)
+var ChatComponent = function(divId, socketHandler, client, historyMax)
 {
   var self = this;
   /* Defining the main properties */
@@ -28,6 +28,10 @@ var ChatComponent = function(divId, socketHandler, historyMax)
     socketHandler:
     {
       value: socketHandler
+    },
+    client:
+    {
+      value: client
     },
     historyMax:
     {
@@ -45,7 +49,7 @@ var ChatComponent = function(divId, socketHandler, historyMax)
   });
 
   /* Setting up the div element */
-  self.view.appendChild(Utils.htmlToElement(mainTemplate()));
+  self.view.appendChild(WebUtils.htmlToElement(mainTemplate()));
 
   /* Setting up the references to the gui elements */
   Object.defineProperties(self,
@@ -152,6 +156,10 @@ Object.defineProperties(ChatComponent.prototype,
      */
     value: function(message)
     {
+      if (typeof message.clearBefore != "undefined" && message.clearBefore === true)
+      {
+        this.clearMessages();
+      }
       this.addMessage(message);
     }
   },
@@ -167,6 +175,13 @@ Object.defineProperties(ChatComponent.prototype,
     value: function(number)
     {
       var element = self.view.querySelector("#history-item-" + number);
+    }
+  },
+  clearMessages:
+  {
+    value: function()
+    {
+      this.history.innerHTML = "";
     }
   },
   addMessage:
@@ -194,7 +209,7 @@ Object.defineProperties(ChatComponent.prototype,
         {
           return content.replace(/([^\s-]{5})([^\s-]{5})/g, "$1&shy;$2");
         }
-        return Utils.escapeHTML(content).replace(/([^\s-]{5})([^\s-]{5})/g, "$1&shy;$2");
+        return WebUtils.escapeHTML(content).replace(/([^\s-]{5})([^\s-]{5})/g, "$1&shy;$2");
       };
 
       /* If the element is an array, we need to setup each element and then join with newlines*/
@@ -204,7 +219,7 @@ Object.defineProperties(ChatComponent.prototype,
       }).join("<br>") : setupContent(message.content);
 
       /* Creating the html node */
-      var historyItemNode = Utils.htmlToElement(historyItemTemplate(
+      var historyItemNode = WebUtils.htmlToElement(historyItemTemplate(
       {
         hideSource: typeof message.hideSource == "undefined" ? false : message.hideSource,
         isSelf: typeof message.isSelf == "undefined" ? false : message.isSelf,

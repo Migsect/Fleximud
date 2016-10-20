@@ -1,0 +1,14 @@
+div.stats-view {
+  flex: 1 1 0px;
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+}
+
+div.stats-bars {
+  flex: 1 1 0px;
+}
+
+div.stats-attributes {
+  flex: 1 1 0px;
+}

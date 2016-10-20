@@ -1,7 +1,7 @@
 "use strict";
 
 /* Used modules */
-var Utils = require("../../utils");
+var WebUtils = require("../../utils");
 
 /* Templates */
 var mainTemplate = require("./templates/location.html");
@@ -19,7 +19,7 @@ require("./styles/location.css");
  * @param {String} divId         [description]
  * @param {SocketHandler} socketHandler [description]
  */
-var LocationComponent = function(divId, socketHandler)
+var LocationComponent = function(divId, socketHandler, client)
 {
   var self = this;
   /* Defining the main properties */
@@ -33,6 +33,10 @@ var LocationComponent = function(divId, socketHandler)
     {
       value: socketHandler
     },
+    client:
+    {
+      value: client
+    },
     cachedData:
     {
       value: null
@@ -40,7 +44,7 @@ var LocationComponent = function(divId, socketHandler)
   });
 
   /* Setting up the div element */
-  self.view.appendChild(Utils.htmlToElement(mainTemplate()));
+  self.view.appendChild(WebUtils.htmlToElement(mainTemplate()));
 
   console.log("Assigning components");
   /* Setting up the references to the gui elements */
@@ -94,10 +98,8 @@ Object.defineProperties(LocationComponent.prototype,
         self.addConnection(connection);
       });
 
+      /* Rendering location information */
       self.setInformation(data);
-
-      /* Rendering the location information */
-      /* TODO */
     }
   },
   setInformation:
@@ -146,7 +148,7 @@ Object.defineProperties(LocationComponent.prototype,
     {
       var self = this;
 
-      var connectionNode = Utils.htmlToElement(connectionTemplate(connectionData));
+      var connectionNode = WebUtils.htmlToElement(connectionTemplate(connectionData));
       self.connections.appendChild(connectionNode);
       connectionNode.addEventListener("click", function()
       {

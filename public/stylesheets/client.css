@@ -9,7 +9,10 @@ div.panel {
   flex-direction: row;
 }
 
-div#main-left-panel {}
+div#main-left-panel {
+  display: flex;
+  flex-direction: column;
+}
 
 div#main-right-panel {
   display: flex;
@@ -20,30 +23,30 @@ div.stat-item-title {
   text-align: center;
 }
 
-div#stat-panel {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
 div.stat-item {
   flex: 0 0 content;
 }
 
+div#stats-panel {
+  flex: 1 1 0px;
+  display: flex;
+  flex-direction: column;
+}
+
 div#chat-panel {
-  flex: 1 1;
+  flex: 1 1 0px;
   display: flex;
   flex-direction: column;
 }
 
 div#location-panel {
-  flex: 1 1;
+  flex: 1 1 0px;
   display: flex;
   flex-direction: column;
 }
 
 div#action-panel {
-  flex: 1 1;
+  flex: 1 1 0px;
   display: flex;
   flex-direction: column;
 }

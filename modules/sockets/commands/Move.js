@@ -54,7 +54,8 @@ Object.defineProperties(Move.prototype,
           source: "Server",
           content: "You traveled through the " + foundConnection.name,
           isSelf: false,
-          hideSource: true
+          hideSource: true,
+          clearBefore: true
         });
       });
 

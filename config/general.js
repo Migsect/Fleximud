@@ -22,10 +22,25 @@ module.exports = {
     attributeChoiceMultiplier: 1.2,
     minimumLongNameLength: 6
   },
-  stats
-:
+  stats:
   {
     attributeMidTier: 2,
-    bars: []
+    combatResources: [
+    {
+      id: "health",
+      showBar: true
+    },
+    {
+      id: "energy",
+      showBar: true
+    },
+    {
+      id: "willpower",
+      showBar: true
+    },
+    {
+      id: "mana",
+      showBar: true
+    }]
   }
 };

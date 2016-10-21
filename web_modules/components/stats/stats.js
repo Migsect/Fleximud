@@ -121,8 +121,20 @@ var StatComponent = function(divId, socketHandler, client)
   // });
 
   /* Setting up the socket handler */
-  socketHandler.addHandler("stats", function(data) {
-
+  socketHandler.addHandler("stats", function(data)
+  {
+    /* If its an array then we're going to loop it for receivings */
+    if (Array.isArray(data))
+    {
+      data.forEach(function(element)
+      {
+        self.receiveUpdate(element);
+      });
+    }
+    else
+    {
+      self.receiveUpdate(data);
+    }
   });
 };
 
@@ -130,8 +142,18 @@ Object.defineProperties(StatComponent.prototype,
 {
   receiveUpdate:
   {
-    value: function(updateData) {
+    value: function(updateData)
+    {
+      var self = this;
+      if (updateData.type == "attributes")
+      {
+        self.setAttribute(updateData.content);
+      }
+      else if (updateData.type == "setbar")
+      {
 
+      }
+      /* Otherwise do nothing, maybe throw an Error */
     }
   },
   setAttribute:

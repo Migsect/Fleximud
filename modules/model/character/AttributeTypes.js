@@ -186,7 +186,7 @@ Object.defineProperty(module.exports, "map",
   value: (function()
   {
     /* Getting the list of attributes */
-    var typesJSON = require("../../../config/attributes.json");
+    var typesJSON = require("../../../config/attributes");
 
     /* Mapping the jsons to objects */
     var types = new Map();

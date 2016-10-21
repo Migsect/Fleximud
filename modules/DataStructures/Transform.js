@@ -16,6 +16,7 @@ var Transform = function(type)
   {
     type:
     {
+      enumerable: true,
       value: type
     }
   });
@@ -60,9 +61,11 @@ var CompositeTransform = function(objectArray)
   {
     transforms:
     {
+      enumerable: true,
       value: objectArray.map(function(baseObject)
       {
-        module.exports.createTransform(baseObject);
+        console.log(baseObject);
+        return module.exports.createTransform(baseObject);
       })
     }
   });
@@ -75,10 +78,24 @@ Object.defineProperties(CompositeTransform.prototype,
     value: function(value, source)
     {
       var transformedValue = value;
-      this.transforms.forEach(function(transform)
+      for (var i = 0; i < this.transforms.length; i++)
       {
-        transformedValue = transform(transformedValue);
-      });
+        /* Performing the transform */
+        transformedValue = this.transforms[i].transform(transformedValue, source);
+
+        /* This is an object return which will have special options */
+        if (!Util.isNull(transformedValue.value))
+        {
+          /* Final values are instantly returned */
+          if (!Util.isNull(transformedValue.final) && transformedValue.final)
+          {
+            return transformedValue.value;
+          }
+          transformedValue = transformedValue.value;
+        }
+      }
+
+      /* Returning the result of the iteration */
       return transformedValue;
     }
   }
@@ -184,27 +201,38 @@ Object.defineProperties(module.exports,
      */
     value: function(baseObject)
     {
+      /* If null or undefined then bad and error */
       if (Util.isNull(baseObject))
       {
         throw new Error("Attempted to create a transform when the baseObject is null or undefined");
       }
+      /* Composite of objects */
       else if (Array.isArray(baseObject))
       {
         return new CompositeTransform(baseObject);
       }
+      /* Will be based off of a lambda function */
       else if (typeof baseObject == "function")
       {
         return new DirectTransform(baseObject);
       }
+      /* Will be an expression */
       else if (typeof baseObject == "string")
       {
         /* TODO make use of a MATH parser */
         throw new Error("Attempted to create a transform with a string, this type of transform is not yet supported");
       }
+      /* Creating a transform from a transform does not change it */
+      else if (baseObject instanceof Transform)
+      {
+        return baseObject;
+      }
+      /* Configuration transforms are an object */
       else if (typeof baseObject == "object")
       {
         return new ConfiguredTransform(baseObject);
       }
+      /* If we couldn't infer it then we error */
       else
       {
         throw new Error("Attempeted to create a transform with an unrecognized object.");

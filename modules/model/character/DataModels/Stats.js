@@ -4,6 +4,7 @@ var Mongoose = require("mongoose");
 var Schema = Mongoose.Schema;
 
 var Util = require(process.cwd() + "/modules/Util");
+var Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 
 /* Represents a collection of static values that can be transformed by other models */
 var StatSchema = Schema(
@@ -55,12 +56,10 @@ StatSchema.methods.getStat = function(character, key)
 {
   /* The starting place is the stored data */
   var transformedStat = Util.isNull(this.getStatStatic(key)) ? 0 : this.getStatStatic(key);
-  var transforms = character.getStatTransforms(key);
-  transforms.forEach(function(transform)
-  {
-    transformedStat = transform.transform(transformedStat, character);
-  });
-  return transformedStat;
+  /* Transforming all the revelevant transforms into a composite transform */
+  var transformComposite = Transform.createTransform(character.getStatTransforms(key));
+  /* Returning the resulting value */
+  return transformComposite.transform(transformedStat, character);
 };
 
 /**

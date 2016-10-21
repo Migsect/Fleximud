@@ -4,6 +4,7 @@ var Mongoose = require("mongoose");
 var Schema = Mongoose.Schema;
 
 var AttributeTypes = require("../AttributeTypes");
+var Util = require(process.cwd() + "/modules/Util");
 
 /* Represents a collection of attribute values */
 var AttributesSchema = Schema(
@@ -116,6 +117,31 @@ AttributesSchema.methods.setAttribute = function(attribute, value)
   {
     this.values[attribute] = value;
   }
+};
+
+/**
+ * Generates update data for the stats.
+ * This will return a single object representing the root attribute.
+ * 
+ * @param  {Number} level The level or tier to not assign the hidden tag to.
+ * @return {Object[]}     The root data object, contains children.
+ */
+AttributesSchema.methods.getUpdateData = function(character, level, type)
+{
+  var self = this;
+  type = Util.isNull(type) ? AttributeTypes.top : type;
+
+  return {
+    id: type.id,
+    name: type.name,
+    value: character.getStat(type.id),
+    hidden: level >= 0 ? false : true,
+    color: type.color,
+    children: type.children.map(function(child)
+    {
+      return self.getUpdateData(character, level - 1, child);
+    })
+  };
 };
 
 Object.defineProperties(module.exports,

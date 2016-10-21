@@ -103,6 +103,23 @@ CharacterSchema.methods.getLocation = function()
 };
 
 /**
+ * Retrieves the stat for the character from the stats object.
+ * This is a quality of life method.
+ *
+ * This does not return the static stat but instead a transformed stat.
+ * If you want to get a static stat you need to use:
+ * 
+ *   character.stats.getStatStatic(key)
+ * 
+ * @param  {String} key The key of the stat to retrieve.
+ * @return {Value}     [description]
+ */
+CharacterSchema.methods.getStat = function(key)
+{
+  return this.stats.getStat(this, key);
+};
+
+/**
  * Moves the character to the new location.
  * This changes the character's current location, removes the character from
  * their current location, and adds the character to their new location.

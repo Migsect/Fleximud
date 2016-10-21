@@ -60,49 +60,65 @@ var StatComponent = function(divId, socketHandler, client)
     }
   });
 
-  self.setAttribute(
-  {
-    id: "test_id_0",
-    name: "test_name_0",
-    value: "test_value_0",
-    children: [
+  self.socketHandler.sendCommand("stats",
     {
-      id: "test_id_1",
-      name: "test_name_1",
-      value: "test_value_1",
-      children: [
-      {
-        id: "test_id_3",
-        name: "test_name_3",
-        value: "test_value_3",
-        children: []
-      },
-      {
-        id: "test_id_4",
-        name: "test_name_4",
-        value: "test_value_4",
-        children: []
-      }]
+      request: "attributes"
     },
+    function(data)
     {
-      id: "test_id_2",
-      name: "test_name_2",
-      value: "test_value_2",
-      children: [
-      {
-        id: "test_id_5",
-        name: "test_name_5",
-        value: "test_value_5",
-        children: []
-      },
-      {
-        id: "test_id_6",
-        name: "test_name_6",
-        value: "test_value_6",
-        children: []
-      }]
-    }]
-  });
+      self.setAttribute(data);
+    });
+  // self.setAttribute(
+  // {
+  //   id: "test_id_0",
+  //   name: "test_name_0",
+  //   value: "test_value_0 ",
+  //   hidden: false,
+
+  //   children: [
+  //   {
+  //     id: "test_id_1",
+  //     name: "test_name_1",
+  //     value: "test_value_1",
+  //     hidden: false,
+  //     children: [
+  //     {
+  //       id: "test_id_3",
+  //       name: "test_name_3",
+  //       value: "test_value_3",
+  //       hidden: true,
+  //       children: []
+  //     },
+  //     {
+  //       id: "test_id_4",
+  //       name: "test_name_4",
+  //       value: "test_value_4",
+  //       hidden: true,
+  //       children: []
+  //     }]
+  //   },
+  //   {
+  //     id: "test_id_2",
+  //     name: "test_name_2",
+  //     value: "test_value_2",
+  //     hidden: false,
+  //     children: [
+  //     {
+  //       id: "test_id_5",
+  //       name: "test_name_5",
+  //       value: "test_value_5",
+  //       hidden: true,
+  //       children: []
+  //     },
+  //     {
+  //       id: "test_id_6",
+  //       name: "test_name_6",
+  //       value: "test_value_6",
+  //       hidden: true,
+  //       children: []
+  //     }]
+  //   }]
+  // });
 
   /* Setting up the socket handler */
   socketHandler.addHandler("stats", function(data) {
@@ -146,7 +162,7 @@ Object.defineProperties(StatComponent.prototype,
           return child.id;
         }).join(",") : "",
         level: 8 * level,
-        hidden: typeof parent != "undefined"
+        hidden: typeof attributeData.hidden != "undefined" ? attributeData.hidden : typeof parent != "undefined"
       }));
 
       /* Adding the element to the attribute container */
@@ -173,34 +189,49 @@ Object.defineProperties(StatComponent.prototype,
       /* Adding the event listeners */
       attributeElement.addEventListener("click", function()
       {
-        var children = attributeElement.dataset.children.split(",").map(function(child)
+        /* Retrieves all the children nodes */
+        var getChildrenNodes = function(element)
         {
-          return self.attributes.get(child);
-        });
-        console.log(children);
-        var doShow = children.some(function(child)
+          return element.dataset.children.split(",").map(function(child)
+          {
+            return self.attributes.get(child);
+          }).filter(function(child)
+          {
+            return !(typeof child == "undefined" || child === null);
+          });
+        };
+        /* Recursively hides all children */
+        var hideChildren = function(element)
         {
-          if (typeof child == "undefined" || child === null)
-          {
-            return false;
-          }
-          return child.classList.contains("hidden");
-        });
-        children.forEach(function(child)
-        {
-          if (typeof child == "undefined" || child === null)
-          {
-            return;
-          }
-          if (doShow)
-          {
-            child.classList.remove("hidden");
-          }
-          else
+          var children = getChildrenNodes(element);
+          children.forEach(function(child)
           {
             child.classList.add("hidden");
-          }
-        });
+            hideChildren(child);
+          });
+        };
+        /* Just shows the children */
+        var showChildren = function(element)
+        {
+          var children = getChildrenNodes(element);
+          children.forEach(function(child)
+          {
+            child.classList.remove("hidden");
+          });
+        };
+
+        /* Calculting if we do show the children or not */
+        if (getChildrenNodes(attributeElement).some(function(child)
+          {
+            return child.classList.contains("hidden");
+          }))
+        {
+          showChildren(attributeElement);
+        }
+        else
+        {
+          hideChildren(attributeElement);
+        }
       });
 
       /* If there are children we will now add them (but they are hidden by default */

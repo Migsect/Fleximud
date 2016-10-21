@@ -16,7 +16,7 @@ var auth = require("./routes/auth");
 var client = require("./routes/client");
 var account = require("./routes/account");
 
-var config = require("./config/general.json");
+var config = require("./config/general");
 
 /* Loading universals */
 require("./modules/location/Location");

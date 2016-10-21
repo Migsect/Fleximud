@@ -6,13 +6,13 @@ var passwordHash = require("password-hash");
 var uuid = require("node-uuid");
 var Promise = require("promise");
 
-var config = require(process.cwd() + "/config/general.json");
+var config = require(process.cwd() + "/config/general");
 
 var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
 /* Modules */
-var Character = require('./character//Character.js');
+var Character = require('./character/Character');
 
 /* Schemas */
 var CharacterSchema = Character.schema;

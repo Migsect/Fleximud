@@ -4,7 +4,7 @@ var express = require("express");
 var router = express.Router();
 
 var templates = require("../templates/templates");
-var config = require("../config/general.json");
+var config = require("../config/general");
 
 var accountGrabber = require(process.cwd() + "/modules/middleware/accountGrabber");
 

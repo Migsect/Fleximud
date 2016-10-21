@@ -2,6 +2,7 @@
 
 var Command = require("../Command");
 var Util = require(process.cwd() + "/modules/Util");
+var config = require(process.cwd() + "/config/general");
 
 var Stats = function()
 {
@@ -17,7 +18,29 @@ Object.defineProperties(Stats.prototype,
 {
   execute:
   {
-    value: function(client, data) {}
+    value: function(client, data)
+    {
+      var character = client.character;
+
+      /* If there is not a specific request */
+      if (Util.isNull(data.request))
+      {
+        /* TODO send everything */
+      }
+      else
+      {
+        switch (data.request)
+        {
+          case "attributes":
+            return character.attributes.getUpdateData(character, config.stats.attributeMidTier);
+          case "bars":
+            return "";
+          default:
+            return "Invalid Request...";
+        }
+      }
+
+    }
   },
   executeWithArray:
   {

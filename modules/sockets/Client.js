@@ -141,7 +141,7 @@ Object.defineProperties(Client.prototype,
       if (typeof callback == "function")
       {
         /* If the result doesn't have a then member, then it isn't a promise*/
-        if (Util.isNull(result.then) && typeof result.then != "function")
+        if (Util.isNull(result.then) || typeof result.then != "function")
         {
           callback(result);
         }

@@ -17,6 +17,7 @@ var AttributeType = function(json)
   Util.assertNotNull(json, json.name, json.id, json.tag);
 
   var self = this;
+  /* Defining the main data */
   Object.defineProperties(self,
   {
     name:
@@ -44,7 +45,11 @@ var AttributeType = function(json)
     {
       enumerable: true,
       value: Util.isNull(json.color) ? "#444444" : json.color
-    },
+    }
+  });
+  /* Defining stuff that relies on the prior items */
+  Object.defineProperties(self,
+  {
     transforms:
     {
       /**
@@ -60,10 +65,31 @@ var AttributeType = function(json)
         }
 
         /* Getting the base attribute off */
-        var transform = Transform.createTransform(function(value, character)
+        var transform = null;
+        if (self.children.length <= 0)
         {
-          return value + character.attributes.getAttribute(json.id);
-        });
+          /* The transform will be based of the attribute's current value */
+          transform = Transform.createTransform(function(value, character)
+          {
+            return value + character.attributes.getAttribute(json.id);
+          });
+        }
+        else
+        {
+          transform = Transform.createTransform(function(value, character)
+          {
+            /* The attribute will be create from the children */
+            var sum = 0;
+            self.children.forEach(function(child)
+            {
+              sum += character.getStat(child.id);
+            });
+            return {
+              value: sum / self.children.length,
+              final: true
+            };
+          });
+        }
         Object.defineProperty(transform, "tag",
         {
           value: "attributeSource"

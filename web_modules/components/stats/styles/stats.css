@@ -11,4 +11,24 @@ div.stats-bars {
 
 div.stats-attributes {
   flex: 1 1 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+div.stat-attribute {
+  display: flex;
+  flex-direction: row;
+  padding: 4px;
+}
+
+div.stat-attribute-title {
+  flex: 0 1 0px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+div.stat-attribute-value {
+  flex: 0 1 0px;
+  padding-left: 4px;
+  padding-right: 4px;
 }

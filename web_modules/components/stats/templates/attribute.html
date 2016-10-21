@@ -1,14 +1,8 @@
-<div class="stat-attribute" data-attribute-id="{{id}}">
+<div class="clickable stat-attribute{{#if hidden}} hidden{{/if}}" data-attribute-id="{{id}}" data-color="{{{color}}}" data-level="{{level}}" data-children="{{children}}" style="background-color:{{{color}}}; margin-left: {{level}}px;">
   <div class="stat-attribute-title">
     {{name}}
   </div>
   <div class="stat-attribute-value">
     {{value}}
-  </div>
-  <!-- 
-      Stores all the stat-attribute's children.
-      This will actually become a popup when the stat-attribute is hovered.
-  -->
-  <div class="stat-attribute-children">
   </div>
 </div>

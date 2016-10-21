@@ -66,20 +66,12 @@ div[background=black] {
   color: white;
 }
 
-div.clickable[background=black]:hover {
-  background-color: #005ce6;
-}
-
 
 /* Grey 1 Backgrounds - 10*/
 
 div[background=grey_1] {
   background-color: #1a1a1a;
   color: white;
-}
-
-div.clickable[background=grey_1]:hover {
-  background-color: #005ce6;
 }
 
 
@@ -90,20 +82,12 @@ div[background=grey_2] {
   color: white;
 }
 
-div.clickable[background=grey_2]:hover {
-  background-color: #005ce6;
-}
-
 
 /* Grey 3 Backgrounds - 30*/
 
 div[background=grey_3] {
   background-color: #4d4d4d;
   color: white;
-}
-
-div.clickable[background=grey_3]:hover {
-  background-color: #005ce6;
 }
 
 
@@ -114,20 +98,12 @@ div[background=grey_4] {
   color: black;
 }
 
-div.clickable[background=grey_4]:hover {
-  background-color: #b3d1ff;
-}
-
 
 /* White Backgrounds */
 
 div[background=white] {
   background-color: #ffffff;
   color: black;
-}
-
-div.clickable[background=white]:hover {
-  background-color: #b3d1ff;
 }
 
 
@@ -138,20 +114,12 @@ div[background=blue] {
   color: white;
 }
 
-div.clickable[background=blue]:hover {
-  background-color: #3385ff;
-}
-
 
 /* Grey-Blue Backgrounds */
 
 div[background=bluegrey] {
   background-color: #4073bf;
   color: white;
-}
-
-div.clickable[background=bluegrey]:hover {
-  background-color: #799dd2;
 }
 
 
@@ -162,20 +130,12 @@ div[background=green] {
   color: white;
 }
 
-div.clickable[background=green]:hover {
-  background-color: #5cd65c;
-}
-
 
 /* Red Backgrounds */
 
 div[background=red] {
   background-color: #ff0000;
   color: white;
-}
-
-div.clickable[background=red]:hover {
-  background-color: #ff4d4d;
 }
 
 
@@ -186,10 +146,6 @@ div[background=yellow] {
   color: black;
 }
 
-div.clickable[background=yellow]:hover {
-  background-color: #ffffb3;
-}
-
 
 /* Orange Backgrounds */
 
@@ -198,20 +154,12 @@ div[background=orange] {
   color: white;
 }
 
-div.clickable[background=orange]:hover {
-  background-color: #ffad33;
-}
-
 
 /* Purple Backgrounds */
 
 div[background=purple] {
   background-color: #9900cc;
   color: white;
-}
-
-div.clickable[background=purple]:hover {
-  background-color: #d966ff;
 }
 
 
@@ -228,7 +176,12 @@ div.clickable {
 }
 
 div.clickable:hover {
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.25);
   cursor: pointer;
+}
+
+div.clickable:active {
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.75);
 }
 
 

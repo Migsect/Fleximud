@@ -1,4 +1,6 @@
 <div class="stat-bar-container" data-id="{{id}}">
-  <div class="stat-bar-name">{{name}}</div>
-  <progress class="stat-bar" value="{{value}}" max="{{max}}"></progress>
+  <div class="stat-bar-info stat-bar-name">{{name}}</div>
+  <div class="stat-bar-info stat-bar-percentage">{{percentage}}</div>
+  <div class="stat-bar-info stat-bar-ratio">{{ratio}}</div>
+  <progress id="stat-bar-{{id}}" class="stat-bar" value="{{value}}" max="{{max}}"></progress>
 </div>

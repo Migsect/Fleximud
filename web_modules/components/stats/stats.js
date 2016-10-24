@@ -11,6 +11,13 @@ var attributeTemplate = require("./templates/attribute.html");
 /* CSS styles */
 require("./styles/stats.css");
 
+var getPercentage = function(top, bottom, decimals)
+{
+  var ratio = 100 * Number(top) / Number(bottom);
+  var truncated = Math.round(ratio * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  return truncated + "%";
+};
+
 var StatComponent = function(divId, socketHandler, client)
 {
   var self = this;
@@ -68,57 +75,6 @@ var StatComponent = function(divId, socketHandler, client)
     {
       self.setAttribute(data);
     });
-  // self.setAttribute(
-  // {
-  //   id: "test_id_0",
-  //   name: "test_name_0",
-  //   value: "test_value_0 ",
-  //   hidden: false,
-
-  //   children: [
-  //   {
-  //     id: "test_id_1",
-  //     name: "test_name_1",
-  //     value: "test_value_1",
-  //     hidden: false,
-  //     children: [
-  //     {
-  //       id: "test_id_3",
-  //       name: "test_name_3",
-  //       value: "test_value_3",
-  //       hidden: true,
-  //       children: []
-  //     },
-  //     {
-  //       id: "test_id_4",
-  //       name: "test_name_4",
-  //       value: "test_value_4",
-  //       hidden: true,
-  //       children: []
-  //     }]
-  //   },
-  //   {
-  //     id: "test_id_2",
-  //     name: "test_name_2",
-  //     value: "test_value_2",
-  //     hidden: false,
-  //     children: [
-  //     {
-  //       id: "test_id_5",
-  //       name: "test_name_5",
-  //       value: "test_value_5",
-  //       hidden: true,
-  //       children: []
-  //     },
-  //     {
-  //       id: "test_id_6",
-  //       name: "test_name_6",
-  //       value: "test_value_6",
-  //       hidden: true,
-  //       children: []
-  //     }]
-  //   }]
-  // });
 
   /* Setting up the socket handler */
   socketHandler.addHandler("stats", function(data)
@@ -135,6 +91,39 @@ var StatComponent = function(divId, socketHandler, client)
     {
       self.receiveUpdate(data);
     }
+  });
+
+  self.addBar(
+  {
+    id: "health",
+    name: "Health",
+    value: 0,
+    max: 100,
+    color: "red"
+  });
+  self.addBar(
+  {
+    id: "willpower",
+    name: "Willpower",
+    value: 57,
+    max: 100,
+    color: "purple"
+  });
+  self.addBar(
+  {
+    id: "energy",
+    name: "Energy",
+    value: 110,
+    max: 100,
+    color: "green"
+  });
+  self.addBar(
+  {
+    id: "mana",
+    name: "Mana",
+    value: 57,
+    max: 100,
+    color: "blue"
   });
 };
 
@@ -269,7 +258,99 @@ Object.defineProperties(StatComponent.prototype,
   },
   setBar:
   {
-    value: function(barData) {
+    value: function(data) {
+
+    }
+  },
+  addBar:
+  {
+    /**
+     * Adds a bar based on the data passed in.
+     * 
+     * @param  {Object} data The bardata thatd defines the bar.
+     */
+    value: function(data)
+    {
+      var self = this;
+
+      /* Creating the bar element */
+      var barElement = WebUtils.htmlToElement(barTemplate(
+      {
+        id: data.id,
+        name: data.name,
+        value: data.value,
+        max: data.max,
+        ratio: data.value + " / " + data.max,
+        percentage: getPercentage(data.value, data.max, 2)
+      }));
+      /* Removing the old bar */
+      /* TODO */
+
+      /* Adding the new bar */
+      self.bars.set(data.id, barElement);
+
+      /* toggling the overflowed class if it starts off as overflowed */
+      if (Number(data.value) > Number(data.max))
+      {
+        barElement.querySelector("progress").classList.add("overflowed");
+      }
+
+      /* By far the most effective means of changing the color of the progress bar */
+      var style = document.createElement("style");
+      style.type = "text/css";
+      style.innerHTML = "progress#stat-bar-" + data.id + "::-webkit-progress-value { background: " + data.color + "; }";
+      barElement.appendChild(style);
+
+      self.barContainer.appendChild(barElement);
+    }
+  },
+  updateBar:
+  {
+    /**
+     * Updates t
+     * @param  {String} barId The id of the bar to update.
+     * @param  {Number} value The value to update the bar to.
+     * @param  {Number} max   The max value to update the bar to. (optional)
+     */
+    value: function(barId, value, max)
+    {
+      var self = this;
+
+      /* Grabbing the bar element for the id, if there is no id then we throw a hissy fit */
+      var barElement = self.bars.get(barId);
+      if (!barElement)
+      {
+        throw new Error("Bar element was not defined");
+      }
+
+      /* Updating the values of the progress element which matters the most */
+      var progressElement = barElement.querySelector("progress");
+      progressElement.setAttribute("value", value);
+      if (max)
+      {
+        progressElement.setAttribute("max", max);
+      }
+
+      /* Getting the new value and the new max as attributes */
+      var newValue = Number(progressElement.getAttribute("value"));
+      var newMax = Number(progressElement.getAttribute("max"));
+
+      /* Updating all the display information */
+      var percentageElement = barElement.querySelector("div.stat-bar-percentage");
+      percentageElement.innerHTML = getPercentage(newValue, newMax, 2);
+
+      var ratioElement = barElement.querySelector("div.stat-bar-ratio");
+      ratioElement.innerHTML = newValue + " / " + newMax;
+
+      /* Setting the overflow */
+      if (newValue > newMax)
+      {
+        progressElement.classList.add("overflowed");
+      }
+      else
+      {
+        progressElement.classList.remove("overflowed");
+      }
 
     }
   }

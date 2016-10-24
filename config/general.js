@@ -24,23 +24,6 @@ module.exports = {
   },
   stats:
   {
-    attributeMidTier: 2,
-    combatResources: [
-    {
-      id: "health",
-      showBar: true
-    },
-    {
-      id: "energy",
-      showBar: true
-    },
-    {
-      id: "willpower",
-      showBar: true
-    },
-    {
-      id: "mana",
-      showBar: true
-    }]
+    attributeMidTier: 2
   }
 };

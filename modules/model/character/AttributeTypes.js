@@ -14,7 +14,7 @@ var templates = require(process.cwd() + "/templates/templates");
 var AttributeType = function(json)
 {
   /* Validating the inputs */
-  Util.assertNotNull(json, json.name, json.id, json.tag);
+  Util.assertNotNull(json, json.id);
 
   var self = this;
   /* Defining the main data */
@@ -23,7 +23,7 @@ var AttributeType = function(json)
     name:
     {
       enumerable: true,
-      value: json.name
+      value: Util.isNull(json.name) ? json.id : json.name
     },
     id:
     {
@@ -33,7 +33,7 @@ var AttributeType = function(json)
     tag:
     {
       enumerable: true,
-      value: json.tag
+      value: Util.isNull(json.tag) ? json.id : json.tag
     },
     children:
     {
@@ -194,8 +194,17 @@ Object.defineProperty(module.exports, "map",
     /* Creating all the AttributeTypes from the JSONs */
     typesJSON.forEach(function(json)
     {
-      var type = new AttributeType(json);
-      types.set(type.id, type);
+      try
+      {
+        var type = new AttributeType(json);
+        types.set(type.id, type);
+      }
+      catch (error)
+      {
+        /* Skipping this part of the configuration if there was an error */
+        console.log(error.name + " : " + error.message);
+        return;
+      }
     });
 
     /* Populating the children of each type */
@@ -206,17 +215,16 @@ Object.defineProperty(module.exports, "map",
 
     /* Returning the type */
     return types;
-  })()
+  })(),
+  enumerable: true
 });
 
 Object.defineProperties(module.exports,
 {
   list:
   {
-    value: (function()
-    {
-      return Array.from(module.exports.map.keys());
-    })()
+    enumerable: true,
+    value: Array.from(module.exports.map.keys())
   },
   top:
   {
@@ -251,10 +259,12 @@ Object.defineProperties(module.exports,
       }
 
       return tops[0];
-    })()
+    })(),
+    enumerable: true
   },
   transforms:
   {
+    enumerable: true,
     value: (function()
     {
       var transformMap = new Map();

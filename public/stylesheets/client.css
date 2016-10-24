@@ -55,11 +55,6 @@ div#item-panel {}
 
 div#bottom-bar {}
 
-progress[value] {
-  -webkit-appearance: none;
-  appearance: none;
-}
-
 progress#healthBar::-webkit-progress-value {
   background: #FF0000;
 }

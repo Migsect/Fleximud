@@ -68,12 +68,19 @@ var StatComponent = function(divId, socketHandler, client)
   });
 
   self.socketHandler.sendCommand("stats",
-    {
-      request: "attributes"
-    },
+    {},
     function(data)
     {
-      self.setAttribute(data);
+      /* Setting attributes */
+      var attributes = data.attributes;
+      self.setAttribute(attributes);
+
+      /* Setting the resource bars */
+      var resources = data.resources;
+      resources.forEach(function(resource)
+      {
+        self.addBar(resource);
+      });
     });
 
   /* Setting up the socket handler */
@@ -92,39 +99,6 @@ var StatComponent = function(divId, socketHandler, client)
       self.receiveUpdate(data);
     }
   });
-
-  self.addBar(
-  {
-    id: "health",
-    name: "Health",
-    value: 0,
-    max: 100,
-    color: "red"
-  });
-  self.addBar(
-  {
-    id: "willpower",
-    name: "Willpower",
-    value: 57,
-    max: 100,
-    color: "purple"
-  });
-  self.addBar(
-  {
-    id: "energy",
-    name: "Energy",
-    value: 110,
-    max: 100,
-    color: "green"
-  });
-  self.addBar(
-  {
-    id: "mana",
-    name: "Mana",
-    value: 57,
-    max: 100,
-    color: "blue"
-  });
 };
 
 Object.defineProperties(StatComponent.prototype,
@@ -138,9 +112,13 @@ Object.defineProperties(StatComponent.prototype,
       {
         self.setAttribute(updateData.content);
       }
-      else if (updateData.type == "setbar")
+      else if (updateData.type == "addbar")
       {
-
+        self.addBar(updateData.content);
+      }
+      else if (updateData.type == "updateBar")
+      {
+        self.updateBar(updateData.content);
       }
       /* Otherwise do nothing, maybe throw an Error */
     }
@@ -256,10 +234,11 @@ Object.defineProperties(StatComponent.prototype,
 
     }
   },
-  setBar:
+  removeBar:
   {
-    value: function(data) {
-
+    value: function(data)
+    {
+      /* Todo */
     }
   },
   addBar:

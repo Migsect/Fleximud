@@ -39,10 +39,10 @@ module.exports = [
 },
 {
   id: "mana",
+  name: "Mana",
   showBar: true,
   stats:
   {
-    name: "Mana",
     max: "mana_max",
     current: "mana_current",
     efficiency: "mana_efficiency",

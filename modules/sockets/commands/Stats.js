@@ -3,6 +3,7 @@
 var Command = require("../Command");
 var Util = require(process.cwd() + "/modules/Util");
 var config = require(process.cwd() + "/config/general");
+var Resources = require(process.cwd() + "/modules/model/character/ResourceTypes");
 
 var Stats = function()
 {
@@ -25,7 +26,10 @@ Object.defineProperties(Stats.prototype,
       /* If there is not a specific request */
       if (Util.isNull(data.request))
       {
-        /* TODO send everything */
+        return {
+          attributes: character.attributes.getUpdateData(character, config.stats.attributeMidTier),
+          resources: Resources.getUpdateData(character)
+        };
       }
       else
       {
@@ -33,8 +37,8 @@ Object.defineProperties(Stats.prototype,
         {
           case "attributes":
             return character.attributes.getUpdateData(character, config.stats.attributeMidTier);
-          case "bars":
-            return "";
+          case "resources":
+            return Resources.getUpdateData(character);
           default:
             return "Invalid Request...";
         }

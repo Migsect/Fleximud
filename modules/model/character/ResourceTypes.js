@@ -63,7 +63,27 @@ var ResourceType = function(json)
 /* Prototype definition */
 Object.defineProperties(ResourceType.prototype,
 {
-
+  getUpdateData:
+  {
+    /**
+     * Gets the update data for this resource object.  This will always return
+     * an object and does not care about the showBar property.
+     * 
+     * @param  {Character} character The character to get the update data for.
+     * @return {Object}              The resulting update data.
+     */
+    value: function(character)
+    {
+      var self = this;
+      return {
+        id: self.id,
+        name: self.name,
+        color: self.color,
+        max: character.getStat(self.stats.max),
+        value: character.getStat(self.stats.current)
+      };
+    }
+  }
 });
 
 /* Exports definition */
@@ -100,6 +120,21 @@ Object.defineProperties(module.exports,
   list:
   {
     enumerable: true,
-    value: Array.from(module.exports.map.keys())
+    value: Array.from(module.exports.map.values())
+  },
+  getUpdateData:
+  {
+    enumerable: true,
+    value: function(character)
+    {
+      return module.exports.list.filter(function(element)
+        {
+          return element.showBar;
+        })
+        .map(function(element)
+        {
+          return element.getUpdateData(character);
+        });
+    }
   }
 });

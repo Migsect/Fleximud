@@ -1,6 +1,10 @@
 "use strict";
 
 var Util = require(process.cwd() + "/modules/Util");
+var scheduler = require(process.cwd() + "/modules/scheduling/Scheduler").instance;
+var Task = require(process.cwd() + "/modules/scheduling/Task");
+
+var config = require(process.cwd() + "/config/general");
 
 var ResourceType = function(json)
 {
@@ -11,22 +15,21 @@ var ResourceType = function(json)
   {
     name:
     {
-      enumerable: true,
-      value: Util.isNull(json.name) ? json.id : json.name
+      value: Util.isNull(json.name) ? json.id : json.name,
+      enumerable: true
     },
     id:
     {
-      enumerable: true,
-      value: json.id
+      value: json.id,
+      enumerable: true
     },
     showBar:
     {
-      enumerable: true,
-      value: Util.isNull(json.showBar) ? false : json.showBar
+      value: Util.isNull(json.showBar) ? false : json.showBar,
+      enumerable: true
     },
     stats:
     {
-      enumerable: true,
       value: Object.defineProperties(
       {},
       {
@@ -50,12 +53,13 @@ var ResourceType = function(json)
           enumerable: true,
           value: Util.isNull(json.stats) || Util.isNull(json.stats.regen) ? json.id + "_regen" : json.stats.regen
         }
-      })
+      }),
+      enumerable: true
     },
     color:
     {
-      enumerable: true,
-      value: Util.isNull(json.color) ? "#cccccc" : json.color
+      value: Util.isNull(json.color) ? "#cccccc" : json.color,
+      enumerable: true
     }
   });
 };
@@ -138,3 +142,48 @@ Object.defineProperties(module.exports,
     }
   }
 });
+
+/* Scheduling all the updates for regeneration */
+scheduler.schedule(new Task(function()
+{
+  var clientManager = require(process.cwd() + "/modules/sockets/ClientManager").instance;
+
+  /* Getting all active characters to update */
+  var characters = clientManager.activeCharacters;
+  characters.forEach(function(character)
+  {
+    var clients = clientManager.characters.get(character.id);
+
+    /* Updating the characters stats */
+    module.exports.list.forEach(function(resourceType)
+    {
+      var regen = config.stats.regenUpdateRate * character.getStat(resourceType.stats.regen);
+      var max = character.getStat(resourceType.stats.max);
+      var current = character.getStat(resourceType.stats.current);
+
+      var newCurrent = (current + regen) > max ? max : current + regen;
+      /* Checking to see if there was a change */
+      if (newCurrent == current)
+      {
+        return;
+      }
+      character.stats.setStat(resourceType.stats.current, newCurrent);
+
+      /* Sending the update data */
+      var update = {
+        type: "updatebar",
+        content:
+        {
+          id: resourceType.id,
+          value: newCurrent,
+          max: max
+        }
+      };
+      clients.forEach(function(client)
+      {
+        client.sendUpdate("stats", update);
+      });
+
+    });
+  });
+}, config.stats.regenUpdateRate * scheduler.tickRate));

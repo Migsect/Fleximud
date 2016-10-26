@@ -18,7 +18,8 @@ var ClientManager = function()
      */
     clients:
     {
-      value: new Map()
+      value: new Map(),
+      enumerable: true
     },
     /**
      * A mapping of character IDs to a list of the currently active clients.
@@ -30,7 +31,22 @@ var ClientManager = function()
      */
     characters:
     {
-      value: new Map()
+      value: new Map(),
+      enumerable: true
+    },
+    activeCharacters:
+    {
+      /**
+       * Retrieves a list of the currently active characters.
+       * @type {Character[]} List of current active characters
+       */
+      get: function()
+      {
+        return Array.from(self.characters.values()).map(function(element)
+        {
+          return element[0].character;
+        });
+      }
     }
   });
 };
@@ -92,11 +108,18 @@ Object.defineProperties(ClientManager.prototype,
 
       client.onDisconnection();
       this.clients.delete(client);
+
+      /* Splicing out the client from the character clients listing */
       var characterClients = this.characters.get(client.character.id);
       characterClients.splice(characterClients.findIndex(function(element)
       {
         return element === client;
       }), 1);
+      /* Removing the character's listing if its empty */
+      if (characterClients.length <= 0)
+      {
+        this.characters.delete(client.character.id);
+      }
       console.log("Client Disconnected:", client.toString());
     }
   },
@@ -201,4 +224,14 @@ Object.defineProperties(ClientManager.prototype,
   }
 });
 
-module.exports = ClientManager;
+Object.defineProperties(module.exports,
+{
+  constructor:
+  {
+    value: ClientManager
+  },
+  instance:
+  {
+    value: new ClientManager()
+  }
+});

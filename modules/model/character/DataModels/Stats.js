@@ -81,7 +81,6 @@ StatSchema.methods.getStaticKeys = function()
  */
 StatSchema.methods.getKeys = function(character)
 {
-  console.log(this);
   return this.getStaticKeys().concat(character.getStatTransformsKeys());
 };
 

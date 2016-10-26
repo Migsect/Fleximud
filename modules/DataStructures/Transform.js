@@ -64,7 +64,6 @@ var CompositeTransform = function(objectArray)
       enumerable: true,
       value: objectArray.map(function(baseObject)
       {
-        console.log(baseObject);
         return module.exports.createTransform(baseObject);
       })
     }

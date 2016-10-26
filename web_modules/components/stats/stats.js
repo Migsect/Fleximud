@@ -108,17 +108,18 @@ Object.defineProperties(StatComponent.prototype,
     value: function(updateData)
     {
       var self = this;
+      var content = updateData.content;
       if (updateData.type == "attributes")
       {
         self.setAttribute(updateData.content);
       }
       else if (updateData.type == "addbar")
       {
-        self.addBar(updateData.content);
+        self.addBar(content);
       }
-      else if (updateData.type == "updateBar")
+      else if (updateData.type == "updatebar")
       {
-        self.updateBar(updateData.content);
+        self.updateBar(content.id, content.value, content.max);
       }
       /* Otherwise do nothing, maybe throw an Error */
     }
@@ -251,7 +252,6 @@ Object.defineProperties(StatComponent.prototype,
     value: function(data)
     {
       var self = this;
-
       /* Creating the bar element */
       var barElement = WebUtils.htmlToElement(barTemplate(
       {
@@ -295,6 +295,7 @@ Object.defineProperties(StatComponent.prototype,
     {
       var self = this;
 
+      console.log("updating bar:", barId, value, max);
       /* Grabbing the bar element for the id, if there is no id then we throw a hissy fit */
       var barElement = self.bars.get(barId);
       if (!barElement)

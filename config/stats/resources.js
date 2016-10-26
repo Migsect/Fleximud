@@ -5,6 +5,7 @@ module.exports = [
   name: "Health",
   id: "health",
   showBar: true,
+  color: "#c4001d",
   stats:
   {
     max: "health_max",
@@ -17,6 +18,7 @@ module.exports = [
   name: "Energy",
   id: "energy",
   showBar: true,
+  color: "#1dbd01",
   stats:
   {
     max: "energy_max",
@@ -29,6 +31,7 @@ module.exports = [
   name: "Willpower",
   id: "willpower",
   showBar: true,
+  color: "#ff7300",
   stats:
   {
     max: "willpower_max",
@@ -41,6 +44,7 @@ module.exports = [
   id: "mana",
   name: "Mana",
   showBar: true,
+  color: "#0040ff",
   stats:
   {
     max: "mana_max",

@@ -22,8 +22,10 @@ module.exports = {
     attributeChoiceMultiplier: 1.2,
     minimumLongNameLength: 6
   },
+  tickRate: 20,
   stats:
   {
-    attributeMidTier: 2
+    attributeMidTier: 2,
+    regenUpdateRate: 0.5
   }
 };

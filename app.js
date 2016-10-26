@@ -18,13 +18,21 @@ var account = require("./routes/account");
 
 var config = require("./config/general");
 
-/* Loading universals */
+var Scheduler = require("./modules/scheduling/Scheduler");
+
+/* Loading configurations and types */
 require("./modules/location/Location");
+require("./modules/model/character/DescriptorTypes");
+require("./modules/model/character/AttributeTypes");
+require("./modules/model/character/ResourceTypes");
 
 var app = express();
 
 /* Variable for storing all middleware */
 app.locals.middleware = {};
+
+/* Start the scheduling loop */
+Scheduler.instance.start();
 
 /* Database setup */
 /* Creating the database connection */

@@ -265,7 +265,6 @@ Object.defineProperties(module.exports,
           character.descriptors.setDescriptor(key, JSON.descriptors[key]);
         });
       }
-      console.log(character.descriptors);
 
       /*** Attribute Setting ***/
 

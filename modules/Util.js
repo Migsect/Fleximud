@@ -164,7 +164,7 @@ Object.defineProperties(module.exports,
      */
     value: function(value)
     {
-      return (typeof value === 'number' || value instanceof Number);
+      return (typeof value == "number" || value instanceof Number);
     }
   },
   assertNumber:
@@ -181,6 +181,36 @@ Object.defineProperties(module.exports,
       this.assert(function(value)
       {
         return !self.isNumber(value);
+      }, TypeCheckError, arguments);
+    }
+  },
+  isFunction:
+  {
+    /**
+     * Checks to see if the value is a function.
+     * 
+     * @param  {Object} value The value being checked
+     * @return {Boolean}      True if it is a function
+     */
+    value: function(value)
+    {
+      return typeof value == "function";
+    }
+  },
+  assertFunction:
+  {
+    /**
+     * Asserts that the values are functions.
+     *
+     * @param {...Object} values The values to check
+     * @throws {TypeCheckError} If any supplied value is not a function.
+     */
+    value: function()
+    {
+      var self = this;
+      this.assert(function(value)
+      {
+        return !self.isFunction(value);
       }, TypeCheckError, arguments);
     }
   },

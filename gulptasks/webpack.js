@@ -52,6 +52,7 @@ gulp.task("webpack:watch", function()
     .pipe(webpack(
     {
       watch: true,
+      bail: false,
       module:
       {
         loaders: loaders,

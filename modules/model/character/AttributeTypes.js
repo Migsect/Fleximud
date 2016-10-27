@@ -149,6 +149,9 @@ Object.defineProperties(AttributeType.prototype,
           value: self
         });
         return type;
+      }).filter(function(element)
+      {
+        return element !== null;
       });
     }
   },

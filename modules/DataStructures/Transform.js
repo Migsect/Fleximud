@@ -268,7 +268,7 @@ Object.defineProperties(module.exports,
         /* Checking to see if the individual direcred transforms are valid */
         if (Util.isNull(directedTransform.transform, directedTransform.target) || !Util.isString(directedTransform.target))
         {
-          throw new Error("Invalid DirectedTransform inside DirectedTransforms configuration.");
+          throw new Error("Invalid DirectedTransform configuration:" + JSON.stringify(directedTransform));
         }
 
         /* Getting the members */

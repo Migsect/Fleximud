@@ -166,8 +166,7 @@ Object.defineProperties(Scheduler.prototype,
 
 Object.defineProperties(module.exports,
 {
-  cons
-tructor:
+  constructor:
   {
     value: Scheduler
   },

@@ -5,6 +5,11 @@ module.exports = {
   {
     url: "mongodb://localhost/devtest"
   },
+  logging:
+  {
+    level: "debug",
+    fileLevel: "info"
+  },
   sessions:
   {
     secret: "macro dogos",

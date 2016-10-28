@@ -2,6 +2,8 @@
 
 /* Includes */
 var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
+
 var passwordHash = require("password-hash");
 var uuid = require("node-uuid");
 var Promise = require("promise");
@@ -12,10 +14,10 @@ var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
 /* Modules */
-var Character = require('./character/Character');
+// var Character = require('./character/Character');
 
 /* Schemas */
-var CharacterSchema = Character.schema;
+// var CharacterSchema = Character.schema;
 
 /* Creating the Account Schema */
 var AccountSchema = Schema(
@@ -53,8 +55,8 @@ AccountSchema.methods.addCharacter = function(character)
   /* Saving the account */
   this.save(function(err, document)
   {
-    if (err) return console.error(err);
-    console.log("Updated Account", document.id, "with new character:", character.id);
+    if (err) return logger.error(err);
+    logger.debug("Updated Account", document.id, "with new character:", character.id);
   });
 };
 AccountSchema.methods.removeCharacter = function(character)
@@ -99,7 +101,7 @@ Object.defineProperties(module.exports,
       account.save(function(err, document)
       {
         if (err) return console.error(err);
-        console.log("Saved Account to Database:", document);
+        logger.debug("Saved Account to Database:", document);
       });
 
       return account;

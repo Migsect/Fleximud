@@ -1,10 +1,12 @@
 "use strict";
 
+var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
+
 var Mongoose = require("mongoose");
 var Schema = Mongoose.Schema;
 
 var AttributeTypes = require("../AttributeTypes");
-var Util = require(process.cwd() + "/modules/Util");
 
 /* Represents a collection of attribute values */
 var AttributesSchema = Schema(
@@ -27,7 +29,7 @@ AttributesSchema.methods.getAttribute = function(attribute)
   var type = AttributeTypes.map.get(attribute);
   if (!type)
   {
-    console.log("Attempted to getAttribute of untyped attribute: '" + attribute + "'");
+    logger.warn("Attempted to getAttribute of untyped attribute: '" + attribute + "'");
     return null;
   }
 
@@ -58,7 +60,7 @@ AttributesSchema.methods.scaleAttribute = function(attribute, scalar)
   var type = AttributeTypes.map.get(attribute);
   if (!type)
   {
-    console.log("Attempted to setAttribute of untyped attribute: '" + attribute + "'");
+    logger.warn("Attempted to setAttribute of untyped attribute: '" + attribute + "'");
     return null;
   }
 
@@ -97,7 +99,7 @@ AttributesSchema.methods.setAttribute = function(attribute, value)
   var type = AttributeTypes.map.get(attribute);
   if (!type)
   {
-    console.log("Attempted to setValue of untyped attribute: '" + attribute + "'");
+    logger.warn("Attempted to setValue of untyped attribute: '" + attribute + "'");
     return null;
   }
 

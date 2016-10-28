@@ -168,6 +168,10 @@ scheduler.schedule(new Task(function()
         return;
       }
       character.stats.setStat(resourceType.stats.current, newCurrent);
+      character.save(function(err)
+      {
+        if (err) console.error(err);
+      });
 
       /* Sending the update data */
       var update = {

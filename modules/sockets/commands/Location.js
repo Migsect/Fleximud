@@ -1,7 +1,9 @@
 "use strict";
 
+var Util = require(process.cwd() + "/modules/Util");
+
 var Command = require("../Command");
-var LocationModule = require(process.cwd() + "/modules/location/Location");
+// var LocationModule = require(process.cwd() + "/modules/location/Location");
 
 var Location = function()
 {
@@ -11,13 +13,10 @@ var Location = function()
   {});
 
 };
-Location.prototype = Object.create(Command.prototype);
+
+Util.inherit(Command, Location);
 Object.defineProperties(Location.prototype,
 {
-  constructor:
-  {
-    value: Location
-  },
   execute:
   {
     value: function(client)

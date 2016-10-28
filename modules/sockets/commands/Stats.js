@@ -1,7 +1,8 @@
 "use strict";
 
-var Command = require("../Command");
 var Util = require(process.cwd() + "/modules/Util");
+
+var Command = require("../Command");
 var config = require(process.cwd() + "/config/general");
 var Resources = require(process.cwd() + "/modules/model/character/ResourceTypes");
 

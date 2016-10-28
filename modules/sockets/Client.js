@@ -1,7 +1,8 @@
 "use strict";
 
-var commands = require("./commands/commands");
 var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
+var commands = require("./commands/commands");
 
 /**
  * The Client class is used to abstract a socket connection.
@@ -19,7 +20,6 @@ var Util = require(process.cwd() + "/modules/Util");
  */
 var Client = function(manager, socket, account, character)
 {
-  console.log("Creating a client");
   var self = this;
   Object.defineProperties(self,
   {
@@ -88,7 +88,7 @@ Object.defineProperties(Client.prototype,
     value: function()
     {
       /* Removing the character of this client from the location */
-      this.character.getLocation().removeCharacter(this.character.id);
+      this.character.getLocation().removeCharacter(this.character);
     }
   },
   onConnection:
@@ -96,7 +96,7 @@ Object.defineProperties(Client.prototype,
     value: function()
     {
       /* Adding the character of this client to the location */
-      this.character.getLocation().addCharacter(this.character.id);
+      this.character.getLocation().addCharacter(this.character);
     }
   },
   sendUpdate:
@@ -125,10 +125,10 @@ Object.defineProperties(Client.prototype,
      */
     value: function(commandEvent, callback)
     {
-      console.log("Command Type:", commandEvent.command, ", Command Data:", commandEvent.data);
+      logger.info("Command Type:", commandEvent.command, ", Command Data:", commandEvent.data);
       if (!commands.has(commandEvent.command))
       {
-        console.log("WARNING - Could not find command '" + commandEvent.command + "'");
+        logger.warn("Could not find command '" + commandEvent.command + "'");
         return;
       }
       var command = commands.get(commandEvent.command.toLowerCase());

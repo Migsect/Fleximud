@@ -1,6 +1,5 @@
 "use strict";
 
-var fs = require("fs");
 var Descriptor = require("./Descriptor");
 var templates = require(process.cwd() + "/templates/templates");
 

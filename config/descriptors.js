@@ -38,7 +38,6 @@ module.exports = [
     transform: function(value, source)
     {
       var height = source.stats.getStat(source, "height");
-      console.log("agility", value, Math.pow(4, (baseSize / height) - 1));
       return value * Math.pow(1.25, (baseSize / height) - 1);
     }
   },
@@ -47,7 +46,6 @@ module.exports = [
     transform: function(value, source)
     {
       var height = source.stats.getStat(source, "height");
-      console.log("strength:", value, Math.pow(4, (height / baseSize) - 1));
       return value * Math.pow(1.25, (height / baseSize) - 1);
     }
   },
@@ -56,7 +54,6 @@ module.exports = [
     transform: function(value, source)
     {
       var height = source.stats.getStat(source, "height");
-      console.log("stamina", value, Math.pow(5, (baseSize / height) - 1));
       return value * Math.pow(1.05, (baseSize / height) - 1);
     }
   }]

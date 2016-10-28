@@ -20,7 +20,8 @@ var StatSchema = Schema(
 
 /**
  * Sets the static value of the stat.  This will override the current value.
- * You can use getStatStatic to get the current value stored, using just getStat
+ * You can use getStatS
+tatic to get the current value stored, using just getStat
  * may result in the value spinning out of control.
  * 
  * @param {String} key  The key of the stat to retrieve
@@ -29,6 +30,7 @@ var StatSchema = Schema(
 StatSchema.methods.setStat = function(key, value)
 {
   this.values[key] = value;
+  this.markModified("values");
 };
 
 /**

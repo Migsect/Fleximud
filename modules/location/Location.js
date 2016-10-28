@@ -80,7 +80,7 @@ var Location = function(json)
       writable: true,
       value: null
     },
-    /** @type {Client} A list of all the clients at this location */
+    /** @type {Character} A list of all the characters at this location */
     characters:
     {
       writable: true,
@@ -121,17 +121,17 @@ Object.defineProperties(Location.prototype,
      *
      * @param  {CharacterID} characterId The characterId to add to the location.
      */
-    value: function(characterId)
+    value: function(character)
     {
       if (this.characters.findIndex(function(element)
         {
-          return element === characterId;
+          return element.id === character.id;
         }) >= 0)
       {
         return;
       }
       /* pushing the client onto the list */
-      this.characters.push(characterId);
+      this.characters.push(character);
     }
   },
   removeCharacter:
@@ -143,12 +143,12 @@ Object.defineProperties(Location.prototype,
      * 
      * @param  {CharacterID} characterId The characterId to remove.
      */
-    value: function(characterId)
+    value: function(character)
     {
       /* Getting the client's index */
       var characterIndex = this.characters.findIndex(function(element)
       {
-        return element === characterId;
+        return element.id === character.id;
       });
       /* If the index is less than 0 then the client is not in the list */
       if (characterIndex < 0)
@@ -160,7 +160,7 @@ Object.defineProperties(Location.prototype,
 
     }
   },
-  clearCharacter:
+  clearCharacters:
   {
     /**
      * Removes all the clients from the location.

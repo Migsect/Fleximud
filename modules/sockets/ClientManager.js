@@ -1,6 +1,7 @@
 "use strict";
 
 var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
 
 var Client = require("./Client");
 var Account = require("../model/Account");
@@ -72,15 +73,14 @@ Object.defineProperties(ClientManager.prototype,
     {
       var self = this;
       var accountId = socket.handshake.session.account;
-      console.log("Account", accountId, "connected to a socket.");
+      logger.info("Account", accountId, "connected to a socket.");
       socket.on("disconnect", function()
       {
-        console.log("Account", accountId, "disconnected from a socket.");
+        logger.info("Account", accountId, "disconnected from a socket.");
         self.onDisconnection(socket);
       });
       socket.on("register", function(characterId, callback)
       {
-        console.log("registering character");
         callback(true);
         self.onRegister(socket, characterId, callback);
       });
@@ -120,7 +120,6 @@ Object.defineProperties(ClientManager.prototype,
       {
         this.characters.delete(client.character.id);
       }
-      console.log("Client Disconnected:", client.toString());
     }
   },
   onCommand:
@@ -155,15 +154,16 @@ Object.defineProperties(ClientManager.prototype,
      */
     value: function(socket, characterId, callback)
     {
+      logger.warn("POOP WARNING");
       var self = this;
       var accountId = socket.handshake.session.account;
       /* Checking if the character ID or account ID are not null (and therefore exist */
       if (Util.isNull(accountId) || Util.isNull(characterId))
       {
-        console.log("WARNING - Socket attempted to register with:");
-        console.log("  accoundId:", accountId);
-        console.log("  characterId:", characterId);
-        console.log("  but one was null.");
+        logger.warn("Socket attempted to register with:",
+          "\n  accoundId:", accountId,
+          "\n  characterId:", characterId,
+          "\n  but one was null.");
         callback(false);
       }
 
@@ -173,10 +173,10 @@ Object.defineProperties(ClientManager.prototype,
         /* If the account is null, then the account doesn't exist */
         if (Util.isNull(account))
         {
-          console.log("WARNING - Socket attempted to register with:");
-          console.log("  accoundId:", accountId);
-          console.log("  characterId:", characterId);
-          console.log("  but the account query returned null.");
+          logger.warn("WARNING - Socket attempted to register with:",
+            "\n  accoundId:", accountId,
+            "\n  characterId:", characterId,
+            "\n  but the account query returned null.");
           callback(false);
         }
 
@@ -188,15 +188,15 @@ Object.defineProperties(ClientManager.prototype,
         /* Checking if the character returned exists*/
         if (Util.isNull(character))
         {
-          console.log("WARNING - Socket attempted to register with:");
-          console.log("  accoundId:", accountId);
-          console.log("  characterId:", characterId);
-          console.log("  but the character query returned null.");
+          logger.warn("WARNING - Socket attempted to register with:",
+            "\n  accoundId:", accountId,
+            "\n  characterId:", characterId,
+            "\n  but the character query returned null.");
           callback(false);
         }
 
         /* Now to actually start registration */
-        console.log("Registering:", accountId + " for character " + characterId);
+        logger.debug("Registering:", accountId + " for character " + characterId);
 
         /* Creating the client instance */
         var socketId = socket.client.id;
@@ -212,7 +212,7 @@ Object.defineProperties(ClientManager.prototype,
         self.characters.get(characterId).push(client);
 
         /* Registration was sucess */
-        console.log("Registered:", client.toString());
+        logger.info("Registered:", client.toString());
         callback(true);
       }, function()
       {

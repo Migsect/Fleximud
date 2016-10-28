@@ -1,6 +1,8 @@
 "use strict";
 
 var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
+
 var Fuzzy = Util.Fuzzy;
 var Classification = require("./Classification");
 var templates = require(process.cwd() + "/templates/templates");
@@ -15,7 +17,7 @@ var speciesJSON = require(process.cwd() + "/config/species");
 var Species = function(json)
 {
   Classification.call(this, json);
-  console.log("Created new species with id '" + this.id + "'");
+  logger.info("Created new species with id '" + this.id + "'");
 
   /* Getting all the sexes */
   this.sexes = (function()

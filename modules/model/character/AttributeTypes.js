@@ -1,6 +1,7 @@
 "use strict";
 
 var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
 var Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 
 var templates = require(process.cwd() + "/templates/templates");
@@ -140,7 +141,7 @@ Object.defineProperties(AttributeType.prototype,
         var type = typeMapping.get(id);
         if (!type)
         {
-          console.log("WARNING - '" + id + "' did not have a type object defined.");
+          logger.warn("'" + id + "' did not have a type object defined.");
           return null;
         }
         /* This sets a reference to the parent of each child. This is not enumerable */
@@ -205,7 +206,7 @@ Object.defineProperty(module.exports, "map",
       catch (error)
       {
         /* Skipping this part of the configuration if there was an error */
-        console.log(error.name + " : " + error.message);
+        logger.error(error);
         return;
       }
     });
@@ -258,7 +259,7 @@ Object.defineProperties(module.exports,
       /* We should only have one top level attribute */
       if (tops.length > 1)
       {
-        console.log("WARNING - the number of root attributes is greater than 1.");
+        logger.warn("The number of root attributes is greater than 1.");
       }
 
       return tops[0];

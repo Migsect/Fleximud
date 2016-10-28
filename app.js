@@ -3,7 +3,7 @@
 var express = require("express");
 var path = require("path");
 // var favicon = require('serve-favicon');
-var logger = require("morgan");
+// var logger = require("morgan");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var session = require("express-session");
@@ -17,6 +17,8 @@ var client = require("./routes/client");
 var account = require("./routes/account");
 
 var config = require("./config/general");
+
+var logger = require(process.cwd() + "/modules/Logger");
 
 var Scheduler = require("./modules/scheduling/Scheduler");
 
@@ -42,11 +44,11 @@ var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.on("connected", function()
 {
-  console.log("Connected to the database!");
+  logger.info("Connected to the database!");
 });
 db.on("disconnected", function()
 {
-  console.log("Disconnected from the database!");
+  logger.info("Disconnected from the database!");
 });
 
 /* view engine setup */
@@ -56,7 +58,7 @@ app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded(
 {

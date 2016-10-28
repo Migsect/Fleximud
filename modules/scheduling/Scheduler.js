@@ -1,6 +1,7 @@
 "use strict";
 
 var Util = require(process.cwd() + "/modules/Util");
+
 var Gameloop = require("node-gameloop");
 var PriorityQueue = require("priorityqueuejs");
 
@@ -165,7 +166,8 @@ Object.defineProperties(Scheduler.prototype,
 
 Object.defineProperties(module.exports,
 {
-  constructor:
+  cons
+tructor:
   {
     value: Scheduler
   },

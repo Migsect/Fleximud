@@ -4,11 +4,14 @@
  * Used to load and have a single reference to all templates.
  */
 
+var logger = require(process.cwd() + "/modules/Logger");
+
 var fs = require('fs');
 var handlebars = require('handlebars');
 
 /** @type {Map} Mapping of file locations to compiled templates of those files */
 var compiled = new Map();
+
 /**
  * Compiles a template File.
  * Caches all compiled files.
@@ -23,7 +26,7 @@ var compileTemplate = function(path)
     return compiled.get(path);
   }
   var file = fs.readFileSync(__dirname + "/" + path + ".html", 'utf-8');
-  console.log("Compiling Template '" + __dirname + "/" + path + "'");
+  logger.debug("Compiling Template '" + __dirname + "/" + path + "'");
 
   var fileCompiled = handlebars.compile(file);
   compiled.set(path, fileCompiled);
@@ -47,7 +50,7 @@ var precompileTemplate = function(path)
     return precompiled.get(path);
   }
   var file = fs.readFileSync(__dirname + "/" + path + ".html", 'utf-8');
-  console.log("Precompiling Template '" + __dirname + "/" + path + "'");
+  logger.debug("Precompiling Template '" + __dirname + "/" + path + "'");
 
   var fileCompiled = handlebars.precompile(file);
   compiled.set(path, fileCompiled);

@@ -1,6 +1,7 @@
 "use strict";
 
 var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
 
 /**
  * A limitation is a constructed boolean lambda that either wraps a function or
@@ -43,11 +44,11 @@ var Limitation = function(json)
         {
           var noValueAssociated = function()
           {
-            console.log("WARNING - Limitation of type '" + json.type + "' has no value(s) associated.");
+            logger.warn("Limitation of type '" + json.type + "' has no value(s) associated.");
           };
           var noTargetAssociated = function()
           {
-            console.log("WARNING - Limitation of type '" + json.type + "' has no target associated.");
+            logger.warn("Limitation of type '" + json.type + "' has no target associated.");
           };
           if (Util.isNull(json.target))
           {

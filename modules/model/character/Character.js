@@ -11,6 +11,7 @@ var dbUtils = require(process.cwd() + "/modules/DatabaseUtil");
 
 /* General Utilities or DataStructures*/
 var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
 
 /* Type Configurations */
 var AttributeTypes = require("./AttributeTypes");
@@ -136,8 +137,8 @@ CharacterSchema.methods.moveToLocation = function(nextLocation)
   var currentLocation = this.getLocation();
 
   /* Removing the character from the current location and adding them to the new */
-  currentLocation.removeCharacter(this.id);
-  nextLocation.addCharacter(this.id);
+  currentLocation.removeCharacter(this);
+  nextLocation.addCharacter(this);
 
   /* Setting and saving the character's new path */
   this.locationPath = nextLocation.getPath();
@@ -300,9 +301,9 @@ Object.defineProperties(module.exports,
           {
             errorCallback(err);
           }
-          return console.error(err);
+          return logger.error(err);
         }
-        console.log("Saved Character to Database:", document.id);
+        logger.log("Saved Character to Database:", document.id);
         if (typeof callback == "function")
         {
           callback(character);
@@ -384,7 +385,7 @@ Object.defineProperties(module.exports,
           if (error)
           {
             reject(error);
-            console.log(error);
+            logger.error(error);
           }
           else
           {

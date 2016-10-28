@@ -1,5 +1,8 @@
 "use strict";
+
 var Util = require(process.cwd() + "/modules/Util");
+var logger = require(process.cwd() + "/modules/Logger");
+
 var DisplayName = require("../DisplayName");
 var DescriptorType = require("../DescriptorTypes");
 
@@ -264,12 +267,12 @@ Object.defineProperties(module.exports,
         var constructor = typeMapping.get(json.type);
         if (!constructor)
         {
-          console.log("Warning! - Could not find descriptor type :", json.type);
+          logger.warn("Could not find descriptor type :", json.type);
           return null;
         }
         if (!constructor.isType(json))
         {
-          console.log("Warning! - Descriptor not properly formatted for type" + json.type + " :", json);
+          logger.warn("Descriptor not properly formatted for type" + json.type + " :", json);
           return null;
         }
         return new constructor(json);
@@ -288,7 +291,7 @@ Object.defineProperties(module.exports,
         {
           return new foundConstructor(json);
         }
-        console.log("Warning! - Could not find a descriptor type for :", json);
+        logger.warn("Could not find a descriptor type for :", json);
         return null;
       }
     }

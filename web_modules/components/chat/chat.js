@@ -124,6 +124,7 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
     {
       value: results
     });
+    console.log(results);
   });
 
   /*** Setting up special key functions ***/
@@ -145,13 +146,18 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
         /* Setting the command to the only possible one */
         self.inputContent.value = "/" + possibleCommands[0];
       }
-      else if (possibleCommands > 1)
+      else if (possibleCommands.length > 1)
       {
         /* Printing out all the possibilities */
-        self.addMessage(["Possible Commands:", possibleCommands.join(", ")]);
+        self.addMessage(
+        {
+          hideSource: true,
+          source: "client",
+          content: possibleCommands
+        });
       }
     }
-    else if (event.keyCode == DOWN_KEY)
+    else if (event.keyCode == UP_KEY)
     {
       event.preventDefault();
       if (self.previousMessagesIndex < 0)
@@ -167,7 +173,7 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
       }
       self.inputContent.value = self.previousMessages[self.previousMessagesIndex];
     }
-    else if (event.keyCode == UP_KEY)
+    else if (event.keyCode == DOWN_KEY)
     {
       event.preventDefault();
       if (self.previousMessagesIndex == self.previousMessages.length - 1)

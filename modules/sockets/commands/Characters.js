@@ -13,7 +13,14 @@ Object.defineProperties(Characters.prototype,
 {
   execute:
   {
-    value: function(client, data) {}
+    value: function(client)
+    {
+      var location = client.character.getLocation();
+      return location.characters.map(function(character)
+      {
+        return character.name.name;
+      });
+    }
   },
   executeWithArray:
   {

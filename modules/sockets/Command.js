@@ -1,13 +1,21 @@
 "use strict";
 
-var Command = function(name)
+var Util = require(process.cwd() + "/modules/Util");
+
+var Command = function(name, isChatCommand)
 {
   var self = this;
   Object.defineProperties(self,
   {
     name:
     {
+      enumerable: true,
       value: name
+    },
+    isChatCommand:
+    {
+      enumerable: true,
+      value: Util.isNull(isChatCommand) ? false : isChatCommand
     }
   });
 };

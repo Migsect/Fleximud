@@ -7,7 +7,7 @@ var Command = require("../Command");
 
 var Location = function()
 {
-  Command.call(this, "location");
+  Command.call(this, "location", true);
   var self = this;
   Object.defineProperties(self,
   {});
@@ -38,21 +38,6 @@ Object.defineProperties(Location.prototype,
         return ["Location",
           "- path: '" + location.getPath() + "'",
           "- localId: " + location.localId,
-          "- globalId: " + location.globalId,
-          "- characters: " + location.characters.join(", "),
-          "- parent: '" + location.parent + "'",
-          "- children: '" + (function()
-          {
-            var childKeys = [];
-            var keyIterator = location.children.keys();
-            var current = keyIterator.next();
-            while (!current.done)
-            {
-              childKeys.push(current.value);
-              current = keyIterator.next();
-            }
-            return childKeys;
-          })().join(", ") + "'",
           "- connections: '" + location.connections.map(function(connection)
           {
             return connection.name + "-->" + connection.destination;

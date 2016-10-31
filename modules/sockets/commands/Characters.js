@@ -5,10 +5,7 @@ var Command = require("../Command");
 
 var Characters = function()
 {
-  Command.call(this, "characters");
-  var self = this;
-  Object.defineProperties(self,
-  {});
+  Command.call(this, "characters", true);
 };
 
 Util.inherit(Command, Characters);

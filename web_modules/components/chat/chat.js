@@ -23,6 +23,7 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
   {
     view:
     {
+      enumerable: true,
       value: document.getElementById(divId)
     },
     socketHandler:
@@ -31,20 +32,41 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
     },
     client:
     {
+      enumerable: true,
       value: client
     },
     historyMax:
     {
+      enumerable: true,
       value: historyMax
     },
     messages:
     {
+      enumerable: true,
       value: []
     },
     messageNumber:
     {
+      enumerable: true,
       writable: true,
       value: 0
+    },
+    previousMessages:
+    {
+      enumerable: true,
+      value: []
+    },
+    previousMessagesIndex:
+    {
+      enumerable: true,
+      writable: true,
+      value: -1
+    },
+    currentMessageCache:
+    {
+      enumerable: true,
+      writable: true,
+      value: ""
     }
   });
 
@@ -94,6 +116,74 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
     self.receiveMessage(data);
   });
 
+  /* Getting the chat commands from the server */
+  socketHandler.sendCommand("retrievecommands",
+  {}, function(results)
+  {
+    Object.defineProperty(self, "commands",
+    {
+      value: results
+    });
+  });
+
+  /*** Setting up special key functions ***/
+  self.inputContent.addEventListener("keydown", function(event)
+  {
+    var TAB_KEY = 9;
+    var UP_KEY = 38;
+    var DOWN_KEY = 40;
+    if (event.keyCode == TAB_KEY && self.inputContent.value.startsWith("/"))
+    {
+      event.preventDefault();
+      var partialCommand = self.inputContent.value.substring(1);
+      var possibleCommands = self.commands.filter(function(command)
+      {
+        return command.startsWith(partialCommand);
+      });
+      if (possibleCommands.length == 1)
+      {
+        /* Setting the command to the only possible one */
+        self.inputContent.value = "/" + possibleCommands[0];
+      }
+      else if (possibleCommands > 1)
+      {
+        /* Printing out all the possibilities */
+        self.addMessage(["Possible Commands:", possibleCommands.join(", ")]);
+      }
+    }
+    else if (event.keyCode == DOWN_KEY)
+    {
+      event.preventDefault();
+      if (self.previousMessagesIndex < 0)
+      {
+        /* Setting the initial index and caching the current input */
+        self.previousMessagesIndex = self.previousMessages.length - 1;
+        self.currentMessageCache = self.inputContent.value;
+      }
+      else if (self.previousMessagesIndex > 0)
+      {
+        /* Decrementing the index of the message to show */
+        self.previousMessagesIndex--;
+      }
+      self.inputContent.value = self.previousMessages[self.previousMessagesIndex];
+    }
+    else if (event.keyCode == UP_KEY)
+    {
+      event.preventDefault();
+      if (self.previousMessagesIndex == self.previousMessages.length - 1)
+      {
+        /* Resetting to the cached message */
+        self.previousMessagesIndex = -1;
+        self.inputContent.value = self.currentMessageCache;
+        self.currentMessageCache = "";
+      }
+      else if (self.previousMessagesIndex >= 0)
+      {
+        self.previousMessagesIndex++;
+        self.inputContent.value = self.previousMessages[self.previousMessagesIndex];
+      }
+    }
+  });
 };
 
 Object.defineProperties(ChatComponent.prototype,
@@ -144,6 +234,16 @@ Object.defineProperties(ChatComponent.prototype,
           content: content
         });
       }
+
+      /* Adding the sent input to the previous messages sent */
+      if (self.previousMessages[self.previousMessages.length - 1] != content)
+      {
+        self.previousMessages.push(content);
+      }
+
+      /* Resetting the previous message index and the current message cache */
+      self.previousMessagesIndex = -1;
+      self.currentMessageCache = "";
     }
   },
   receiveMessage:

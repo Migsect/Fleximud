@@ -83,6 +83,7 @@ var Location = function(json)
     /** @type {Character} A list of all the characters at this location */
     characters:
     {
+      enumerable: true,
       writable: true,
       value: []
     }

@@ -15,7 +15,8 @@ fs.readdirSync(__dirname).forEach(function(file)
   var commandConstructor = require(__dirname + "/" + file);
   if (typeof commandConstructor != "function")
   {
-    logger.log("Failed to register command:", file);
+    logger.warn("Failed to register command (exported module was not a function):", file);
+    return;
   }
   var command;
   try
@@ -29,7 +30,7 @@ fs.readdirSync(__dirname).forEach(function(file)
   }
   if (typeof command.name == "undefined")
   {
-    logger.log("Failed to register command:", file);
+    logger.log("Failed to register command (command name unspecified):", file);
     return;
   }
   logger.log("Registered command file:", file);

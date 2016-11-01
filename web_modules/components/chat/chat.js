@@ -4,6 +4,7 @@ var WebUtils = require("../../utils");
 
 var mainTemplate = require("./templates/chat.html");
 var historyItemTemplate = require("./templates/history-item.html");
+var characterItemTemplate = require("./templates/character-item.html");
 
 require("./styles/chat.css");
 
@@ -67,6 +68,18 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
       enumerable: true,
       writable: true,
       value: ""
+    },
+    characters:
+    {
+      enumerable: true,
+      writable: true,
+      value: []
+    },
+    characterCounter:
+    {
+      enumerable: true,
+      writable: true,
+      value: 0
     }
   });
 
@@ -91,6 +104,14 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
     inputButton:
     {
       value: self.view.querySelector(".chat-input-button")
+    },
+    charactersButton:
+    {
+      value: self.view.querySelector(".chat-characters-count")
+    },
+    charactersList:
+    {
+      value: self.view.querySelector(".chat-characters-list")
     }
   });
 
@@ -110,10 +131,20 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
     }
   });
 
+  /* Setting up the listener for collapsing and uncollapsing the character display */
+  self.charactersButton.addEventListener("click", function()
+  {
+    self.charactersList.classList.toggle("hidden");
+  });
   /* Setting up this to receive a message from the "chat" update */
   socketHandler.addHandler("chat", function(data)
   {
     self.receiveMessage(data);
+  });
+  /* Setting up this to receive an update of the character list when it changes */
+  socketHandler.addHandler("characters", function(data)
+  {
+    self.receiveCharacters(data);
   });
 
   /* Getting the chat commands from the server */
@@ -124,15 +155,23 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
     {
       value: results
     });
-    console.log(results);
   });
 
-  /*** Setting up special key functions ***/
+  /* Sending a command requesting the initial characters */
+  socketHandler.sendCommand("characters",
+  {}, function(results)
+  {
+    self.receiveCharacters(results);
+  });
+
+  /* Setting up special key functions */
   self.inputContent.addEventListener("keydown", function(event)
   {
     var TAB_KEY = 9;
     var UP_KEY = 38;
     var DOWN_KEY = 40;
+
+    /* Tab Key for completion */
     if (event.keyCode == TAB_KEY && self.inputContent.value.startsWith("/"))
     {
       event.preventDefault();
@@ -157,6 +196,7 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
         });
       }
     }
+    /* Up key to search for previous commands */
     else if (event.keyCode == UP_KEY)
     {
       event.preventDefault();
@@ -173,6 +213,7 @@ var ChatComponent = function(divId, socketHandler, client, historyMax)
       }
       self.inputContent.value = self.previousMessages[self.previousMessagesIndex];
     }
+    /* Down key to return to previous commands */
     else if (event.keyCode == DOWN_KEY)
     {
       event.preventDefault();
@@ -339,6 +380,42 @@ Object.defineProperties(ChatComponent.prototype,
 
       /* Automatically scrolling the view to the new element when a message is added */
       this.content.scrollTop = this.content.scrollHeight;
+    }
+  },
+  receiveCharacters:
+  {
+    value: function(data)
+    {
+      var self = this;
+      self.clearCharacters();
+      data.forEach(function(character)
+      {
+        self.addCharacter(character);
+      });
+    }
+  },
+  addCharacter:
+  {
+    value: function(characterData)
+    {
+      var self = this;
+      characterData.count = self.characterCounter++;
+      self.charactersButton.innerHTML = self.characterCounter;
+      var characterItemNode = WebUtils.htmlToElement(characterItemTemplate(characterData));
+
+      self.characters.push(characterData);
+      self.charactersList.appendChild(characterItemNode);
+    }
+  },
+  clearCharacters:
+  {
+    value: function()
+    {
+      var self = this;
+      self.characterCounter = 0;
+      self.charactersButton.innerHTML = self.characterCounter;
+      self.characters = [];
+      self.charactersList.innerHTML = "";
     }
   }
 });

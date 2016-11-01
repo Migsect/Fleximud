@@ -18,7 +18,7 @@ Object.defineProperties(Characters.prototype,
       var location = client.character.getLocation();
       return location.characters.map(function(character)
       {
-        return character.name.name;
+        return character.getUpdateData();
       });
     }
   },
@@ -31,7 +31,7 @@ Object.defineProperties(Characters.prototype,
       {
         return ["Characters:"].concat(location.characters.map(function(character)
         {
-          return character.name.name;
+          return character.getUpdateData().name;
         }));
       }
     }

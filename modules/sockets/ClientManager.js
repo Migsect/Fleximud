@@ -228,10 +228,12 @@ Object.defineProperties(module.exports,
 {
   constructor:
   {
+    enumerable: true,
     value: ClientManager
   },
   instance:
   {
+    enumerable: true,
     value: new ClientManager()
   }
 });

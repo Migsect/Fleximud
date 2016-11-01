@@ -69,3 +69,14 @@ div.chat-characters-count {
   padding-left: 8px;
   padding-right: 8px;
 }
+
+div.chat-characters-list {
+  min-width: 100px;
+}
+
+div.chat-character-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+}

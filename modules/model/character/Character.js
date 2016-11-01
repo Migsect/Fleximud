@@ -28,6 +28,9 @@ var Name = require("./DataModels/Name");
 /* Locations */
 var Location = require(process.cwd() + "/modules/location/Location");
 
+/* Client Manager */
+var ClientManager = require(process.cwd() + "/modules/sockets/ClientManager");
+
 /**
  * The character schema is represented by a character id and the character's data.
  * The character data can be anything ranging from their name to an attribute.*Because the character model may change,
@@ -209,6 +212,25 @@ CharacterSchema.methods.getStatTransformsKeys = function()
     return element[0];
   });
 };
+
+/**
+ * Retrieves the update data for the character.
+ * 
+ * @param  {Character} reference The character who will be the reference of 
+ *                               retrieving the character data.
+ * @return {Object}              The character data.
+ */
+CharacterSchema.methods.getUpdateData = function(reference)
+{
+  return {
+    name: this.name.name,
+    id: this.id
+  };
+};
+
+CharacterSchema.methods.getClients = function() {
+
+}
 
 /* Hooks for validating on loading */
 

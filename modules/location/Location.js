@@ -2,6 +2,7 @@
 
 var uuid = require("node-uuid");
 var Util = require("../Util");
+var logger = require(process.cwd() + "/modules/Logger");
 
 var Limitation = require("./Limitation");
 var Connection = require("./Connection");
@@ -158,7 +159,6 @@ Object.defineProperties(Location.prototype,
       }
       /* Splicing the client out */
       this.characters.splice(characterIndex, 1);
-
     }
   },
   clearCharacters:
@@ -401,6 +401,39 @@ Object.defineProperties(Location.prototype,
           };
         })
       };
+    }
+  },
+  sendCharactersUpdate:
+  {
+    /**
+     * A helper function for sending out a characters update (update type is characters).
+     * This was created because it was becoming annoying to keep on perfoming this update.
+     *
+     * If the reference character is stated, then its clients will not be updated.
+     * 
+     * @param  {Character} reference The character of reference for this update.
+     */
+    value: function(reference)
+    {
+      var self = this;
+
+      var charactersData = self.characters.map(function(character)
+      {
+        return character.getUpdateData();
+      });
+      self.characters.forEach(function(character)
+      {
+        /* Ignoring the reference character */
+        if (!Util.isNull(reference) && (character.id == reference.id))
+        {
+          return;
+          /* Sending all the updated */
+        }
+        character.getClients().forEach(function(client)
+        {
+          client.sendUpdate("characters", charactersData);
+        });
+      });
     }
   }
 });

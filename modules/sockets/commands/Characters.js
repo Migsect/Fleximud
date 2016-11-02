@@ -18,7 +18,7 @@ Object.defineProperties(Characters.prototype,
       var location = client.character.getLocation();
       return location.characters.map(function(character)
       {
-        return character.getUpdateData();
+        return character.getUpdateData(client.character);
       });
     }
   },

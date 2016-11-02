@@ -77,7 +77,29 @@ var Client = function(manager, socket, account, character)
         return this.manager.characters.get(character.id);
       }
     }
+    /**
+     * Represents the state of the client and if its ready to receive updates.
+     * If this is false, updates will be pushed to an update queue.  When this
+     * is set to true then all updates in the queue will be sent and any
+     * additional updates will be sent.
+     * 
+     * @type {Boolean}
+     */
+    // ready:
+    // {
+    //   enumerable: true,
+    //   writable: true,
+    //   value: false
+    // },
+    // updateQueue:
+    // {
+    //   enumerable: true,
+    //   writable: true,
+    //   value: []
+    // }
+
   });
+
   self.onConnection();
 };
 
@@ -87,18 +109,44 @@ Object.defineProperties(Client.prototype,
   {
     value: function()
     {
+      var self = this;
+      var location = self.character.getLocation();
+
       /* Removing the character of this client from the location */
-      this.character.getLocation().removeCharacter(this.character);
+      location.removeCharacter(this.character);
+      location.sendCharactersUpdate(this.character);
     }
   },
   onConnection:
   {
     value: function()
     {
+      var self = this;
+      var location = self.character.getLocation();
+
       /* Adding the character of this client to the location */
-      this.character.getLocation().addCharacter(this.character);
+      location.addCharacter(this.character);
+      location.sendCharactersUpdate(this.character);
     }
   },
+  // onReady:
+  // {
+  //   value: function(state)
+  //   {
+  //     var self = this;
+  //     /* Setting the ready state to the new state */
+  //     self.ready = Util.isNull(state) ? true : state;
+  //     if (self.ready)
+  //     {
+  //       self.updateQueue.forEach(function(args)
+  //       {
+  //         self.sendUpdate.apply(self, args);
+  //       });
+  //       /* Emptying the update Queue */
+  //       self.updateQueue = [];
+  //     }
+  //   }
+  // },
   sendUpdate:
   {
     /**
@@ -111,6 +159,14 @@ Object.defineProperties(Client.prototype,
      */
     value: function(type, data)
     {
+      /* If we are not yet ready to send the update, then push it to the queue */
+      // if (!this.ready)
+      // {
+      //    All the arguments are pushed so the command be re-executed later 
+      //   this.updateQueue.push(arguments);
+      //   return;
+      // }
+
       var message = {
         type: type,
         data: data
@@ -122,6 +178,9 @@ Object.defineProperties(Client.prototype,
   {
     /**
      * Handles a command which is contained within the event object passed in.
+     * Even if the client is not yet "ready" to receive updates, it can still send
+     * commands.  If a command does results in an update to be sent out, the client
+     * needs to be ready to recieve these command side effects.
      */
     value: function(commandEvent, callback)
     {

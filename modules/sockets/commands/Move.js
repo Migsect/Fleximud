@@ -45,6 +45,10 @@ Object.defineProperties(Move.prototype,
       /* Updating the character's location */
       character.moveToLocation(newLocation);
 
+      /* Updating everyone's character location */
+      location.sendCharactersUpdate();
+      newLocation.sendCharactersUpdate();
+
       /* Updating all the character clients */
       client.family.forEach(function(familyClient)
       {
@@ -57,10 +61,12 @@ Object.defineProperties(Move.prototype,
           hideSource: true,
           clearBefore: true
         });
+
       });
 
-      return "Success";
+      /* Updating all the other characters */
 
+      return "Success";
     }
   },
   executeWithArray:

@@ -154,9 +154,9 @@ Object.defineProperties(ClientManager.prototype,
      */
     value: function(socket, characterId, callback)
     {
-      logger.warn("POOP WARNING");
       var self = this;
       var accountId = socket.handshake.session.account;
+
       /* Checking if the character ID or account ID are not null (and therefore exist */
       if (Util.isNull(accountId) || Util.isNull(characterId))
       {
@@ -196,7 +196,7 @@ Object.defineProperties(ClientManager.prototype,
         }
 
         /* Now to actually start registration */
-        logger.debug("Registering:", accountId + " for character " + characterId);
+        logger.debug("Registering:", accountId + "/" + characterId);
 
         /* Creating the client instance */
         var socketId = socket.client.id;
@@ -212,11 +212,12 @@ Object.defineProperties(ClientManager.prototype,
         self.characters.get(characterId).push(client);
 
         /* Registration was sucess */
-        logger.info("Registered:", client.toString());
+        logger.debug("Registered:", client.toString());
         callback(true);
       }, function()
       {
         /* If there is an issue with the server, then we're going to callback false */
+        logger.warn("Failed to find account during registration: ", accountId);
         callback(false);
       });
 

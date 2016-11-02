@@ -276,6 +276,7 @@ div.filling {
 div.dropdown {
   display: none;
   position: absolute;
+  z-index: 100;
 }
 
 div>.dropdown.box {

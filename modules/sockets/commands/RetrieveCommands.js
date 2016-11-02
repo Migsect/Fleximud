@@ -19,7 +19,6 @@ Object.defineProperties(RetrieveCommands.prototype,
     value: function()
     {
       var commands = require("./commands");
-      console.log(commands);
       return Array.from(commands.values()).filter(function(command)
       {
         return command.isChatCommand;

@@ -131,7 +131,7 @@ CharacterSchema.methods.getStat = function(key)
  * This will save the character's data to the database.
  *
  * This does not send any updates to the client(s).  The updates should be handled
- * by the clients.
+ * by the clients or the commands executed.
  * 
  * @param  {Location} nextLocation [description] */
 CharacterSchema.methods.moveToLocation = function(nextLocation)
@@ -228,9 +228,16 @@ CharacterSchema.methods.getUpdateData = function(reference)
   };
 };
 
-CharacterSchema.methods.getClients = function() {
-
-}
+/**
+ * A helper method reference the ClientManager.  This will grab a list of all
+ * the current clients for this character.
+ * 
+ * @return {Client[]} The list of all the clients for this character.
+ */
+CharacterSchema.methods.getClients = function()
+{
+  return ClientManager.instance.characters.get(this.id);
+};
 
 /* Hooks for validating on loading */
 

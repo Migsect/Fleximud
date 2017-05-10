@@ -3,7 +3,12 @@
 module.exports = {
   database:
   {
-    url: "mongodb://localhost/devtest"
+    client: "sqlite3",
+    connection:
+    {
+      filename: "./data/main.sqlite"
+    },
+    useNullAsDefault: true
   },
   logging:
   {

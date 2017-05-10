@@ -1,60 +1,62 @@
 "use strict";
 
-var express = require("express");
-var path = require("path");
+const express = require("express");
+const path = require("path");
 // var favicon = require('serve-favicon');
 // var logger = require("morgan");
-var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
-var session = require("express-session");
-var engines = require("consolidate");
-var MongoStore = require("connect-mongo")(session);
-var mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const session = require("express-session");
 
-var index = require("./routes/index");
-var auth = require("./routes/auth");
-var client = require("./routes/client");
-var account = require("./routes/account");
+const config = require("./config/general");
 
-var config = require("./config/general");
+const Logger = require(process.cwd() + "/modules/Logger");
 
-var logger = require(process.cwd() + "/modules/Logger");
+const app = express();
 
-var Scheduler = require("./modules/scheduling/Scheduler");
+/* ########################################################################## *
+ * # Configuration initialization                                           # *  
+ * ########################################################################## */
 
-/* Loading configurations and types */
 require("./modules/location/Location");
 require("./modules/model/character/DescriptorTypes");
 require("./modules/model/character/AttributeTypes");
 require("./modules/model/character/ResourceTypes");
 
-var app = express();
+Logger.info("Configuration: Loaded");
+
+/* ########################################################################## *
+ * # Setting up the scheduler                                               # *  
+ * ########################################################################## */
+const Scheduler = require("./modules/scheduling/Scheduler");
+Scheduler.instance.start();
+
+Logger.info("Scheduler: Loaded");
+
+/* ########################################################################## *
+ * # Handling database initialization                                       # *  
+ * ########################################################################## */
+/* Creating the database connection + manager */
+const databaseConfig = config.database;
+const DatabaseManager = require("./modules/database/DatabaseManager");
+const databaseManager = DatabaseManager.initialize(databaseConfig);
+
+/* Setting up the database tables */
+const Account = require("./modules/model/Account");
+Account.initializeDatabase(databaseManager.connection);
+
+Logger.info("Database: Loaded");
+
+/* ########################################################################## *
+ * # Setting up sessions and other middleware                               # *  
+ * ########################################################################## */
 
 /* Variable for storing all middleware */
 app.locals.middleware = {};
 
-/* Start the scheduling loop */
-Scheduler.instance.start();
-
-/* Database setup */
-/* Creating the database connection */
-var databaseURL = config.database.url;
-mongoose.connect(databaseURL);
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.on("connected", function()
-{
-  logger.info("Connected to the database!");
-});
-db.on("disconnected", function()
-{
-  logger.info("Disconnected from the database!");
-});
-
-/* view engine setup */
+/* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
-app.engine('html', engines.handlebars);
-app.set('view engine', 'html');
+app.set("view engine", "hbs");
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -65,16 +67,11 @@ app.use(bodyParser.urlencoded(
   extended: false
 }));
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, "public")));
 
 /* Session setup */
-var appSession = session(
+const appSession = session(
 {
-  store: new MongoStore(
-  {
-    url: config.database.url
-  }),
   secret: config.sessions.secret ? config.sessions.secret : "secrety secret",
   cookie:
   {
@@ -84,12 +81,29 @@ var appSession = session(
   saveUninitialized: true
 });
 app.use(appSession);
-app.locals.middleware.session = appSession;
+// app.locals.middleware.session = appSession;
+
+Logger.info("Webapp: Loaded");
+
+/* ########################################################################## *
+ * # Setting up the routes                                                  # *  
+ * ########################################################################## */
+
+const index = require("./routes/index");
+const auth = require("./routes/auth");
+const client = require("./routes/client");
+const account = require("./routes/account");
 
 app.use('/', index);
 app.use('/auth', auth);
 app.use('/account', account);
 app.use('/client', client);
+
+Logger.info("Routes: Loaded");
+
+/* ########################################################################## *
+ * # Developer / Debug Stuff                                                # *  
+ * ########################################################################## */
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next)

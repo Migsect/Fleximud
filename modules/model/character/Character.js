@@ -1,8 +1,7 @@
 "use strict";
 
 /* General Node Modules */
-var uuid = require("node-uuid");
-var Promise = require("promise");
+var uuid = require("uuid/v4");
 
 /* Database */
 var Mongoose = require("mongoose");

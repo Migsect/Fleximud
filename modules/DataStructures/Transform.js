@@ -1,187 +1,166 @@
 "use strict";
 
-var Util = require(process.cwd() + "/modules/Util");
+const Util = require(process.cwd() + "/modules/Util");
 
 /**
  * A transform is a wrapper object around a function.
  * This is a base class for the implementing classes.
- * 
- * @constructor
- * @param {[type]} baseObject [description]
  */
-var Transform = function(type)
+class Transform
 {
-  var self = this;
-  Object.defineProperties(self,
+  constructor(type)
   {
-    type:
+    const self = this;
+    Object.defineProperties(self,
     {
-      enumerable: true,
-      value: type
-    }
-  });
-};
-
-Object.defineProperties(Transform.prototype,
-{
-  transform:
-  {
-    /**
-     * Performs a transformation on the value.
-     * This needs to be implemented by each different transform.
-     *
-     * @param  {Object} source A datasource for the transform.
-     * @param  {Value}  value The value to transform.
-     * @return {Object}       The result of the transformation.
-     */
-    value: function(value, source)
-    {
-      return value;
-    },
-    writable: true
+      type:
+      {
+        enumerable: true,
+        value: type
+      }
+    });
   }
-});
+
+  /**
+   * Performs a transformation on the value.
+   * This needs to be implemented by each different transform.
+   *
+   * @param  {Value}  value The value to transform.
+   * @param  {Object} source A datasource for the transform.
+   * @return {Object}       The result of the transformation.
+   */
+  transform(value, source)
+  {
+    /* NOTE This is the default for the transform */
+    return value;
+  }
+}
 
 /**
- * A group of transforms to be executed on a value.
- *
- * @constructor
- * @param {Object[]} objectArray An array of the bjects to be parsed.
+ * A transform that is a group of transformations.
+ * (that being it will pass the result of the first onto the next)
  */
-var CompositeTransform = function(objectArray)
+class CompositeTransform extends Transform
 {
-  if (!Array.isArray(objectArray))
+  constructor(objects)
   {
-    throw new Error("Attempted to create a CompositeTransform with a non-array object.");
-  }
-
-  var self = this;
-  Transform.call(self, "composite");
-  Object.defineProperties(self,
-  {
-    transforms:
+    super("composite");
+    if (!Array.isArray(objects))
     {
-      enumerable: true,
-      value: objectArray.map(function(baseObject)
-      {
-        return module.exports.createTransform(baseObject);
-      })
+      throw new Error("Attempted to create a CompositeTransform with a non-array object.");
     }
-  });
-};
-Util.inherit(Transform, CompositeTransform);
-Object.defineProperties(CompositeTransform.prototype,
-{
-  transform:
-  {
-    value: function(value, source)
-    {
-      var transformedValue = value;
-      for (var i = 0; i < this.transforms.length; i++)
-      {
-        /* Performing the transform */
-        transformedValue = this.transforms[i].transform(transformedValue, source);
 
-        /* This is an object return which will have special options */
-        if (!Util.isNull(transformedValue.value))
+    const self = this;
+    Object.defineProperties(self,
+    {
+      transforms:
+      {
+        enumerable: true,
+        value: objects.map(function(object)
         {
-          /* Final values are instantly returned */
-          if (!Util.isNull(transformedValue.final) && transformedValue.final)
-          {
-            return transformedValue.value;
-          }
-          transformedValue = transformedValue.value;
-        }
+          return module.exports.createTransform(object);
+        })
       }
-
-      /* Returning the result of the iteration */
-      return transformedValue;
-    }
+    });
   }
-});
+
+  transform(value, source)
+  {
+    var transformedValue = value;
+    for (let i = 0; i < this.transforms.length; i++)
+    {
+      /* Performing the transform */
+      transformedValue = this.transforms[i].transform(transformedValue, source);
+
+      /* This is an object return which will have special options */
+      if (!Util.isNull(transformedValue.value))
+      {
+        /* Final values are instantly returned */
+        if (!Util.isNull(transformedValue.final) && transformedValue.final)
+        {
+          return transformedValue.value;
+        }
+        transformedValue = transformedValue.value;
+      }
+    }
+
+    /* Returning the result of the iteration */
+    return transformedValue;
+  }
+}
 
 /**
  * A transform that is based directly off a function.
- * 
- * @param {function} functionObject A function object.
  */
-var DirectTransform = function(functionObject)
+class LambdaTransform extends Transform
 {
-  if (typeof functionObject != "function")
+  constructor(lambda)
   {
-    throw new Error("Attempted to create a DirectTransform with a non-function object");
+    super("direct");
+    if (typeof functionObject != "function")
+    {
+      throw new Error("Attempted to create a DirectTransform with a non-function object");
+    }
+
+    const self = this;
+    Object.defineProperties(self,
+    {
+      lambda:
+      {
+        value: lambda
+      }
+    });
   }
 
-  var self = this;
-  Transform.call(self, "direct");
-  Object.defineProperties(self,
+  trasnsform(value, source)
   {
-    directFunction:
-    {
-      value: functionObject
-    }
-  });
-};
-Util.inherit(Transform, DirectTransform);
-Object.defineProperties(DirectTransform.prototype,
-{
-  transform:
-  {
-    value: function(value, source)
-    {
-      return this.directFunction(value, source);
-      /* Possibility: Add a check to make sure there isn't an outrageous transform */
-    }
+    const self = this;
+    return self.lambda(value, source);
   }
-});
+}
 
 /**
  * A configured transformation is defined by a JSON object file.
  * Through the configuration it can support multiple different types of simple transforms.
- * 
- * @param {Object} configurationObject The configuration object to use.
  */
-var ConfiguredTransform = function(configurationObject)
+class ConfiguredTransform extends Transform
 {
-  if (typeof configurationObject != "object")
+  constructor(config)
   {
-    throw new Error("Attempted to create a ConfiguredTransform without a configurationObject");
+    super("configured");
+    if (typeof config != "object")
+    {
+      throw new Error("Attempted to create a ConfiguredTransform without a configurationObject");
+    }
+
+    const self = this;
+    Object.defineProperties(self,
+    {
+      add:
+      {
+        value: Util.isNull(config.add) ? 0 : config.add
+      },
+      multiply:
+      {
+        value: Util.isNull(config.multiply) ? 1 : config.multiply
+      },
+      divide:
+      {
+        value: Util.isNull(config.divide) ? 1 : config.divide
+      },
+      exponent:
+      {
+        value: Util.isNull(config.exponent) ? 1 : config.exponent
+      }
+    });
   }
 
-  var self = this;
-  Transform.call(self, "configured");
-  Object.defineProperties(self,
+  transform(value, source)
   {
-    add:
-    {
-      value: Util.isNull(configurationObject.add) ? 0 : configurationObject.add
-    },
-    multiply:
-    {
-      value: Util.isNull(configurationObject.multiply) ? 1 : configurationObject.multiply
-    },
-    divide:
-    {
-      value: Util.isNull(configurationObject.divide) ? 1 : configurationObject.divide
-    },
-    exponent:
-    {
-      value: Util.isNull(configurationObject.exponent) ? 1 : configurationObject.exponent
-    }
-  });
-};
-
-Util.inherit(Transform, ConfiguredTransform);
-Object.defineProperties(ConfiguredTransform.prototype,
-{
-  transform:
-  {
-    value: function(value, source)
-    {
-      return ((Math.exp(value, this.exponent) * this.add) / this.divide) + this.add;
-    }
+    const self = this;
+    return ((Math.exp(value, self.exponent) * self.add) / self.divide) + self.add;
   }
-});
+}
 
 Object.defineProperties(module.exports,
 {
@@ -198,38 +177,38 @@ Object.defineProperties(module.exports,
      * @param  {Object} baseObject The base object to parse for a transform.
      * @return {Transform}         The resulting transform.
      */
-    value: function(baseObject)
+    value: function(object)
     {
       /* If null or undefined then bad and error */
-      if (Util.isNull(baseObject))
+      if (Util.isNull(object))
       {
         throw new Error("Attempted to create a transform when the baseObject is null or undefined");
       }
       /* Composite of objects */
-      else if (Array.isArray(baseObject))
+      else if (Array.isArray(object))
       {
-        return new CompositeTransform(baseObject);
+        return new CompositeTransform(object);
       }
       /* Will be based off of a lambda function */
-      else if (typeof baseObject == "function")
+      else if (typeof object == "function")
       {
-        return new DirectTransform(baseObject);
+        return new LambdaTransform(object);
       }
       /* Will be an expression */
-      else if (typeof baseObject == "string")
+      else if (typeof object == "string")
       {
         /* TODO make use of a MATH parser */
         throw new Error("Attempted to create a transform with a string, this type of transform is not yet supported");
       }
       /* Creating a transform from a transform does not change it */
-      else if (baseObject instanceof Transform)
+      else if (object instanceof Transform)
       {
-        return baseObject;
+        return object;
       }
       /* Configuration transforms are an object */
-      else if (typeof baseObject == "object")
+      else if (typeof object == "object")
       {
-        return new ConfiguredTransform(baseObject);
+        return new ConfiguredTransform(object);
       }
       /* If we couldn't infer it then we error */
       else

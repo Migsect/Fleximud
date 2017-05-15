@@ -46,18 +46,23 @@ Object.defineProperties(module.exports,
   {
     value: function(connection)
     {
-      connection.schema.createTableIfNotExists("accounts", function(table)
+      return new Promise(function(resolve, reject)
       {
-        table.uuid("id");
-        table.string("name");
-        table.string("email");
-        table.string("password");
-      }).then(function dbThem()
-      {
-        Logger.debug("Created Accounts Table");
-      }).catch(function dbCatch(err)
-      {
-        Logger.error(err);
+        connection.schema.createTableIfNotExists("accounts", function(table)
+        {
+          table.uuid("id");
+          table.string("name");
+          table.string("email");
+          table.string("password");
+        }).then(function dbThen()
+        {
+          Logger.debug("Created Accounts Table");
+          resolve();
+        }).catch(function dbCatch(error)
+        {
+          Logger.error(error);
+          reject(error);
+        });
       });
     }
   },

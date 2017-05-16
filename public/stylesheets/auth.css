@@ -1,13 +1,85 @@
-#loginWindow {
-  position: absolute;
-  right: 0px;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 400px;
 }
 
-#createAccountWindow {
-  position: absolute;
-  right: 0px;
+@media (max-width: 800px) {
+    body {
+        flex-direction: column;
+    }
 }
 
-.error {
-  background-color: #ffb3b3;
+.input-container {
+    border-radius: 0.25em;
+    border-color: rgba(255, 255, 255, 0.5);
+    border-width: 1px;
+    border-style: solid;
+    padding: 1em;
+    margin: 1em;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.input-title {
+    text-align: center;
+    padding-bottom: 0.5em;
+    font-size: 1.25em;
+}
+
+.field-container {
+    padding: 1px;
+}
+
+.button-container {
+    padding-top: 0.5em;
+    display: flex;
+    justify-content: center;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    padding: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    font: inherit;
+    color: inherit;
+    border-radius: 0.1em;
+    border-color: rgba(255, 255, 255, 0.5);
+    border-width: 1px;
+    border-style: solid;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    background-color: rgba(128, 128, 256, 0.3);
+}
+
+input[type="button"] {
+    background-color: rgba(255, 255, 255, 0.3);
+    font: inherit;
+    color: inherit;
+    border-radius: 0.1em;
+    border-color: rgba(255, 255, 255, 0.5);
+    border-width: 1px;
+    border-style: solid;
+}
+
+input[type="button"]:hover {
+    background-color: rgba(128, 128, 256, 0.5);
+    cursor: pointer;
+}
+
+input[type="button"]:focus {
+    background-color: rgba(128, 128, 256, 0.3);
+}
+
+input[type="button"]:active {
+    background-color: rgba(128, 128, 256, 0.8);
+}
+
+.field-title {
+    display: inline-block;
+    width: 8em;
 }

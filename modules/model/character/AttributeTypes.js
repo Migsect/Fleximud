@@ -48,6 +48,7 @@ var AttributeType = function(json)
       value: Util.isNull(json.color) ? "#444444" : json.color
     }
   });
+
   /* Defining stuff that relies on the prior items */
   Object.defineProperties(self,
   {

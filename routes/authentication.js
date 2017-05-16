@@ -3,22 +3,25 @@
 var express = require('express');
 var router = express.Router();
 
-var Accounts = require("../modules/model/Account");
+var Accounts = require("../modules/Model/Account");
 var Util = require('../modules/Util');
 
-/* Main page get */
-router.get('/', function(req, res, next)
+/* Gets the main view for authentication, aka the login screen */
+router.get('/', function(request, response)
 {
     /* Checking to see if the session is already logged in */
-    if (req.session.account)
+    if (request.session.account)
     {
-        res.redirect("/account");
-    } else
+        response.redirect("/characters");
+    }
+    else
     {
-        res.redirect("/");
+        response.render("auth");
     }
 });
-router.post('/login', function(req, res, next)
+
+/* A request to login */
+router.post('/login', function(req, res)
 {
     var login = req.body;
 
@@ -39,7 +42,7 @@ router.post('/login', function(req, res, next)
         {
             res.send(
             {
-                message : "badInfo"
+                message: "badInfo"
             });
             return;
         }
@@ -47,13 +50,26 @@ router.post('/login', function(req, res, next)
         console.log("Result.ID: ", result.id);
         /* Setting the session's logged in account */
         session.account = result.id;
-        console.log(session.account)
+        console.log(session.account);
 
         /* Client handles redirection, send empty response */
         res.send();
     });
 });
-router.post('/create', function(req, res, next)
+
+/* If someone makes a request to logout, then they will be sent back to the main auth page */
+router.get('/logout', function(req, res)
+{
+    var session = req.session;
+    /* Setting the session's account to null */
+    session.account = null;
+
+    /* Redirecting back to authentication */
+    res.redirect("/");
+});
+
+/* This is a request to create an account */
+router.post('/create', function(req, res)
 {
     var create = req.body;
 
@@ -66,13 +82,13 @@ router.post('/create', function(req, res, next)
 
     Accounts.accountExists(
     {
-        $or : [
+        $or: [
         {
-            email : email
+            email: email
         },
         {
-            name : name
-        } ]
+            name: name
+        }]
     }).then(function(result)
     {
         /* If the query comes back false then */
@@ -87,25 +103,17 @@ router.post('/create', function(req, res, next)
             session.account = account.id;
 
             /* Client handles redirection, send empty response */
-            res.send()
-        } else
+            res.send();
+        }
+        else
         {
             console.log("Sending NameTaken Error");
             res.send(
             {
-                message : "nameTaken"
+                message: "nameTaken"
             });
         }
     });
-});
-router.get('/logout', function(req, res, next)
-{
-    var session = req.session;
-    /* Setting the session's account to null */
-    session.account = null;
-
-    /* Redirecting back to authentication */
-    res.redirect("/");
 });
 
 module.exports = router;

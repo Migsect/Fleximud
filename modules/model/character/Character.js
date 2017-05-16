@@ -29,7 +29,7 @@ class Character
       },
       descriptors:
       {
-        value.config.descriptors
+        value: config.descriptors
       },
       species:
       {

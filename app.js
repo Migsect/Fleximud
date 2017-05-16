@@ -18,17 +18,17 @@ const app = express();
  * # Configuration initialization                                           # *  
  * ########################################################################## */
 
-require("./modules/location/Location");
-require("./modules/model/character/DescriptorTypes");
-require("./modules/model/character/AttributeTypes");
-require("./modules/model/character/ResourceTypes");
+// require("./modules/location/Location");
+// require("./modules/Model/Character/DescriptorTypes");
+// require("./modules/Model/Character/AttributeTypes");
+// require("./modules/Model/Character/ResourceTypes");
 
 Logger.info("Configuration: Loaded");
 
 /* ########################################################################## *
  * # Setting up the scheduler                                               # *  
  * ########################################################################## */
-const Scheduler = require("./modules/scheduling/Scheduler");
+const Scheduler = require("./modules/Scheduling/Scheduler");
 Scheduler.instance.start();
 
 Logger.info("Scheduler: Loaded");
@@ -38,11 +38,11 @@ Logger.info("Scheduler: Loaded");
  * ########################################################################## */
 /* Creating the database connection + manager */
 const databaseConfig = config.database;
-const DatabaseManager = require("./modules/database/DatabaseManager");
+const DatabaseManager = require("./modules/Database/DatabaseManager");
 const databaseManager = DatabaseManager.initialize(databaseConfig);
 
 /* Setting up the database tables */
-const Account = require("./modules/model/Account");
+const Account = require("./modules/Model/Account");
 Account.initializeDatabase(databaseManager.connection);
 
 Logger.info("Database: Loaded");
@@ -91,13 +91,13 @@ Logger.info("Webapp: Loaded");
 
 const index = require("./routes/index");
 const auth = require("./routes/auth");
-const client = require("./routes/client");
-const account = require("./routes/account");
+// const client = require("./routes/client");
+// const account = require("./routes/account");
 
 app.use('/', index);
 app.use('/auth', auth);
-app.use('/account', account);
-app.use('/client', client);
+// app.use('/account', account);
+// app.use('/client', client);
 
 Logger.info("Routes: Loaded");
 

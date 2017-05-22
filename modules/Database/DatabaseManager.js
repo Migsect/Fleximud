@@ -1,47 +1,47 @@
-"use strict";
+  "use strict";
 
-const Knex = require('knex');
+  const Knex = require('knex');
 
-class DatabaseManager
-{
-  constructor(connection)
+  class DatabaseManager
   {
-    const self = this;
-    Object.defineProperties(self,
-    {
-      connection:
+      constructor(connection)
       {
-        value: connection
+          const self = this;
+          Object.defineProperties(self,
+          {
+              connection:
+              {
+                  value: connection
+              }
+          });
       }
-    });
   }
-}
 
-Object.defineProperties(module.exports,
-{
-  initialize:
+  Object.defineProperties(module.exports,
   {
-    value: function(config)
-    {
-      if (module.exports.instance !== null)
+      initialize:
       {
-        throw new Error("Attempted to initialize DatabaseManager twice.");
+          value: function(config)
+          {
+              if (module.exports.instance !== null)
+              {
+                  throw new Error("Attempted to initialize DatabaseManager twice.");
+              }
+              const connection = Knex(config);
+              const databaseManager = new DatabaseManager(connection);
+              Object.defineProperty(module.exports, "instance",
+              {
+                  configurable: false,
+                  writable: false,
+                  value: databaseManager
+              });
+              return databaseManager;
+          }
+      },
+      instance:
+      {
+          configurable: true,
+          writable: true,
+          value: null
       }
-      const connection = Knex(config);
-      const databaseManager = new DatabaseManager(connection);
-      Object.defineProperty(module.exports, "instance",
-      {
-        configurable: false,
-        writable: false,
-        value: databaseManager
-      });
-      return databaseManager;
-    }
-  },
-  instance:
-  {
-    configurable: true,
-    writable: true,
-    value: null
-  }
-});
+  });

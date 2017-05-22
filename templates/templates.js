@@ -4,13 +4,14 @@
  * Used to load and have a single reference to all templates.
  */
 
-var logger = require(process.cwd() + "/modules/Logger");
+const logger = require(process.cwd() + "/modules/Logger");
 
-var fs = require('fs');
-var handlebars = require('handlebars');
+const fs = require("fs");
+const path = require("path");
+const handlebars = require("handlebars");
 
 /** @type {Map} Mapping of file locations to compiled templates of those files */
-var compiled = new Map();
+const compiled = new Map();
 
 /**
  * Compiles a template File.
@@ -19,23 +20,24 @@ var compiled = new Map();
  * @param  {String} path The path of the template file.
  * @return {Object}      A Compiled template.
  */
-var compileTemplate = function(path)
+function compileTemplate(templatePath)
 {
-  if (compiled.has(path))
-  {
-    return compiled.get(path);
-  }
-  var file = fs.readFileSync(__dirname + "/" + path + ".html", 'utf-8');
-  logger.debug("Compiling Template '" + __dirname + "/" + path + "'");
+    if (compiled.has(templatePath))
+    {
+        return compiled.get(templatePath);
+    }
+    const fullPath = path.join(__dirname, templatePath + ".hbs");
+    const file = fs.readFileSync(fullPath, 'utf-8');
+    logger.debug("Compiling Template:", fullPath);
 
-  var fileCompiled = handlebars.compile(file);
-  compiled.set(path, fileCompiled);
+    const fileCompiled = handlebars.compile(file);
+    compiled.set(templatePath, fileCompiled);
 
-  return fileCompiled;
-};
+    return fileCompiled;
+}
 
 /** @type {Map} Mapping of file locations to precompiled templates of those files */
-var precompiled = new Map();
+const precompiled = new Map();
 /**
  * Precompiles a template file.
  * Caches all precompiled files.
@@ -43,24 +45,25 @@ var precompiled = new Map();
  * @param  {String} path The path of the template file.
  * @return {Object}      The precompiled template.
  */
-var precompileTemplate = function(path)
+function precompileTemplate(templatePath)
 {
-  if (precompiled.has(path))
-  {
-    return precompiled.get(path);
-  }
-  var file = fs.readFileSync(__dirname + "/" + path + ".html", 'utf-8');
-  logger.debug("Precompiling Template '" + __dirname + "/" + path + "'");
+    if (precompiled.has(templatePath))
+    {
+        return precompiled.get(templatePath);
+    }
+    const fullPath = path.join(__dirname, templatePath + ".hbs");
+    const file = fs.readFileSync(fullPath, 'utf-8');
+    logger.debug("Precompiling Template:", fullPath);
 
-  var fileCompiled = handlebars.precompile(file);
-  compiled.set(path, fileCompiled);
+    const fileCompiled = handlebars.precompile(file);
+    compiled.set(templatePath, fileCompiled);
 
-  return fileCompiled;
-};
+    return fileCompiled;
+}
 
 module.exports = compileTemplate;
 Object.defineProperties(module.exports,
 {
-  precompile: precompileTemplate,
-  compile: compileTemplate
+    precompile: precompileTemplate,
+    compile: compileTemplate
 });

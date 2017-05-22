@@ -5,14 +5,9 @@
  * Module dependencies.
  */
 
-/* Creating the client manager */
-var clientManager = require("../modules/sockets/ClientManager").instance;
-
 /* Doing app stuff */
-var app = require("../app");
-var debug = require("debug")("RPGMUD:server");
-var http = require("http");
-var sharedsession = require("express-socket.io-session");
+const app = require("../app").app;
+const debug = require("debug")("RPGMUD:server");
 
 /**
  * Get port from environment and store in Express.
@@ -22,33 +17,10 @@ var port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
 /**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
-
-/**
- * Socket.io connection
- */
-var io = require("socket.io")(server);
-io.on("connection", function(socket)
-{
-  clientManager.onConnection(socket);
-});
-
-/**
- * Sharing the session between socketio and express app
- */
-/* Setting up socket to have access to the session variable */
-io.use(sharedsession(app.locals.middleware.session,
-{
-  autoSave: true
-}));
-
-/**
  * Listen on provided port, on all network interfaces.
  */
 
+const server = require("../app").server;
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/global.css">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans" rel="stylesheet"> {{#each styles}}
+    <link rel="stylesheet" type="text/css" href="{{this}}"> {{/each}}
+</head>
+
+<body>
+    <div class="menu">
+        <div class="menu-left">
+        </div>
+        <div class="menu-right">
+            {{#if account}}
+            <div class="menu-item">{{account.username}}</div>
+            <a href="/auth/logout" class="menu-item menu-auth menu-button">Logout</a> {{else}}
+            <a href="/auth" class="menu-item menu-auth menu-button">Login</a> {{/if}}
+        </div>
+
+    </div>
+    <div class="view">
+        {{{view}}}
+    </div>
+    {{#each scripts}}
+    <script type="text/javascript" src="{{this}}"></script>{{/each}}
+</body>
+
+</html>

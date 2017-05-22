@@ -1,75 +1,209 @@
 "use strict";
 
-const Util = require(process.cwd() + "/modules/Util");
-const Logger = require(process.cwd() + "/modules/Logger");
-
 const PasswordHash = require("password-hash");
 const uuid = require("uuid/v4");
 
+const Util = require(process.cwd() + "/modules/Util");
+const Logger = require(process.cwd() + "/modules/Logger");
+
+const DatabaseManager = require(process.cwd() + "/modules/Database/DatabaseManager");
+const ACCOUNTS_TABLE_NAME = "accounts";
+
 class Account
 {
-  constructor(config)
-  {
-    const self = this;
-    Object.defineProperties(self,
+    constructor(config)
     {
-      id:
-      {
-        value: config.email
-      },
-      name:
-      {
-        value: config.name
-      },
-      email:
-      {
-        value: config.email
-      },
-      password:
-      {
-        value: config.password
-      },
-    });
-  }
+        const self = this;
+        Object.defineProperties(self,
+        {
+            dbid:
+            {
+                enumerable: true,
+                value: config.id
+            },
+            uuid:
+            {
+                enumerable: true,
+                value: config.uuid
+            },
+            username:
+            {
+                enumerable: true,
+                value: config.username || "Unspecified"
+            },
+            email:
+            {
+                enumerable: true,
+                value: config.email
+            },
+            password:
+            {
+                enumerable: true,
+                value: config.password
+            },
+        });
+    }
 
-  verify(passwordAttempt)
-  {
-    const self = this;
-    return PasswordHash.verify(passwordAttempt, self.password);
-  }
+    /**
+     * Returns a promise that will provide a list of all characters under this account.
+     * This list will not include all character information, nor will it include full Character models.
+     * Instead it will provide a list of Objects that include character DBID, UUID, Name, Species, and Sex
+     *
+     * This is utlimately meant to be used for character listings and no more.
+     */
+    getCharacterList()
+    {
+
+    }
+
+    verify(passwordAttempt)
+    {
+        const self = this;
+        return PasswordHash.verify(passwordAttempt, self.password);
+    }
 
 }
 
 Object.defineProperties(module.exports,
 {
-  initializeDatabase:
-  {
-    value: function(connection)
+    table:
     {
-      return new Promise(function(resolve, reject)
-      {
-        connection.schema.createTableIfNotExists("accounts", function(table)
+        value: ACCOUNTS_TABLE_NAME
+    },
+    initializeDatabase:
+    {
+        value: function()
         {
-          table.uuid("id");
-          table.string("name");
-          table.string("email");
-          table.string("password");
-        }).then(function dbThen()
+            return new Promise(function(resolve, reject)
+            {
+                const connection = DatabaseManager.instance.connection;
+                connection.schema.createTableIfNotExists(ACCOUNTS_TABLE_NAME, function(table)
+                {
+                    table.increments("id").primary().notNullable();
+                    table.uuid("uuid").notNullable();
+                    table.string("username").notNullable();
+                    table.string("email").notNullable();
+                    table.string("password").notNullable();
+                }).then(function dbThen()
+                {
+                    Logger.debug("Table Ready:", ACCOUNTS_TABLE_NAME);
+                    resolve();
+                }).catch(function dbCatch(error)
+                {
+                    Logger.error(error);
+                    reject(error);
+                });
+            });
+        }
+    },
+    newAccount:
+    {
+        value: function(username, email, plainPassword)
         {
-          Logger.debug("Created Accounts Table");
-          resolve();
-        }).catch(function dbCatch(error)
-        {
-          Logger.error(error);
-          reject(error);
-        });
-      });
-    }
-  },
-  createAccount:
-  {
-    value: function(name, email, plainPassword) {
+            const connection = DatabaseManager.instance.connection;
 
+            const password = PasswordHash.generate(plainPassword);
+            Logger.debug("H.Pass.Len:", password.length);
+
+            const id = uuid();
+            return new Promise(function(resolve, reject)
+            {
+                connection(ACCOUNTS_TABLE_NAME).select("email").where(function()
+                {
+                    this.where("email", email).orWhere("username", username);
+                }).then(function(emails)
+                {
+                    /* Checking to see if that email exists */
+                    if (emails.length > 0)
+                    {
+                        reject("An account with that email or username already exists.");
+                        return;
+                    }
+                    connection(ACCOUNTS_TABLE_NAME).insert(
+                    {
+                        uuid: id,
+                        username: username,
+                        email: email,
+                        password: password
+                    }).then(function(dbid)
+                    {
+                        const account = new Account(
+                        {
+                            dbid: dbid,
+                            uuid: id,
+                            username: username,
+                            email: email,
+                            password: password
+                        });
+                        resolve(account);
+                    }).catch(function(error)
+                    {
+                        Logger.error(error);
+                        reject("An issue occured with the server.");
+                    });
+                    resolve();
+                }).catch(function(error)
+                {
+                    Logger.error(error);
+                    reject("An issue occured with the server.");
+                });
+            });
+        }
+    },
+    getAccount:
+    {
+        value: function(query)
+        {
+            const connection = DatabaseManager.instance.connection;
+            return new Promise(function(resolve, reject)
+            {
+                connection(ACCOUNTS_TABLE_NAME).select().where(query).then((results) =>
+                {
+                    if (results.length < 1)
+                    {
+                        resolve(null);
+                    }
+                    const config = results[0];
+                    Logger.debug("Account-Config:", config);
+                    const account = new Account(config);
+                    Logger.debug("Account:", account);
+                    resolve(account);
+
+                }).catch((error) =>
+                {
+                    reject(error);
+                });
+            });
+        }
+    },
+    getAccountByUUID:
+    {
+        value: function(id)
+        {
+            return module.exports.getAccount(
+            {
+                uuid: id
+            });
+        }
+    },
+    getAccountByEmail:
+    {
+        value: function(email)
+        {
+            return module.exports.getAccount(
+            {
+                email: email
+            });
+        }
+    },
+    getAccountByName:
+    {
+        value: function(username)
+        {
+            return module.exports.getAccount(
+            {
+                username: username
+            });
+        }
     }
-  }
 });

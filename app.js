@@ -3,16 +3,19 @@
 const express = require("express");
 const path = require("path");
 // var favicon = require('serve-favicon');
-// var logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const KnexSessionStore = require("connect-session-knex")(session);
+
+const http = require("http");
 
 const config = require("./config/general");
 
 const Logger = require(process.cwd() + "/modules/Logger");
 
 const app = express();
+const server = http.createServer(app);
 
 /* ########################################################################## *
  * # Configuration initialization                                           # *  
@@ -42,14 +45,36 @@ const DatabaseManager = require("./modules/Database/DatabaseManager");
 const databaseManager = DatabaseManager.initialize(databaseConfig);
 
 /* Setting up the database tables */
-const Account = require("./modules/Model/Account");
-Account.initializeDatabase(databaseManager.connection);
+require("./modules/Model/Account").initializeDatabase();
+require("./modules/Model/Character/Character").initializeDatabase();
 
 Logger.info("Database: Loaded");
 
 /* ########################################################################## *
  * # Setting up sessions and other middleware                               # *  
  * ########################################################################## */
+
+/* Setting up winston for logging */
+const winston = require("winston");
+const expressWinston = require("express-winston");
+app.use(expressWinston.logger(
+{
+    transports: [
+        new winston.transports.Console(
+        {
+            json: false,
+            colorize: true
+        })
+    ],
+    meta: false,
+    msg: "HTTP {{req.method}} {{req.url}}",
+    expressFormat: true,
+    colorize: true,
+    ignoreRoute: function()
+    {
+        return false;
+    }
+}));
 
 /* Variable for storing all middleware */
 app.locals.middleware = {};
@@ -64,7 +89,7 @@ app.set("view engine", "hbs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded(
 {
-  extended: false
+    extended: false
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -72,13 +97,19 @@ app.use(express.static(path.join(__dirname, "public")));
 /* Session setup */
 const appSession = session(
 {
-  secret: config.sessions.secret ? config.sessions.secret : "secrety secret",
-  cookie:
-  {
-    maxAge: config.sessions.maxAge ? config.sessions.maxAge : 3600000 /* An hour */
-  },
-  resave: true,
-  saveUninitialized: true
+    store: new KnexSessionStore(
+    {
+        createtable: true,
+        tablename: "sessions",
+        knex: DatabaseManager.instance.connection
+    }),
+    secret: config.sessions.secret ? config.sessions.secret : "secrety secret",
+    cookie:
+    {
+        maxAge: config.sessions.maxAge ? config.sessions.maxAge : 3600000 /* An hour */
+    },
+    resave: true,
+    saveUninitialized: true
 });
 app.use(appSession);
 // app.locals.middleware.session = appSession;
@@ -86,16 +117,37 @@ app.use(appSession);
 Logger.info("Webapp: Loaded");
 
 /* ########################################################################## *
+ * # Socket.io initialization                                               # *  
+ * ########################################################################## */
+const io = require("socket.io")(server);
+const sharedsession = require("express-socket.io-session");
+
+const ClientManager = require(process.cwd() + "/modules/sockets/ClientManager").instance;
+io.on("connection", function(socket)
+{
+    ClientManager.onConnection(socket);
+});
+/* Setting up socket to have access to the session variable */
+io.use(sharedsession(app.locals.middleware.session,
+{
+    autoSave: true
+}));
+
+/* ########################################################################## *
  * # Setting up the routes                                                  # *  
  * ########################################################################## */
 
 const index = require("./routes/index");
 const auth = require("./routes/auth");
+const creation = require("./routes/creation");
+const characters = require("./routes/characters");
 // const client = require("./routes/client");
 // const account = require("./routes/account");
 
-app.use('/', index);
-app.use('/auth', auth);
+app.use("/'", index);
+app.use("/auth", auth);
+app.use("/creation", creation);
+app.use("/characters", characters);
 // app.use('/account', account);
 // app.use('/client', client);
 
@@ -108,9 +160,9 @@ Logger.info("Routes: Loaded");
 // catch 404 and forward to error handler
 app.use(function(req, res, next)
 {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
@@ -119,15 +171,18 @@ app.use(function(req, res, next)
 // will print stacktrace
 if (app.get('env') === 'development')
 {
-  app.use(function(err, req, res)
-  {
-    res.status(err.status || 500);
-    res.render('error',
+    app.use(function(err, req, res)
     {
-      message: err.message,
-      error: err
+        res.status(err.status || 500);
+        res.render('error',
+        {
+            message: err.message,
+            error: err
+        });
     });
-  });
 }
 
-module.exports = app;
+module.exports = {
+    app: app,
+    server: server
+};

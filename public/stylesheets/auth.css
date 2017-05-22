@@ -1,4 +1,4 @@
-body {
+.view {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,7 +6,7 @@ body {
 }
 
 @media (max-width: 800px) {
-    body {
+    .view {
         flex-direction: column;
     }
 }

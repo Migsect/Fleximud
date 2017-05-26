@@ -14,34 +14,11 @@ class Account
     constructor(config)
     {
         const self = this;
-        Object.defineProperties(self,
-        {
-            dbid:
-            {
-                enumerable: true,
-                value: config.id
-            },
-            uuid:
-            {
-                enumerable: true,
-                value: config.uuid
-            },
-            username:
-            {
-                enumerable: true,
-                value: config.username || "Unspecified"
-            },
-            email:
-            {
-                enumerable: true,
-                value: config.email
-            },
-            password:
-            {
-                enumerable: true,
-                value: config.password
-            },
-        });
+        self.dbid = config.id;
+        self.uuid = config.uuid;
+        self.username = config.username || "Unspecified";
+        self.email = config.email;
+        self.password = config.password;
     }
 
     /**

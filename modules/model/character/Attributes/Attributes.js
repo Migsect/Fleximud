@@ -10,7 +10,13 @@ class Attributes
     constructor(config)
     {
         const self = this;
-        self.values = config.values;
+        self._values = config.values;
+    }
+
+    getDatabaseObject()
+    {
+        const self = this;
+        return self._values;
     }
 
     /**
@@ -41,7 +47,7 @@ class Attributes
         }
 
         /* Otherwise we simply return the value if it exists */
-        const value = self.values[attribute];
+        const value = self._values[attribute];
         if (!value)
         {
             return 1;
@@ -70,12 +76,12 @@ class Attributes
         else
         {
             /* Scaling the value if there are no children */
-            let value = self.values[attribute];
+            let value = self._values[attribute];
             if (!value)
             {
                 value = 1;
             }
-            self.values[attribute] = value * scalar;
+            self._values[attribute] = value * scalar;
         }
     }
 
@@ -111,7 +117,7 @@ class Attributes
         }
         else
         {
-            self.values[attribute] = value;
+            self._values[attribute] = value;
         }
     }
 }

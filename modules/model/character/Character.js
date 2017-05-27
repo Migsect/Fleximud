@@ -6,6 +6,7 @@ const Logger = require(process.cwd() + "/modules/Logger");
 
 const Account = require("../Account");
 const Attributes = require("./Attributes/Attributes");
+const Descriptors = require("./Descriptors/Descriptors");
 
 const DatabaseManager = require(process.cwd() + "/modules/Database/DatabaseManager");
 const CHARACTERS_TABLE_NAME = "characters";
@@ -20,7 +21,7 @@ class Character
         self.accountId = config.accountId;
         self.identity = config.name;
         self.attributes = new Attributes(config.attributes);
-        self.descriptors = config.descriptors;
+        self.descriptors = new Descriptors(config.descriptors);
         self.classification = config.classification;
     }
 }

@@ -7,7 +7,7 @@ const router = express.Router();
 const Logger = require(process.cwd() + "/modules/Logger");
 
 const templates = require(process.cwd() + "/templates/templates");
-const GlobalLayout = require(process.cwd() + "/layouts/global");
+const GlobalLayout = require(process.cwd() + "/layouts/global/global");
 const authPage = templates("pages/auth");
 
 const Accounts = require("../modules/Model/Account");

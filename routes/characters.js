@@ -4,7 +4,7 @@ var express = require("express");
 var router = express.Router();
 
 const templates = require(process.cwd() + "/templates/templates");
-const GlobalLayout = require(process.cwd() + "/layouts/global");
+const GlobalLayout = require(process.cwd() + "/layouts/global/global");
 const charactersPage = templates("pages/characters");
 
 /* GET home page. */

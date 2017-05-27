@@ -1,7 +1,7 @@
 "use strict";
 
 const templates = require(process.cwd() + "/templates/templates");
-const layoutTemplate = templates("layout/global");
+const layoutTemplate = templates(process.cwd() + "/layouts/global/global");
 
 /**
  * This will generate a webpage using the following parameters.

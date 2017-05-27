@@ -6,7 +6,8 @@ module.exports = {
         // index: "./web_modules/entry/index.js",
         // client: "./web_modules/entry/client.js",
         // create: "./web_modules/entry/create.js",
-        auth: "./web_modules/entry/auth.js"
+        auth: "./web_modules/entry/auth.js",
+        creation: "./web_modules/entry/creation.js"
     },
     output:
     {

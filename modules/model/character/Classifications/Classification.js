@@ -14,10 +14,21 @@ class Classification
         const self = this;
         self.id = config.id;
         self.name = config.name;
+        self.type = config.type || "general";
         self.attributes = Util.isNull(config.attributes) ? [] : config.attributes;
         self.transforms = Util.isNull(config.transforms) ? new Map() : Transform.parseDirectedTransforms(config.transforms);
         self.documentation = Util.parseFileString(Util.isNull(config.documentation) ? "" : config.documentation, process.cwd() + "/config/documentation/");
         self.descriptorConfigurations = DescriptorConfiguration.getDescriptorConfigurations(config.descriptors);
+        self.classifications = new Map();
+        config.classifications.forEach(function(classification)
+        {
+            const type = classification.type;
+            if (!self.classifications.has(type))
+            {
+                self.classifications.put(type, []);
+            }
+            self.classifications.get(classification.type).push(new Classification(classification));
+        });
     }
 
     getDescriptorConfiguration(id)
@@ -48,3 +59,5 @@ class Classification
         });
     }
 }
+
+module.exports = Classification;

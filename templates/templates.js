@@ -26,7 +26,7 @@ function compileTemplate(templatePath)
     {
         return compiled.get(templatePath);
     }
-    const fullPath = path.join(__dirname, templatePath + ".hbs");
+    const fullPath = fs.existsSync(templatePath + ".hbs") ? path.resolve(templatePath + ".hbs") : path.join(__dirname, templatePath + ".hbs");
     const file = fs.readFileSync(fullPath, 'utf-8');
     logger.debug("Compiling Template:", fullPath);
 
@@ -51,7 +51,7 @@ function precompileTemplate(templatePath)
     {
         return precompiled.get(templatePath);
     }
-    const fullPath = path.join(__dirname, templatePath + ".hbs");
+    const fullPath = fs.existsSync(templatePath + ".hbs") ? path.resolve(templatePath + ".hbs") : path.join(__dirname, templatePath + ".hbs");
     const file = fs.readFileSync(fullPath, 'utf-8');
     logger.debug("Precompiling Template:", fullPath);
 
@@ -64,6 +64,12 @@ function precompileTemplate(templatePath)
 module.exports = compileTemplate;
 Object.defineProperties(module.exports,
 {
-    precompile: precompileTemplate,
-    compile: compileTemplate
+    precompile:
+    {
+        value: precompileTemplate
+    },
+    compile:
+    {
+        value: compileTemplate
+    }
 });

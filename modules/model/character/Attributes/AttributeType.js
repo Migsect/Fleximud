@@ -16,9 +16,9 @@ class AttributeType
         self.tag = config.tag;
 
         self.color = config.color;
-        self.description = config.description;
+        self.description = config.description || "";
 
-        self.children = config.children;
+        self.children = config.children || [];
 
         self.transforms = new Map();
         self._setupTransforms();

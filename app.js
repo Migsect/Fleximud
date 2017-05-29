@@ -21,9 +21,9 @@ const server = http.createServer(app);
  * # Configuration initialization                                           # *  
  * ########################################################################## */
 
-// require("./modules/location/Location");
-// require("./modules/Model/Character/DescriptorTypes");
-// require("./modules/Model/Character/AttributeTypes");
+require("./modules/location/Location");
+require("./modules/Model/Character/Descriptors/DescriptorType");
+require("./modules/Model/Character/Attributes/AttributeType");
 // require("./modules/Model/Character/ResourceTypes");
 
 Logger.info("Configuration: Loaded");

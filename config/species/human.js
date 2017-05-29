@@ -1,128 +1,89 @@
 "use strict";
 
 module.exports = {
-  id: "human",
-  name:
-  {
-    singular: "Human",
-    plural: "Humans"
-  },
-  attributes: [
-  {
-    id: "default",
-    center: 1.0,
-    range: 0.1
-  }],
-  documentation: "humans.html",
-  descriptors: [
-  {
-    id: "eyeColor",
-    name: "Eye Color",
-    variations: ["green", "blue", "brown"]
-  },
-  {
-    id: "skinColor",
-    name: "Skin Color",
-    variations: ["white", "light brown", "dark brown", "black"]
-  },
-  {
-    id: "hairColor",
-    name: "Hair Color",
-    variations: ["blonde", "black", "red", "brown"]
-  },
-  {
-    id: "bodyType",
-    name: "Body Type",
-    variations: ["ectomorph", "ecto-mesomorph", "mesomorph", "meso-endomorph", "endomorph"]
-  }],
-  slots: [
-  {
-    type: "head",
-    value: 1
-  },
-  {
-    type: "chest",
-    value: 1
-  },
-  {
-    type: "waist",
-    value: 1
-  },
-  {
-    type: "legs",
-    value: 1
-  },
-  {
-    type: "feet",
-    value: 2
-  },
-  {
-    type: "arms",
-    value: 2
-  },
-  {
-    type: "wrists",
-    value: 2
-  },
-  {
-    type: "hands",
-    value: 2
-  },
-  {
-    type: "back",
-    value: 1
-  }],
-  sexes: [
-  {
-    id: "male",
-    name: "male",
-    transforms: [
+    id: "human",
+    name: "Human",
+    type: "species",
+    attributes: [
     {
-      target: "processing",
-      transform: function(value)
-      {
-        return value * 1.1;
-      }
-    },
-    {
-      target: "strength",
-      transform: function(value)
-      {
-        return value * 1.1;
-      }
+        id: "default",
+        center: 1.0,
+        range: 0.1
     }],
-    attributes: [],
+    documentation: "humans.html",
     descriptors: [
     {
-      id: "height",
-      center: 5.75,
-      range: 0.75
-    }]
-  },
-  {
-    id: "female",
-    name: "female",
-    transforms: [
-    {
-      target: "instincts",
-      transform: function(value)
-      {
-        return value * 1.1;
-      }
+        id: "eye_color",
+        name: "Eye Color",
+        variations: ["green", "blue", "brown"]
     },
     {
-      target: "charisma",
-      transform: function(value)
-      {
-        return value * 1.1;
-      }
-    }],
-    attributes: [],
-    descriptors: [
+        id: "skin_color",
+        variations: ["white", "light brown", "dark brown", "black"]
+    },
     {
-      id: "height",
-      center: 5.5,
-      range: 0.75
+        id: "hair_color",
+        name: "Hair Color",
+        variations: ["blonde", "black", "red", "brown"]
+    },
+    {
+        id: "body_type",
+        name: "Body Type",
+        variations: ["ectomorph", "ecto-mesomorph", "mesomorph", "meso-endomorph", "endomorph"]
+    }],
+    classifications: [
+    {
+        type: "sex",
+        id: "male",
+        name: "Male",
+        attributes: [],
+        descriptors: [
+        {
+            id: "height",
+            center: 5.75,
+            range: 0.75
+        }],
+        transforms: [
+        {
+            target: "processing",
+            transform: function(value)
+            {
+                return value * 1.1;
+            }
+        },
+        {
+            target: "strength",
+            transform: function(value)
+            {
+                return value * 1.1;
+            }
+        }]
+    },
+    {
+        type: "sex",
+        id: "female",
+        name: "Female",
+        attributes: [],
+        descriptors: [
+        {
+            id: "height",
+            center: 5.75,
+            range: 0.75
+        }],
+        transforms: [
+        {
+            target: "instincts",
+            transform: function(value)
+            {
+                return value * 1.1;
+            }
+        },
+        {
+            target: "charisma",
+            transform: function(value)
+            {
+                return value * 1.1;
+            }
+        }],
     }]
-  }]
-}
+};

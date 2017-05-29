@@ -13,21 +13,26 @@ class Classification
     {
         const self = this;
         self.id = config.id;
-        self.name = config.name;
         self.type = config.type || "general";
-        self.attributes = Util.isNull(config.attributes) ? [] : config.attributes;
+        self.parent = null;
+        self.name = config.name || self.id;
+
         self.transforms = Util.isNull(config.transforms) ? new Map() : Transform.parseDirectedTransforms(config.transforms);
-        self.documentation = Util.parseFileString(Util.isNull(config.documentation) ? "" : config.documentation, process.cwd() + "/config/documentation/");
-        self.descriptorConfigurations = DescriptorConfiguration.getDescriptorConfigurations(config.descriptors);
+
+        self.attributes = config.attributes || [];
+        self.documentation = Util.parseFileString(config.documentation || "", process.cwd() + "/config/documentation/");
+        self.descriptorConfigurations = DescriptorConfiguration.getDescriptorConfigurations(config.descriptors || []);
         self.classifications = new Map();
-        config.classifications.forEach(function(classification)
+        config.classifications = config.classifications || [];
+        config.classifications.forEach(function(classificationConfig)
         {
-            const type = classification.type;
+            const type = classificationConfig.type;
             if (!self.classifications.has(type))
             {
                 self.classifications.put(type, []);
             }
-            self.classifications.get(classification.type).push(new Classification(classification));
+            const classification = new Classification(classificationConfig);
+            classification.parent = self.classifications.get(classification.type).push(classification);
         });
     }
 

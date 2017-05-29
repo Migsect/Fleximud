@@ -1,0 +1,86 @@
+.view {
+    display: flex;
+}
+
+.creation-control {
+    background-color: rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+    min-width: 240px;
+    flex: 0 1 auto;
+    padding: 1px;
+}
+
+.creation-tabs {
+    padding: 1px;
+    flex: 1 1 0px;
+}
+
+.creation-tab {
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.creation-tab:not(:first-child) {
+    margin-top: 1px;
+}
+
+.creation-tab-name {
+    flex: 1 1 0px;
+}
+
+.creation-tab-status {
+    min-width: auto;
+    flex: 0 1 auto;
+    font-size: 80%;
+    color: rgb(0, 255, 0);
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.creation-buttons {
+    flex: 0 1 auto;
+    margin: 2px;
+}
+
+.creation-button {
+    margin: 2px;
+    padding: 2px;
+    background-color: rgba(255, 255, 255, 0.025);
+    text-align: center;
+    border-radius: 2px;
+}
+
+.creation-forms {
+    flex: 1 1 0px;
+    margin: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.creation-form {
+    flex: 1 1 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.creation-form-header {
+    font-size: 120%;
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    flex: 0 1 auto;
+}
+
+.creation-form-body {
+    background-color: rgba(255, 255, 255, 0.025);
+    flex: 1 1 0px;
+}
+
+.creation-form-buttons {
+    background-color: rgba(255, 255, 255, 0.1);
+    flex: 0 1 auto;
+}

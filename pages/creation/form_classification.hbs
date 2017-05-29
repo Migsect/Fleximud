@@ -1,0 +1,16 @@
+<div class="creation-form-species">
+    {{#each species}}
+    <div id="{{id}}" class="creation-form-species-item">{{name}}</div>
+    {{/each}}
+</div>
+<div class="creation-form-races">
+    {{#each races}}
+    <div id="{{parentId}}-{{id}}" class="creation-form-races-item">{{name}}</div>
+    {{/each}}
+</div>
+<div class="creation-form-sexes">
+    {{#each sexes}}
+    <div id="{{parentId}}-{{id}}" class="creation-form-sexes-item">{{name}}</div>
+    {{/each}}
+</div>
+<div class="creation-form-information"></div>

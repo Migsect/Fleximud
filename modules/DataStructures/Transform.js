@@ -83,7 +83,7 @@ class LambdaTransform extends Transform
     constructor(lambda)
     {
         super("direct");
-        if (typeof functionObject != "function")
+        if (typeof lambda != "function")
         {
             throw new Error("Attempted to create a DirectTransform with a non-function object");
         }

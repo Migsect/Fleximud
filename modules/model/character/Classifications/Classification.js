@@ -1,14 +1,53 @@
 "use strict";
 
 const Util = require(process.cwd() + "/modules/Util");
+const Logger = require(process.cwd() + "/modules/Logger");
 const Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 const Fuzzy = require(process.cwd() + "/modules/DataStructures/Fuzzy");
 
-const DescriptorConfiguration = require("../DescriptorConfiguration");
+const DescriptorConfiguration = require("../Descriptors/DescriptorConfiguration");
 const AttributeType = require("../Attributes/AttributeType");
+
+const classificationsConfig = require(process.cwd() + "/config/classifications");
+
+let classificationMap = null;
 
 class Classification
 {
+    static _loadConfigs()
+    {
+        return Classification.map;
+    }
+
+    static get map()
+    {
+        if (!classificationMap)
+        {
+            classificationMap = new Map();
+            classificationsConfig.forEach((config) =>
+            {
+                try
+                {
+                    const classification = new Classification(config);
+                    classificationMap.set(classification.id, classification);
+                    Logger.info("Loaded Classification:", classification.id);
+                }
+                catch (error)
+                {
+                    /* Skipping this part of the configuration if there was an error */
+                    Logger.warn(error);
+                    return;
+                }
+            });
+        }
+        return classificationMap;
+    }
+
+    static get list()
+    {
+        return Array.from(Classification.map.values());
+    }
+
     constructor(config)
     {
         const self = this;
@@ -29,11 +68,18 @@ class Classification
             const type = classificationConfig.type;
             if (!self.classifications.has(type))
             {
-                self.classifications.put(type, []);
+                self.classifications.set(type, []);
             }
             const classification = new Classification(classificationConfig);
-            classification.parent = self.classifications.get(classification.type).push(classification);
+            self.classifications.get(classification.type).push(classification);
+            classification.parent = self;
         });
+    }
+
+    getChildren(type)
+    {
+        const self = this;
+        return self.classifications.get(type) || [];
     }
 
     getDescriptorConfiguration(id)
@@ -41,6 +87,7 @@ class Classification
         const self = this;
         return self.getDescriptorConfigurations.get(id);
     }
+
     getDescriptorConfigurations()
     {
         const self = this;
@@ -64,5 +111,5 @@ class Classification
         });
     }
 }
-
+Classification._loadConfigs();
 module.exports = Classification;

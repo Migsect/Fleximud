@@ -104,8 +104,8 @@ class VariationDescriptorConfiguration extends DescriptorConfiguration
 {
     constructor(config)
     {
-        const self = this;
         super(config);
+        const self = this;
         self.variations = config.variations;
     }
 

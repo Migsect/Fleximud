@@ -22,6 +22,7 @@ const server = http.createServer(app);
  * ########################################################################## */
 
 require("./modules/location/Location");
+require("./modules/Model/Character/Classifications/Classification");
 require("./modules/Model/Character/Descriptors/DescriptorType");
 require("./modules/Model/Character/Attributes/AttributeType");
 // require("./modules/Model/Character/ResourceTypes");

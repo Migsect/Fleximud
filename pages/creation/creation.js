@@ -1,41 +1,80 @@
 "use strict";
 
+const Logger = require(process.cwd() + "/modules/Logger");
+
 const templates = require(process.cwd() + "/templates/templates");
 
 const pageTemplate = templates(process.cwd() + "/pages/creation/creation");
 const tabTemplate = templates(process.cwd() + "/pages/creation/creation_tab");
 
 const formTemplate = templates(process.cwd() + "/pages/creation/creation_form");
-const formAttributesTemplate = templates(process.cwd() + "/pages/creation/form_classification");
-const formClassificationTemplate = templates(process.cwd() + "/pages/creation/form_descriptors");
-const formDescriptorsTemplate = templates(process.cwd() + "/pages/creation/form_attributes");
+const formAttributesTemplate = templates(process.cwd() + "/pages/creation/form_attributes");
+const formClassificationTemplate = templates(process.cwd() + "/pages/creation/form_classification");
+const formDescriptorsTemplate = templates(process.cwd() + "/pages/creation/form_descriptors");
 const formIdentityTemplate = templates(process.cwd() + "/pages/creation/form_identity");
+
+const AttributeTypes = require(process.cwd() + "/modules/Model/Character/Attributes/AttributeType");
+const Classification = require(process.cwd() + "/modules/Model/Character/Classifications/Classification");
 
 const sections = [
 {
     id: "classification",
     name: "Classification",
-    createForm: function createAttributesForm()
+    createForm: function createClassifcationForm()
     {
-        formAttributesTemplate(
-        {});
+        const species = [];
+        const races = [];
+        const sexes = [];
+        Classification.list.forEach((classification) =>
+        {
+            species.push(
+            {
+                name: classification.name,
+                id: classification.name
+            });
+            classification.getChildren("sex").forEach((sexClassification) =>
+            {
+                sexes.push(
+                {
+                    name: sexClassification.name,
+                    id: sexClassification.id,
+                    parentId: sexClassification.parent.id
+                });
+            });
+            classification.getChildren("race").forEach((raceClassification) =>
+            {
+                races.push(
+                {
+                    name: raceClassification.name,
+                    id: raceClassification.id,
+                    parentId: raceClassification.parent.id
+                });
+            });
+        });
+        Logger.debug("Sexes:", sexes);
+        return formClassificationTemplate(
+        {
+            species: species,
+            races: races,
+            sexes: sexes
+        });
     }
 },
 {
     id: "descriptors",
     name: "Descriptors",
-    createForm: function createClassifcationForm()
+    createForm: function createDescriptorsForm()
     {
-        formClassificationTemplate(
+        return formDescriptorsTemplate(
         {});
     }
 },
 {
     id: "attributes",
     name: "Attributes",
-    createForm: function createDescriptorsForm()
+    createForm: function createAttributesForm()
     {
-        formDescriptorsTemplate(
+        return formAttributesTemplate(
         {});
     }
 },
@@ -44,7 +83,7 @@ const sections = [
     name: "Identity",
     createForm: function createIdentityForm()
     {
-        formIdentityTemplate(
+        return formIdentityTemplate(
         {});
     }
 }];

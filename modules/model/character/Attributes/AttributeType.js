@@ -2,10 +2,79 @@
 
 const Util = require(process.cwd() + "/modules/Util");
 const Logger = require(process.cwd() + "/modules/Logger");
-var Transform = require(process.cwd() + "/modules/DataStructures/Transform");
+const Transform = require(process.cwd() + "/modules/DataStructures/Transform");
+
+const typesConfig = require(process.cwd() + "/config/attributes");
+
+let typesMap = null;
+let transformsMap = null;
 
 class AttributeType
 {
+    static _loadConfigs()
+    {
+        return AttributeType.map;
+    }
+
+    static get map()
+    {
+        if (!typesMap)
+        {
+            typesMap = new Map();
+            /* Creating all the AttributeTypes from the JSONs */
+            typesConfig.forEach(function(config)
+            {
+                try
+                {
+                    var type = new AttributeType(config);
+                    typesMap.set(type.id, type);
+                    Logger.info("Loaded AttributeType:", type.id);
+                }
+                catch (error)
+                {
+                    /* Skipping this part of the configuration if there was an error */
+                    Logger.warn(error);
+                    return;
+                }
+            });
+
+            /* Populating the children of each type */
+            typesMap.forEach(function(type)
+            {
+                type.populateChildren(typesMap);
+            });
+        }
+        return typesMap;
+    }
+
+    static get list()
+    {
+        return Array.from(typesMap.keys());
+    }
+
+    static get transforms()
+    {
+        if (!transformsMap)
+        {
+            transformsMap = new Map();
+            module.exports.map.forEach(function(type)
+            {
+                type.transforms.forEach(function(transformArray, key)
+                {
+                    /* Initializing empty array if it doesn't have the key */
+                    if (!transformsMap.has(key))
+                    {
+                        transformsMap.set(key, []);
+                    }
+                    /* Combining the two lists */
+                    Array.prototype.push.apply(transformsMap.get(key), transformArray);
+                });
+            });
+        }
+        return transformsMap;
+
+    }
+
     constructor(config)
     {
         Util.assertNotNull(config, config.id);
@@ -38,7 +107,7 @@ class AttributeType
         }
 
         /* Getting the base attribute */
-        var transform = null;
+        let transform = null;
         if (self.children.length <= 0)
         {
             /* The transform will be based of the attribute's current value */
@@ -64,7 +133,7 @@ class AttributeType
             });
         }
         /* Inidcating that the transform is a source */
-        self.transform.tag = "attributeSource";
+        transform.tag = "attributeSource";
         self.transforms.get(self.id).push(transform);
 
         /* Inheritance transform (a compsite transform that uses any parent transforms. */
@@ -119,56 +188,5 @@ class AttributeType
     }
 }
 
-module.exports.map = (function()
-{
-    /* Getting the list of attributes */
-    var typesJSON = require(process.cwd() + "/config/attributes");
-
-    /* Mapping the jsons to objects */
-    var types = new Map();
-
-    /* Creating all the AttributeTypes from the JSONs */
-    typesJSON.forEach(function(json)
-    {
-        try
-        {
-            var type = new AttributeType(json);
-            types.set(type.id, type);
-        }
-        catch (error)
-        {
-            /* Skipping this part of the configuration if there was an error */
-            Logger.error(error);
-            return;
-        }
-    });
-
-    /* Populating the children of each type */
-    types.forEach(function(type)
-    {
-        type.populateChildren(types);
-    });
-
-    /* Returning the type */
-    return types;
-})();
-
-module.exports.list = Array.from(module.exports.map.keys());
-module.exports.transforms = (function()
-{
-    var transformMap = new Map();
-    module.exports.map.forEach(function(type)
-    {
-        type.transforms.forEach(function(transformArray, key)
-        {
-            /* Initializing empty array if it doesn't have the key */
-            if (!transformMap.has(key))
-            {
-                transformMap.set(key, []);
-            }
-            /* Combining the two lists */
-            Array.prototype.push.apply(transformMap.get(key), transformArray);
-        });
-    });
-    return transformMap;
-})();
+AttributeType._loadConfigs();
+module.exports = AttributeType;

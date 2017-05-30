@@ -16,6 +16,27 @@ const formIdentityTemplate = templates(process.cwd() + "/pages/creation/form_ide
 const AttributeTypes = require(process.cwd() + "/modules/Model/Character/Attributes/AttributeType");
 const Classification = require(process.cwd() + "/modules/Model/Character/Classifications/Classification");
 
+function compileDocumentation(classification, parentId = null)
+{
+    const information = [];
+    information.push(
+    {
+        id: parentId ? parentId + "-" + classification.id : classification.id,
+        body: classification.documentation,
+        type: classification.type
+    });
+    classification.classifications.forEach((children) =>
+    {
+        children.forEach((child) =>
+        {
+            const childInformation = compileDocumentation(child, classification.id);
+            Array.prototype.push.apply(information, childInformation);
+        });
+    });
+
+    return information;
+}
+
 const sections = [
 {
     id: "classification",
@@ -25,12 +46,14 @@ const sections = [
         const species = [];
         const races = [];
         const sexes = [];
+        const information = [];
         Classification.list.forEach((classification) =>
         {
+            Array.prototype.push.apply(information, compileDocumentation(classification));
             species.push(
             {
                 name: classification.name,
-                id: classification.name
+                id: classification.id
             });
             classification.getChildren("sex").forEach((sexClassification) =>
             {
@@ -56,7 +79,8 @@ const sections = [
         {
             species: species,
             races: races,
-            sexes: sexes
+            sexes: sexes,
+            information: information
         });
     }
 },

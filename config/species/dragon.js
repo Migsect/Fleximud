@@ -1,8 +1,7 @@
 "use strict";
-
 module.exports = {
-    id: "human",
-    name: "Human",
+    id: "dragon",
+    name: "Dragon",
     type: "species",
     attributes: [
     {
@@ -10,7 +9,7 @@ module.exports = {
         center: 1.0,
         range: 0.1
     }],
-    documentation: "humans.hbs",
+    documentation: "dragons.hbs",
     descriptors: [
     {
         id: "eye_color",
@@ -36,6 +35,7 @@ module.exports = {
         type: "sex",
         id: "male",
         name: "Male",
+        documentation: "dragons-male.hbs",
         attributes: [],
         descriptors: [
         {
@@ -63,6 +63,7 @@ module.exports = {
         type: "sex",
         id: "female",
         name: "Female",
+        documentation: "dragons-female.hbs",
         attributes: [],
         descriptors: [
         {
@@ -88,17 +89,22 @@ module.exports = {
     },
     {
         type: "race",
-        id: "northern",
-        name: "Northern"
+        id: "air",
+        name: "Air"
     },
     {
         type: "race",
-        id: "central",
-        name: "Central"
+        id: "earth",
+        name: "Earth"
     },
     {
         type: "race",
-        id: "southern",
-        name: "Southern"
+        id: "fire",
+        name: "Fire"
+    },
+    {
+        type: "race",
+        id: "water",
+        name: "Water"
     }]
 };

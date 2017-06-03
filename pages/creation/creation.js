@@ -13,6 +13,8 @@ const formClassificationTemplate = templates(process.cwd() + "/pages/creation/fo
 const formDescriptorsTemplate = templates(process.cwd() + "/pages/creation/form_descriptors");
 const formIdentityTemplate = templates(process.cwd() + "/pages/creation/form_identity");
 
+const elementAttribute = templates(process.cwd() + "/pages/creation/element_attribute");
+
 const AttributeTypes = require(process.cwd() + "/modules/Model/Character/Attributes/AttributeType");
 const Classification = require(process.cwd() + "/modules/Model/Character/Classifications/Classification");
 
@@ -35,6 +37,26 @@ function compileDocumentation(classification, parentId = null)
     });
 
     return information;
+}
+
+function compileAttributeTree(attributeType, hideDepth = 0)
+{
+    if (!attributeType)
+    {
+        attributeType = AttributeTypes.top;
+    }
+    const children = attributeType.children.map((child) =>
+    {
+        return compileAttributeTree(child, hideDepth - 1);
+    });
+    return elementAttribute(
+    {
+        id: attributeType.id,
+        name: attributeType.name,
+        color: attributeType.color,
+        children: children.join(""),
+        childrenHidden: hideDepth > 0
+    });
 }
 
 const sections = [
@@ -98,8 +120,11 @@ const sections = [
     name: "Attributes",
     createForm: function createAttributesForm()
     {
+        const attributesTree = compileAttributeTree(null, 2);
         return formAttributesTemplate(
-        {});
+        {
+            tree: attributesTree
+        });
     }
 },
 {

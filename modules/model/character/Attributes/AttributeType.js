@@ -6,6 +6,7 @@ const Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 
 const typesConfig = require(process.cwd() + "/config/attributes");
 
+let topAttribute = null;
 let typesMap = null;
 let transformsMap = null;
 
@@ -14,6 +15,31 @@ class AttributeType
     static _loadConfigs()
     {
         return AttributeType.map;
+    }
+
+    static get top()
+    {
+        if (topAttribute)
+        {
+            return topAttribute;
+        }
+        const tops = AttributeType.list.filter((type) =>
+        {
+            return !type.parent;
+        });
+        /* We should only have one top level attribute */
+        if (tops.length > 1)
+        {
+            Logger.warn("The number of root attributes is greater than 1.");
+        }
+        if (tops.length <= 0)
+        {
+            Logger.error("There was apparently no top-level attribute. Someone's making circular attribute hierarchies!");
+            return null;
+        }
+        topAttribute = tops[0];
+        return topAttribute;
+
     }
 
     static get map()
@@ -49,7 +75,7 @@ class AttributeType
 
     static get list()
     {
-        return Array.from(typesMap.keys());
+        return Array.from(typesMap.values());
     }
 
     static get transforms()
@@ -172,7 +198,7 @@ class AttributeType
         const self = this;
         self.children = self.children.map(function(id)
         {
-            var type = typeMapping.get(id);
+            const type = typeMapping.get(id);
             if (!type)
             {
                 Logger.warn("'" + id + "' did not have a type object defined.");

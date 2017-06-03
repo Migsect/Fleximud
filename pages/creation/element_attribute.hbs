@@ -1,0 +1,25 @@
+<div id="attribute-item-{{id}}" class="attribute-item" style="border-color: {{color}};">
+    <div class="attribute-item-main">
+        <div class="attribute-item-name clickable" data-info-id="attribute-info-{{id}}">{{name}}</div>
+        <div class="attribute-item-points">
+            <div class="attribute-item-points-adjust attribute-item-points-add clickable">
+                +
+            </div>
+            <div class="attribute-item-points-adjust attribute-item-points-amount">
+                0
+            </div>
+            <div class="attribute-item-points-adjust attribute-item-points-subtract clickable">
+                -
+            </div>
+        </div>
+    </div>
+    {{#if children}}
+    <div class="attribute-item-children">
+        <div class="attribute-item-children-toggle attribute-item-children-expand{{#if childrenHidden}} hidden{{/if}} clickable">Expand</div>
+        <div class="attribute-item-children-toggle attribute-item-children-collapse{{#unless childrenHidden}} hidden{{/unless}} clickable">Collapse</div>
+        <div class="attribute-item-children-items {{#unless childrenHidden}} hidden{{/unless}}">
+            {{{children}}}
+        </div>
+    </div>
+    {{/if}}
+</div>

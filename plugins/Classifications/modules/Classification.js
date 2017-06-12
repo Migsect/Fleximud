@@ -5,7 +5,7 @@ const Logger = require(process.cwd() + "/modules/Logger");
 const Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 const Fuzzy = require(process.cwd() + "/modules/DataStructures/Fuzzy");
 
-const DescriptorConfiguration = require("../Descriptors/DescriptorConfiguration");
+// const DescriptorConfiguration = require("../Descriptors/DescriptorConfiguration");
 // const AttributeType = require("../Attributes/AttributeType");
 
 const classificationsConfig = require(process.cwd() + "/config/classifications");

@@ -1,4 +1,7 @@
 "use strict";
+
+const path = require("path");
+
 module.exports = {
     entry:
     {
@@ -25,5 +28,17 @@ module.exports = {
             test: /\.css$/,
             loader: "style!css"
         }]
+    },
+    resolve:
+    {
+        root: [
+            path.resolve("./node_modules"),
+            path.resolve("./web_modules"),
+            path.resolve("./plugins")
+        ],
+        modulesDirectories: [
+            "node_modules",
+            "web_modules"
+        ]
     }
 };

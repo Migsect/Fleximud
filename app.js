@@ -21,10 +21,10 @@ const server = http.createServer(app);
  * # Configuration initialization                                           # *  
  * ########################################################################## */
 
-require("./modules/location/Location");
-require("./modules/Model/Character/Classifications/Classification");
-require("./modules/Model/Character/Descriptors/DescriptorType");
-require("./modules/Model/Character/Attributes/AttributeType");
+// require("./modules/location/Location");
+// require("./modules/Model/Character/Classifications/Classification");
+// require("./modules/Model/Character/Descriptors/DescriptorType");
+// require("./modules/Model/Character/Attributes/AttributeType");
 // require("./modules/Model/Character/ResourceTypes");
 
 Logger.info("Configuration: Loaded");
@@ -153,6 +153,13 @@ app.use("/characters", characters);
 // app.use('/client', client);
 
 Logger.info("Routes: Loaded");
+
+/* ########################################################################## *
+ * # Setting up the plugins                                                 # *  
+ * ########################################################################## */
+const PluginManager = require("./modules/Plugins/PluginManager");
+PluginManager.registerPlugins();
+PluginManager.loadPlugins();
 
 /* ########################################################################## *
  * # Developer / Debug Stuff                                                # *  

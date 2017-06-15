@@ -12,6 +12,8 @@ class PluginManager
     constructor()
     {
         this.plugins = new Map();
+        this.creationSections = [];
+        this.pluginsDirectory = PLUGIN_DIRECTORY;
     }
 
     registerPlugin(directory)
@@ -41,7 +43,7 @@ class PluginManager
         try
         {
             const mainConstructor = require(mainPath);
-            main = new mainConstructor(this, manifest);
+            main = new mainConstructor(this, directory, manifest);
         }
         catch (error)
         {
@@ -83,11 +85,15 @@ class PluginManager
             try
             {
                 plugin.onLoad();
+                if (plugin.manifest.creation)
+                {
+                    this.creationSections.push(plugin.getCreationSection());
+                }
                 Logger.info("Loaded Plugin:", plugin.manifest.name);
             }
             catch (error)
             {
-                Logger.warn(error);
+                Logger.warn("Failed to load Plugin:", plugin.manifest.name, "Error:", error);
             }
         });
     }

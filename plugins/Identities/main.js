@@ -8,6 +8,13 @@ class IdentitiesPlugin extends Plugin
     {
 
     }
+
+    getCreationForm()
+    {
+        const formTemplate = this.getCreationTemplate();
+        return formTemplate(
+        {});
+    }
 }
 
 module.exports = IdentitiesPlugin;

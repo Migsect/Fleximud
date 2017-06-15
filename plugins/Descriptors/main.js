@@ -8,6 +8,13 @@ class DescriptorsPlugin extends Plugin
     {
 
     }
+
+    getCreationForm()
+    {
+        const formTemplate = this.getCreationTemplate();
+        return formTemplate(
+        {});
+    }
 }
 
 module.exports = DescriptorsPlugin;

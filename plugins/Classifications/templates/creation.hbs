@@ -1,0 +1,24 @@
+<div class="classification-header">Species</div>
+<div class="classification-choices">
+    {{#each species}}
+    <div id="{{id}}" class="classification-choice classification-choice-species clickable" data-id="{{id}}">{{name}}</div>
+    {{/each}}
+</div>
+<div class="classification-header">Race</div>
+<div class="classification-choices">
+    {{#each races}}
+    <div id="{{parentId}}-{{id}}" class="classification-choice classification-choice-race clickable" data-id="{{id}}" data-parent="{{parentId}}">{{name}}</div>
+    {{/each}}
+</div>
+<div class=" classification-header">Sex</div>
+<div class="classification-choices">
+    {{#each sexes}}
+    <div id="{{parentId}}-{{id}}" class="classification-choice classification-choice-sex clickable " data-id="{{id}} " data-parent="{{parentId}}">{{name}}</div>
+    {{/each}}
+</div>
+<div class="classification-header">Information</div>
+<div class="classification-information">
+    {{#each information}}
+    <div id="{{id}} " class="classification-information-item " data-type="{{type}} ">{{body}}</div>
+    {{/each}}
+</div>

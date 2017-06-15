@@ -1,8 +1,10 @@
 "use strict";
 
 const Config = require("config-js");
+const path = require("path")
 const fs = require("fs-extra");
 const Logger = require(process.cwd() + "/modules/Logger");
+const templates = require(process.cwd() + "/templates/templates");
 
 class PluginLogger
 {
@@ -31,8 +33,9 @@ class PluginLogger
 
 class Plugin
 {
-    constructor(manager, manifest)
+    constructor(manager, directory, manifest)
     {
+        this.directory = directory;
         this.manager = manager;
         this.manifest = manifest;
         this.configRoot = process.cwd() + "/config/" + this.manifest.name;
@@ -45,13 +48,13 @@ class Plugin
      * Retrieves the plugin's personal logger.
      * This will indicate the plugin as the source of the logging.
      */
-    getLogger()
+    get logger()
     {
-        if (!this.logger)
+        if (!this._logger)
         {
-            this.logger = new PluginLogger(this.name);
+            this._logger = new PluginLogger(this.name);
         }
-        return this.logger;
+        return this._logger;
     }
     getConfig()
     {
@@ -83,9 +86,25 @@ class Plugin
         // Do nothing
     }
 
+    getCreationTemplate()
+    {
+        return templates(path.join(this.directory, "templates/creation"));
+
+    }
     getCreationForm()
     {
+        return this.getCreationTemplate()();
+    }
 
+    getCreationSection()
+    {
+        const name = this.manifest.creation.name || this.manifest.name;
+        const id = this.manifest.creation.id || name.toLowerCase();
+        return {
+            name: name,
+            id: id,
+            form: this.getCreationForm()
+        };
     }
 }
 

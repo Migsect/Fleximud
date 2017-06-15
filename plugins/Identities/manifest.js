@@ -1,6 +1,10 @@
 "use strict";
 
 module.exports = {
-    name: "Attributes",
-    depends: []
+    name: "Identities",
+    depends: [],
+    creation:
+    {
+        name: "Identities"
+    }
 };

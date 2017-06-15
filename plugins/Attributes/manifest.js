@@ -2,5 +2,9 @@
 
 module.exports = {
     name: "Attributes",
-    depends: []
+    depends: [],
+    creation:
+    {
+        name: "Attributes"
+    }
 };

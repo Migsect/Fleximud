@@ -2,5 +2,9 @@
 
 module.exports = {
     name: "Classifications",
-    depends: []
+    depends: [],
+    creation:
+    {
+        name: "Classifications"
+    }
 };

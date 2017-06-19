@@ -85,6 +85,7 @@ class PluginManager
             try
             {
                 plugin.onLoad();
+                /* Handling creation sections */
                 if (plugin.manifest.creation)
                 {
                     this.creationSections.push(plugin.getCreationSection());
@@ -95,6 +96,11 @@ class PluginManager
             {
                 Logger.warn("Failed to load Plugin:", plugin.manifest.name, "Error:", error);
             }
+        });
+        /* Sorting the sections */
+        this.creationSections = this.creationSections.sort((a, b) =>
+        {
+            return (a.order) > (b.order);
         });
     }
 

@@ -43,7 +43,7 @@
     "fs-extra": "^3.0.1",
     "handlebars-loader": "^1.4.0",
     "nodemon": "^1.11.0",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.13.2",
     "webpack": "^1.13.2"
   }
 }

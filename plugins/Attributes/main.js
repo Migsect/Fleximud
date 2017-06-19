@@ -11,10 +11,6 @@ const elementAttribute = templates(path.join(__dirname, "templates/element_attri
 
 function compileAttributeTree(attributeType, hideDepth = 0)
 {
-    if (!attributeType)
-    {
-        attributeType = AttributeTypes.top;
-    }
     const children = attributeType.children.map((child) =>
     {
         return compileAttributeTree(child, hideDepth - 1);
@@ -33,16 +29,22 @@ class AttributesPlugin extends Plugin
 {
     onLoad()
     {
-
+        const config = this.getConfig();
+        config.copyDefaults();
+        config.load();
+        this.attributeTree = AttributeTypes.parseAttributeTypes(config.types);
     }
 
     getCreationForm()
     {
         const formTemplate = this.getCreationTemplate();
-        const attributesTree = compileAttributeTree(null, 2);
+        const attributesTree = compileAttributeTree(this.attributeTree.top, 2);
         return formTemplate(
         {
-            tree: attributesTree
+            tree: attributesTree,
+            help: this.getConfig().get("help", ""),
+            information: [].join(""),
+            points: 20
         });
     }
 }

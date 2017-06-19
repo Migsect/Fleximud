@@ -1,5 +1,7 @@
 "use strict";
 
+require("./styles/creation.css");
+
 let currentSpecies = "";
 let currentRace = "";
 let currentSex = "";

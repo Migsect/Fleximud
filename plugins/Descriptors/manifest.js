@@ -5,6 +5,7 @@ module.exports = {
     depends: [],
     creation:
     {
-        name: "Descriptors"
+        name: "Descriptors",
+        order: 2
     }
 };

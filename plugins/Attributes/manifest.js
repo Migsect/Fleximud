@@ -5,6 +5,7 @@ module.exports = {
     depends: [],
     creation:
     {
-        name: "Attributes"
+        name: "Attributes",
+        order: 3
     }
 };

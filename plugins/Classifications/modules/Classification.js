@@ -8,44 +8,34 @@ const Fuzzy = require(process.cwd() + "/modules/DataStructures/Fuzzy");
 const DescriptorConfiguration = require(process.cwd() + "/plugins/Descriptors/modules/DescriptorConfiguration");
 const AttributeType = require(process.cwd() + "/plugins/Attributes/modules/AttributeType");
 
-const classificationsConfig = require(process.cwd() + "/config/classifications");
-
 let classificationMap = null;
 
 class Classification
 {
-    static _loadConfigs()
+    static parseClassifications(classificationConfigs)
     {
-        return Classification.map;
-    }
-
-    static get map()
-    {
-        if (!classificationMap)
+        const result = {
+            map: new Map(),
+            list: []
+        };
+        classificationConfigs.forEach((config) =>
         {
-            classificationMap = new Map();
-            classificationsConfig.forEach((config) =>
+            try
             {
-                try
-                {
-                    const classification = new Classification(config);
-                    classificationMap.set(classification.id, classification);
-                    Logger.info("Loaded Classification:", classification.id);
-                }
-                catch (error)
-                {
-                    /* Skipping this part of the configuration if there was an error */
-                    Logger.warn(error);
-                    return;
-                }
-            });
-        }
-        return classificationMap;
-    }
+                const classification = new Classification(config);
+                result.map.set(classification.id, classification);
+                Logger.info("Loaded Classification:", classification.id);
+            }
+            catch (error)
+            {
+                /* Skipping this part of the configuration if there was an error */
+                Logger.warn(error);
+                return;
+            }
+        });
 
-    static get list()
-    {
-        return Array.from(Classification.map.values());
+        result.list = Array.from(result.map.values());
+        return result;
     }
 
     constructor(config)
@@ -111,5 +101,4 @@ class Classification
         });
     }
 }
-Classification._loadConfigs();
 module.exports = Classification;

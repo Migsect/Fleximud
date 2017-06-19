@@ -19,14 +19,14 @@ module.exports = {
     },
     module:
     {
-        rules: [
+        loaders: [
         {
             test: /\.hbs$/,
             loader: "handlebars-loader"
         },
         {
-            test: /\.css$/,
-            loader: "style!css"
+            test: /\.css/,
+            loaders: ['style-loader', 'css-loader']
         }]
     },
     resolve:

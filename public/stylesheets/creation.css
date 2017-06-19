@@ -1,184 +1,82 @@
-    .view {
-        display: flex;
-    }
-    
-    .creation-control {
-        background-color: rgba(255, 255, 255, 0.05);
-        display: flex;
-        flex-direction: column;
-        margin-top: 4px;
-        min-width: 240px;
-        flex: 0 1 auto;
-        padding: 1px;
-    }
-    
-    .creation-tabs {
-        padding: 1px;
-        flex: 1 1 0px;
-    }
-    
-    .creation-tab {
-        padding: 4px;
-        background-color: rgba(255, 255, 255, 0.05);
-        border-radius: 2px;
-        display: flex;
-        align-items: center;
-    }
-    
-    .creation-tab:not(:first-child) {
-        margin-top: 1px;
-    }
-    
-    .creation-tab-name {
-        flex: 1 1 0px;
-    }
-    
-    .creation-tab-status {
-        min-width: auto;
-        flex: 0 1 auto;
-        font-size: 80%;
-        color: rgb(0, 255, 0);
-        padding-right: 4px;
-        padding-left: 4px;
-    }
-    
-    .creation-buttons {
-        flex: 0 1 auto;
-        margin: 2px;
-    }
-    
-    .creation-button {
-        margin: 2px;
-        padding: 2px;
-        background-color: rgba(255, 255, 255, 0.025);
-        text-align: center;
-        border-radius: 2px;
-    }
-    
-    .creation-forms {
-        flex: 1 1 0px;
-        margin: 4px;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .creation-form {
-        flex: 1 1 0px;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .creation-form-header {
-        font-size: 120%;
-        padding: 4px;
-        background-color: rgba(255, 255, 255, 0.1);
-        flex: 0 1 auto;
-    }
-    
-    .creation-form-body {
-        background-color: rgba(255, 255, 255, 0.025);
-        flex: 1 1 0px;
-        display: flex;
-    }
-    
-    .creation-form-classification .creation-form-body {
-        flex-direction: column;
-    }
-    
-    .classification-header {
-        font-size: 110%;
-        margin: 4px;
-        background-color: rgba(255, 255, 255, 0.01);
-        border-bottom-style: dashed;
-        border-width: 1px;
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .classification-choices {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        overflow-x: auto;
-        height: 90px;
-        overflow-y: hidden;
-    }
-    
-    .classification-choice {
-        width: 60px;
-        height: 60px;
-        font-size: 80%;
-        background-color: rgba(255, 255, 255, 0.05);
-        margin: 1px;
-    }
-    
-    .classification-choice.selected {
-        width: 90px;
-        height: 90px;
-    }
-    
-    .classification-information {
-        flex: 1 1 0px;
-        overflow-y: auto;
-    }
-    
-    .creation-form-attributes .creation-form-body {
-        flex-direction: row;
-    }
-    
-    .attribute-selection {
-        flex: 1 1 0px;
-    }
-    
-    .attribute-documentation {
-        flex: 1 1 0px;
-    }
-    
-    .attribute-item {
-        border-left-width: 4px;
-        border-left-style: solid;
-        border-top-width: 1px;
-        border-top-style: solid;
-    }
-    
-    .attribute-item-main {
-        display: flex;
-        flex-direction: row;
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .attribute-item-name {
-        flex: 1 1 0px;
-        padding: 2px;
-        padding-left: 8px;
-    }
-    
-    .attribute-item-points {
-        flex: 0 1 auto;
-        flex-direction: row;
-        display: flex;
-    }
-    
-    .attribute-item-points-adjust {
-        flex: 0 1 auto;
-        width: 24px;
-        height: 24px;
-        background-color: rgba(255, 255, 255, 0.2);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-        margin: 1px;
-    }
-    
-    .attribute-item-children-toggle {
-        background-color: rgba(255, 255, 255, 0.05);
-        text-align: center;
-        font-size: 80%;
-        margin-bottom: 4px;
-    }
-    
-    .attribute-item-children-items {
-        margin-left: 16px;
-    }
+.view {
+    display: flex;
+}
+
+.creation-control {
+    background-color: rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+    min-width: 240px;
+    flex: 0 1 auto;
+    padding: 1px;
+}
+
+.creation-tabs {
+    padding: 1px;
+    flex: 1 1 0px;
+}
+
+.creation-tab {
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.creation-tab:not(:first-child) {
+    margin-top: 1px;
+}
+
+.creation-tab-name {
+    flex: 1 1 0px;
+}
+
+.creation-tab-status {
+    min-width: auto;
+    flex: 0 1 auto;
+    font-size: 80%;
+    color: rgb(0, 255, 0);
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.creation-buttons {
+    flex: 0 1 auto;
+    margin: 2px;
+}
+
+.creation-button {
+    margin: 2px;
+    padding: 2px;
+    background-color: rgba(255, 255, 255, 0.025);
+    text-align: center;
+    border-radius: 2px;
+}
+
+.creation-forms {
+    flex: 1 1 0px;
+    margin: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.creation-form {
+    flex: 1 1 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.creation-form-header {
+    font-size: 120%;
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    flex: 0 1 auto;
+}
+
+.creation-form-body {
+    background-color: rgba(255, 255, 255, 0.025);
+    flex: 1 1 0px;
+    display: flex;
+}

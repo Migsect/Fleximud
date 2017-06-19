@@ -1,7 +1,7 @@
 "use strict";
 
-const Config = require("config-js");
-const path = require("path")
+const Config = require(process.cwd() + "/modules/Config");
+const path = require("path");
 const fs = require("fs-extra");
 const Logger = require(process.cwd() + "/modules/Logger");
 const templates = require(process.cwd() + "/templates/templates");
@@ -58,7 +58,15 @@ class Plugin
     }
     getConfig()
     {
+        if (this.config)
+        {
+            return this.config;
+        }
+        const mainConfig = this.configRoot + "/config.js";
+        const defaultConfig = this.directory + "/config.js";
+        this.config = new Config(mainConfig, defaultConfig);
 
+        return this.config;
     }
 
     /**
@@ -103,7 +111,8 @@ class Plugin
         return {
             name: name,
             id: id,
-            form: this.getCreationForm()
+            form: this.getCreationForm(),
+            order: this.manifest.creation.order || 100
         };
     }
 }

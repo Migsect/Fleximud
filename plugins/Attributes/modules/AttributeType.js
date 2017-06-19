@@ -4,29 +4,49 @@ const Util = require(process.cwd() + "/modules/Util");
 const Logger = require(process.cwd() + "/modules/Logger");
 const Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 
-const typesConfig = require(process.cwd() + "/config/attributes");
-
-let topAttribute = null;
-let typesMap = null;
-let transformsMap = null;
-
 class AttributeType
 {
-    static _loadConfigs()
+    static parseAttributeTypes(typesConfig)
     {
-        return AttributeType.map;
-    }
+        const result = {
+            top: null,
+            map: new Map(),
+            list: [],
+            transforms: new Map()
+        };
 
-    static get top()
-    {
-        if (topAttribute)
+        /* creating the mapping */
+        typesConfig.forEach(function(config)
         {
-            return topAttribute;
-        }
-        const tops = AttributeType.list.filter((type) =>
+            try
+            {
+                var type = new AttributeType(config);
+                result.map.set(type.id, type);
+                Logger.info("Loaded AttributeType:", type.id);
+            }
+            catch (error)
+            {
+                /* Skipping this part of the configuration if there was an error */
+                Logger.warn(error);
+                return;
+            }
+        });
+
+        /* Populating the children of each type */
+        result.map.forEach(function(type)
+        {
+            type.populateChildren(result.map);
+        });
+
+        /* Populating the list of attribute types */
+        result.list = Array.from(result.map.values());
+
+        /* Getting the top element */
+        const tops = result.list.filter((type) =>
         {
             return !type.parent;
         });
+
         /* We should only have one top level attribute */
         if (tops.length > 1)
         {
@@ -37,67 +57,25 @@ class AttributeType
             Logger.error("There was apparently no top-level attribute. Someone's making circular attribute hierarchies!");
             return null;
         }
-        topAttribute = tops[0];
-        return topAttribute;
-
-    }
-
-    static get map()
-    {
-        if (!typesMap)
+        else
         {
-            typesMap = new Map();
-            /* Creating all the AttributeTypes from the JSONs */
-            typesConfig.forEach(function(config)
-            {
-                try
-                {
-                    var type = new AttributeType(config);
-                    typesMap.set(type.id, type);
-                    Logger.info("Loaded AttributeType:", type.id);
-                }
-                catch (error)
-                {
-                    /* Skipping this part of the configuration if there was an error */
-                    Logger.warn(error);
-                    return;
-                }
-            });
-
-            /* Populating the children of each type */
-            typesMap.forEach(function(type)
-            {
-                type.populateChildren(typesMap);
-            });
+            result.top = tops[0];
         }
-        return typesMap;
-    }
 
-    static get list()
-    {
-        return Array.from(typesMap.values());
-    }
-
-    static get transforms()
-    {
-        if (!transformsMap)
+        result.map.forEach(function(type)
         {
-            transformsMap = new Map();
-            module.exports.map.forEach(function(type)
+            type.transforms.forEach(function(transformArray, key)
             {
-                type.transforms.forEach(function(transformArray, key)
+                /* Initializing empty array if it doesn't have the key */
+                if (!result.transforms.has(key))
                 {
-                    /* Initializing empty array if it doesn't have the key */
-                    if (!transformsMap.has(key))
-                    {
-                        transformsMap.set(key, []);
-                    }
-                    /* Combining the two lists */
-                    Array.prototype.push.apply(transformsMap.get(key), transformArray);
-                });
+                    result.transforms.set(key, []);
+                }
+                /* Combining the two lists */
+                Array.prototype.push.apply(result.transforms.get(key), transformArray);
             });
-        }
-        return transformsMap;
+        });
+        return result;
 
     }
 
@@ -214,5 +192,4 @@ class AttributeType
     }
 }
 
-AttributeType._loadConfigs();
 module.exports = AttributeType;

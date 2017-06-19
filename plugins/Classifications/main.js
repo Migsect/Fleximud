@@ -28,7 +28,11 @@ class ClassificationsPlugin extends Plugin
 {
     onLoad()
     {
+        const config = this.getConfig();
+        config.copyDefaults();
+        config.load();
 
+        this.classifications = Classification.parseClassifications(config.toArray());
     }
 
     getCreationForm()
@@ -40,7 +44,7 @@ class ClassificationsPlugin extends Plugin
         const sexes = [];
         const information = [];
 
-        Classification.list.forEach((classification) =>
+        this.classifications.list.forEach((classification) =>
         {
             Array.prototype.push.apply(information, compileDocumentation(classification));
             species.push(

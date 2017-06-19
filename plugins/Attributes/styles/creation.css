@@ -1,0 +1,87 @@
+.creation-form-attributes .creation-form-body {
+    flex-direction: row;
+    padding: 2px;
+}
+
+.attribute-selection {
+    flex: 1 1 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.attribute-selection-tree {
+    overflow-y: auto;
+    flex: 1 1 auto;
+}
+
+.attribute-item {
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+.attribute-item-main {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.attribute-item-name {
+    flex: 1 1 0px;
+    padding: 2px;
+    padding-left: 8px;
+}
+
+.attribute-item-points {
+    flex: 0 1 auto;
+    flex-direction: row;
+    display: flex;
+}
+
+.attribute-item-points-adjust {
+    flex: 0 1 auto;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: 1px;
+}
+
+.attribute-item-children-toggle {
+    background-color: rgba(255, 255, 255, 0.05);
+    text-align: center;
+    font-size: 80%;
+    margin-bottom: 4px;
+}
+
+.attribute-item-children-items {
+    margin-left: 16px;
+}
+
+.attribute-selection-points {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 4px;
+}
+
+.attribute-selection-points-header {
+    flex: 0 1 auto;
+}
+
+.attribute-selection-points-amount {
+    text-align: center;
+    flex: 1 1 0px;
+    font-weight: bolder;
+}
+
+.attribute-documentation {
+    flex: 1 1 0px;
+    margin-left: 2px;
+    padding: 2px;
+    background-color: rgba(255, 255, 255, 0.1);
+}

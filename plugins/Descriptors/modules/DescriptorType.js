@@ -19,6 +19,7 @@ class DescriptorType
         self.id = config.id;
         self.type = config.type;
         self.display = config.display;
+        self.creation = config.creation || config.type;
         self.unit = config.unit;
         self.transforms = (function()
         {

@@ -79,17 +79,12 @@ class PluginManager
 
     loadPlugins()
     {
-        let plugins = Array.from(this.plugins.values());
-        plugins.forEach((plugin) =>
+        this.plugins.forEach((plugin) =>
         {
             try
             {
                 plugin.onLoad();
-                /* Handling creation sections */
-                if (plugin.manifest.creation)
-                {
-                    this.creationSections.push(plugin.getCreationSection());
-                }
+                plugin.state = "loaded";
                 Logger.info("Loaded Plugin:", plugin.manifest.name);
             }
             catch (error)
@@ -97,7 +92,18 @@ class PluginManager
                 Logger.warn("Failed to load Plugin:", plugin.manifest.name, "Error:", error);
             }
         });
-        /* Sorting the sections */
+        this.cacheCreationSections();
+    }
+
+    cacheCreationSections()
+    {
+        this.plugins.forEach((plugin) =>
+        {
+            if (plugin.manifest.creation && plugin.state !== "unloaded")
+            {
+                this.creationSections.push(plugin.getCreationSection());
+            }
+        });
         this.creationSections = this.creationSections.sort((a, b) =>
         {
             return (a.order) > (b.order);

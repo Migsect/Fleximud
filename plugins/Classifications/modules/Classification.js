@@ -50,7 +50,7 @@ class Classification
 
         self.attributes = config.attributes || [];
         self.documentation = Util.parseFileString(config.documentation || "", process.cwd() + "/config/documentation/");
-        self.descriptorConfigurations = DescriptorConfiguration.getDescriptorConfigurations(config.descriptors || []);
+        self.descriptorConfigurations = config.descriptors || [];
         self.classifications = new Map();
         config.classifications = config.classifications || [];
         config.classifications.forEach(function(classificationConfig)
@@ -70,18 +70,6 @@ class Classification
     {
         const self = this;
         return self.classifications.get(type) || [];
-    }
-
-    getDescriptorConfiguration(id)
-    {
-        const self = this;
-        return self.getDescriptorConfigurations.get(id);
-    }
-
-    getDescriptorConfigurations()
-    {
-        const self = this;
-        return Array.from(self.descriptorConfigurations.values());
     }
 
     applyAttributes(character)

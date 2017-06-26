@@ -123,11 +123,12 @@ Logger.info("Webapp: Loaded");
 const io = require("socket.io")(server);
 const sharedsession = require("express-socket.io-session");
 
-const ClientManager = require(process.cwd() + "/modules/sockets/ClientManager").instance;
-io.on("connection", function(socket)
-{
-    ClientManager.onConnection(socket);
-});
+// const ClientManager = require(process.cwd() + "/modules/sockets/ClientManager").instance;
+// io.on("connection", function(socket)
+// {
+//     ClientManager.onConnection(socket);
+// });
+
 /* Setting up socket to have access to the session variable */
 io.use(sharedsession(app.locals.middleware.session,
 {

@@ -1,6 +1,7 @@
 "use strict";
 
 const Utils = require("utils");
+const WebPlugin = require("Plugins/WebPlugin");
 
 const $ = document.querySelector.bind(document);
 
@@ -81,8 +82,8 @@ $("#creation-button-finalize").addEventListener("click", function() {});
  * ########################################################################## */
 
 const pluginsContext = require.context("../../plugins/", true, /main-creation\.js/);
-const plugins = pluginsContext.keys().map((key) =>
+const pluginConstructors = pluginsContext.keys().map((key) =>
 {
     return pluginsContext(key);
 });
-console.log(plugins.length);
+const plugins = WebPlugin.loadPlugins(pluginConstructors);

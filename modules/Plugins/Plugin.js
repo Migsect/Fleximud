@@ -52,7 +52,7 @@ class Plugin
     {
         if (!this._logger)
         {
-            this._logger = new PluginLogger(this.name);
+            this._logger = new PluginLogger(this.manifest.name);
         }
         return this._logger;
     }

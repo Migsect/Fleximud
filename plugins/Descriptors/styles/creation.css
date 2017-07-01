@@ -1,1 +1,38 @@
+.creation-form-descriptors .creation-form-body {
+    overflow-y: auto;
+}
 
+.descriptors {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0px;
+    padding: 4px;
+}
+
+.descriptor {
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-style: dotted;
+}
+
+.descriptor:not(:first-child) {
+    margin-top: 2px;
+}
+
+.descriptor-header {
+    flex: 0 1 auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2px;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.descriptor-body {
+    display: 1 1 auto;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.05)
+}

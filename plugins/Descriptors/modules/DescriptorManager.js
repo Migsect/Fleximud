@@ -9,8 +9,6 @@ const Logger = require(process.cwd() + "/modules/Logger");
 
 const DescriptorType = require("./DescriptorType");
 
-const DESCRIPTOR_CONFIG = require(process.cwd() + "/config/descriptors");
-
 class DescriptorManager
 {
     constructor(config)
@@ -43,4 +41,4 @@ class DescriptorManager
     }
 }
 
-module.exports = new DescriptorManager(DESCRIPTOR_CONFIG);
+module.exports = DescriptorManager;

@@ -5,6 +5,43 @@
  */
 class WebPlugin
 {
+    static loadPlugin(plugins, pluginId)
+    {
+        if (!plugins.has(pluginId))
+        {
+            return false;
+        }
+
+        const plugin = plugins.get(pluginId);
+        if (plugin.state === "loaded" || plugin.state === "loading")
+        {
+            return true;
+        }
+        console.log("Loading Plugin:", pluginId);
+        plugin.state = "loading";
+
+        const supported = plugin.dependacies.every(function(dependacy)
+        {
+            const result = WebPlugin.loadPlugin(plugins, dependacy);
+            if (!result)
+            {
+                console.log("Could not load dependacy", dependacy, "for", pluginId);
+            }
+            return result;
+        });
+        if (!supported)
+        {
+            plugin.state = "unsupported";
+            console.log("Could not load Plugin:", pluginId);
+            return false;
+        }
+
+        plugin.onLoad();
+        plugin.state = "loaded";
+        console.log("Loaded Plugin:", pluginId);
+        return true;
+    }
+
     static loadPlugins(constructors)
     {
         const plugins = new Map();
@@ -19,14 +56,13 @@ class WebPlugin
             {
                 return;
             }
-            const plugin = new constructor(plugins);
+            const plugin = new constructor(plugins, constructor.dependacies || []);
             plugins.set(id, plugin);
 
         });
         plugins.forEach(function(plugin)
         {
-            plugin.onLoad();
-            console.log("Loaded Plugin:", plugin.id);
+            WebPlugin.loadPlugin(plugins, plugin.id);
         });
         return plugins;
     }
@@ -36,10 +72,12 @@ class WebPlugin
         return this.constructor.name;
     }
 
-    constructor(plugins)
+    constructor(plugins, dependacies)
     {
         this.events = new Map();
         this.plugins = plugins;
+        this.dependacies = dependacies || [];
+        this.state = "unloaded";
     }
 
     /**

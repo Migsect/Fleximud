@@ -78,6 +78,8 @@ class ClassificationPlugin extends CreationPlugin
                 element.classList.add("hidden");
             }
         });
+
+        self.triggerEvent("info_update", current);
     }
 
     switchSex(id)

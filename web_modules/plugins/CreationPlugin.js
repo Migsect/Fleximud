@@ -3,9 +3,9 @@ const WebPlugin = require("./WebPlugin");
 
 class CreationPlugin extends WebPlugin
 {
-    constructor(plugins)
+    constructor(plugins, dependacies)
     {
-        super(plugins);
+        super(plugins, dependacies);
         const self = this;
 
         self.fieldHeader = self.constructor.name;

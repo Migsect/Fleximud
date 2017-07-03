@@ -5,10 +5,7 @@ const Logger = require(process.cwd() + "/modules/Logger");
 const Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 const Fuzzy = require(process.cwd() + "/modules/DataStructures/Fuzzy");
 
-const DescriptorConfiguration = require(process.cwd() + "/plugins/Descriptors/modules/DescriptorConfiguration");
 const AttributeType = require(process.cwd() + "/plugins/Attributes/modules/AttributeType");
-
-let classificationMap = null;
 
 class Classification
 {
@@ -70,6 +67,18 @@ class Classification
     {
         const self = this;
         return self.classifications.get(type) || [];
+    }
+
+    /**
+     * Returns all the children classifications.
+     */
+    get children()
+    {
+        return Array.from(this.classifications.values())
+            .reduce((accumulator, classifications) =>
+            {
+                return accumulator.concat(classifications);
+            }, []);
     }
 
     applyAttributes(character)

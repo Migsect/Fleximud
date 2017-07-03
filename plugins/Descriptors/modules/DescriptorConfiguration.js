@@ -1,7 +1,10 @@
 "use strict";
 
 const Util = require(process.cwd() + "/modules/Util");
-const DescriptorManager = require("./DescriptorManager");
+const templates = require(process.cwd() + "/templates/templates");
+const path = require("path");
+
+const descriptorTemplate = templates(__dirname + "/../templates/descriptor");
 
 /**
  * DescriptorConfigurations are per-classification instances of a specified type of Descriptor.
@@ -9,77 +12,53 @@ const DescriptorManager = require("./DescriptorManager");
  */
 class DescriptorConfiguration
 {
-    constructor(config)
+
+    constructor(type)
     {
         const self = this;
-
-        const idType = DescriptorManager.types.get(config.id);
-        if (!idType)
-        {
-            throw new Error("idType '" + config.id + "' could not be determined");
-        }
-        self.id = Util.isNull(config.id) ? null : config.id;
-        self.idType = idType;
+        self.type = type;
     }
 
-    /**
-     * Merges a descriptor with another of its same type
-     * This does so for some situations where descriptors can be merged. (sex and species descriptors)
-     * 
-     * @return {Descriptor} The resulting descriptor
-     */
-    merge(other)
+    get format()
     {
-        const self = this;
-        if (other.constructor !== self.constructor)
+        return this.constructor.format;
+    }
+
+    getTemplate()
+    {
+        return templates(__dirname + "/../templates/creationDisplays/" + this.format);
+    }
+
+    getHTML(classifications)
+    {
+        return descriptorTemplate(
         {
-            return null;
-        }
-        return self;
+
+            type: this.type,
+            config: this,
+            body: this.getTemplate(
+            {
+                config: this,
+                type: this.type
+            }),
+            classifications: classifications
+        });
     }
 }
 
 class RangeDescriptorConfiguration extends DescriptorConfiguration
 {
-    constructor(config)
+    static get format()
     {
-        super(config);
+        return "range";
+    }
+
+    constructor(type, config)
+    {
+        super(type);
         const self = this;
         self.center = config.center;
         self.range = config.range;
-    }
-
-    static isType(config)
-    {
-        return !Util.isNull(config.range) && !Util.isNull(config.center);
-    }
-    merge(other)
-    {
-        const self = this;
-        const value = super.merge(self, other);
-        if (value === null)
-        {
-            return null;
-        }
-
-        /* merge logic */
-        const otherMax = other.max;
-
-        const otherMin = other.min;
-        const selfMax = self.max;
-        const selfMin = self.min;
-
-        const newMax = otherMax > selfMax ? otherMax : selfMax;
-        const newMin = otherMin < selfMin ? otherMin : selfMin;
-        const newCenter = (newMin + newMax) / 2;
-
-        return new RangeDescriptorConfiguration(
-        {
-            center: newCenter,
-            range: newMax - newCenter,
-            id: self.type
-        });
-
     }
 
     get max()
@@ -87,6 +66,7 @@ class RangeDescriptorConfiguration extends DescriptorConfiguration
         const self = this;
         return self.center + self.range;
     }
+
     get min()
     {
         const self = this;
@@ -102,79 +82,22 @@ class RangeDescriptorConfiguration extends DescriptorConfiguration
 
 class VariationDescriptorConfiguration extends DescriptorConfiguration
 {
-    constructor(config)
+    static get format()
     {
-        super(config);
+        return "variation";
+    }
+
+    constructor(type, config)
+    {
+        super(type);
         const self = this;
         self.variations = config.variations;
     }
-
-    static isType(config)
-    {
-        return !Util.isNull(config.variations);
-    }
-
-    merge(other)
-    {
-        const self = this;
-        const value = super.merge(other);
-        if (value === null)
-        {
-            return null;
-        }
-
-        /* merge logic */
-        const newVariations = [];
-        Array.prototype.push.call(newVariations, self.variations);
-        other.variations.forEach(function(variation)
-        {
-            if (!newVariations.includes(variation))
-            {
-                newVariations.push(variation);
-            }
-        });
-        Array.prototype.push.call(newVariations, other.variations);
-
-        return new VariationDescriptorConfiguration(
-        {
-            variations: newVariations,
-            id: self.id
-        });
-    }
 }
 
-function getDescriptorConfiguration(config)
-{
-    if (RangeDescriptorConfiguration.isType(config))
-    {
-        return new RangeDescriptorConfiguration(config);
-    }
-    else if (VariationDescriptorConfiguration.isType(config))
-    {
-        return new VariationDescriptorConfiguration(config);
-    }
-    else
-    {
-        throw new Error("Could not resolve a type for:" + config);
-    }
-}
+DescriptorConfiguration.types = [
+    RangeDescriptorConfiguration,
+    VariationDescriptorConfiguration
+];
 
-function getDescriptorConfigurations(configs)
-{
-    const descriptorMap = new Map();
-    configs.forEach(function(config)
-    {
-        const descriptor = getDescriptorConfiguration(config);
-        if (!descriptor)
-        {
-            return;
-        }
-        descriptorMap.set(descriptor.id, descriptor);
-    });
-    return descriptorMap;
-}
-
-module.exports = {
-    getDescriptorConfiguration: getDescriptorConfiguration,
-    getDescriptorConfigurations: getDescriptorConfigurations
-};
+module.exports = DescriptorConfiguration;

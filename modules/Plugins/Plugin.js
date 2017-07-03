@@ -13,9 +13,9 @@ class PluginLogger
         this._name = name;
     }
 
-    log()
+    info()
     {
-        Logger.log("[" + this._name + "]", ...arguments);
+        Logger.info("[" + this._name + "]", ...arguments);
     }
     error()
     {

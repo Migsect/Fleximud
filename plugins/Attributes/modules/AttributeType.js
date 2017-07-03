@@ -6,8 +6,12 @@ const Transform = require(process.cwd() + "/modules/DataStructures/Transform");
 
 class AttributeType
 {
-    static parseAttributeTypes(typesConfig)
+    static parseAttributeTypes(typesConfig, logger)
     {
+        if (!logger)
+        {
+            logger = Logger;
+        }
         const result = {
             top: null,
             map: new Map(),
@@ -16,27 +20,24 @@ class AttributeType
         };
 
         /* creating the mapping */
-        typesConfig.forEach(function(config)
+        typesConfig.forEach((config) =>
         {
             try
             {
                 var type = new AttributeType(config);
                 result.map.set(type.id, type);
-                Logger.info("Loaded AttributeType:", type.id);
+                logger.info("Loaded AttributeType:", type.id);
             }
             catch (error)
             {
                 /* Skipping this part of the configuration if there was an error */
-                Logger.warn(error);
+                logger.warn(error);
                 return;
             }
         });
 
         /* Populating the children of each type */
-        result.map.forEach(function(type)
-        {
-            type.populateChildren(result.map);
-        });
+        result.map.forEach((type) => type.populateChildren(result.map));
 
         /* Populating the list of attribute types */
         result.list = Array.from(result.map.values());
@@ -50,11 +51,11 @@ class AttributeType
         /* We should only have one top level attribute */
         if (tops.length > 1)
         {
-            Logger.warn("The number of root attributes is greater than 1.");
+            logger.warn("The number of root attributes is greater than 1.");
         }
         if (tops.length <= 0)
         {
-            Logger.error("There was apparently no top-level attribute. Someone's making circular attribute hierarchies!");
+            logger.error("There was apparently no top-level attribute. Someone's making circular attribute hierarchies!");
             return null;
         }
         else

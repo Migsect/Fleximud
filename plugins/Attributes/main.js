@@ -32,7 +32,7 @@ class AttributesPlugin extends Plugin
         const config = this.getConfig();
         config.copyDefaults();
         config.load();
-        this.attributeTree = AttributeTypes.parseAttributeTypes(config.types);
+        this.attributeTree = AttributeTypes.parseAttributeTypes(config.types, this.logger);
     }
 
     getCreationForm()

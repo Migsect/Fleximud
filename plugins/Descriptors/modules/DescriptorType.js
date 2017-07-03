@@ -17,9 +17,8 @@ class DescriptorType
     {
         const self = this;
         self.id = config.id;
-        self.type = config.type;
+        self.format = config.format;
         self.name = config.name;
-        self.creation = config.creation || config.type;
         self.unit = config.unit;
         self.transforms = (function()
         {

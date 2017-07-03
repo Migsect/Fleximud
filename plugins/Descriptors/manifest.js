@@ -2,7 +2,9 @@
 
 module.exports = {
     name: "Descriptors",
-    depends: [],
+    depends: [
+        "Classifications"
+    ],
     creation:
     {
         name: "Descriptors",

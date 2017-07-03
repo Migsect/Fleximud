@@ -14,7 +14,6 @@ module.exports = {
     descriptors: [
     {
         id: "eye_color",
-        name: "Eye Color",
         variations: ["green", "blue", "brown"]
     },
     {
@@ -23,12 +22,10 @@ module.exports = {
     },
     {
         id: "hair_color",
-        name: "Hair Color",
         variations: ["blonde", "black", "red", "brown"]
     },
     {
         id: "body_type",
-        name: "Body Type",
         variations: ["ectomorph", "ecto-mesomorph", "mesomorph", "meso-endomorph", "endomorph"]
     }],
     classifications: [

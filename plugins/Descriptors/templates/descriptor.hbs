@@ -1,4 +1,5 @@
-<div class="descriptor hidden" data-active="false" data-creation="{{type.creation}}" data-id="{{type.id}}" {{#if classifications.species}} data-classification-species="{{classifications.species}}" {{/if}} {{#if classifications.race}} data-classification-race="{{classifications.race}}" {{/if}} {{#if classifications.sex}} data-classification-sex="{{classifications.sex}}" {{/if}}>
+<div class="descriptor descriptor-{{type.format
+}} hidden" data-active="false" data-format="{{type.format}}" data-id="{{type.id}}" {{#if classifications.species}} data-classification-species="{{classifications.species}}" {{/if}} {{#if classifications.race}} data-classification-race="{{classifications.race}}" {{/if}} {{#if classifications.sex}} data-classification-sex="{{classifications.sex}}" {{/if}}>
     <div class="descriptor-header">{{type.name}}</div>
     <div class="descriptor-body">{{{body}}}</div>
 </div>

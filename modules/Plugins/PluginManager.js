@@ -77,20 +77,54 @@ class PluginManager
 
     }
 
+    loadPlugin(pluginId)
+    {
+        if (!this.plugins.has(pluginId))
+        {
+            return false;
+        }
+        const plugin = this.plugins.get(pluginId);
+        Logger.info("Loading Plugin:", pluginId);
+        if (plugin.state === "loaded" || plugin.state === "loading")
+        {
+            return true;
+        }
+        plugin.state = "loading";
+        const supported = plugin.manifest.depends.every((dependacy) =>
+        {
+            const result = this.loadPlugin(dependacy);
+            if (!result)
+            {
+                Logger.warn("Could not load dependacy", dependacy, "for", pluginId);
+            }
+            return result;
+        });
+        if (!supported)
+        {
+            plugin.state = "unsupported";
+            Logger.warn("Could not load Plugin:", pluginId);
+            return false;
+        }
+        try
+        {
+            plugin.onLoad();
+        }
+        catch (error)
+        {
+            Logger.warn("Failed to load Plugin:", plugin.manifest.name, "Error:", error);
+            return false;
+        }
+        plugin.state = "loaded";
+        Logger.info("Loaded Plugin:", pluginId);
+    }
+
     loadPlugins()
     {
         this.plugins.forEach((plugin) =>
         {
-            try
-            {
-                plugin.onLoad();
-                plugin.state = "loaded";
-                Logger.info("Loaded Plugin:", plugin.manifest.name);
-            }
-            catch (error)
-            {
-                Logger.warn("Failed to load Plugin:", plugin.manifest.name, "Error:", error);
-            }
+            this.loadPlugin(plugin.manifest.name);
+            // Logger.warn("Failed to load Plugin:", plugin.manifest.name, "Error:", error);
+
         });
         this.cacheCreationSections();
     }
@@ -101,7 +135,14 @@ class PluginManager
         {
             if (plugin.manifest.creation && plugin.state !== "unloaded")
             {
-                this.creationSections.push(plugin.getCreationSection());
+                try
+                {
+                    this.creationSections.push(plugin.getCreationSection());
+                }
+                catch (error)
+                {
+                    Logger.warn("Could not create Creation Section for:", plugin.manifest.name, error);
+                }
             }
         });
         this.creationSections = this.creationSections.sort((a, b) =>

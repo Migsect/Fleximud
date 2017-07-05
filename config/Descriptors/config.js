@@ -4,28 +4,24 @@ module.exports = [
 {
     id: "eye_color",
     format: "variation",
-    creation: "color",
     name: "Eye Color",
     transforms: []
 },
 {
     id: "hair_color",
     format: "variation",
-    creation: "color",
     name: "Hair Color",
     transforms: []
 },
 {
     id: "skin_color",
     format: "variation",
-    creation: "color",
     name: "Skin Color",
     transforms: []
 },
 {
     id: "body_type",
     format: "variation",
-    creation: "variation",
     name: "Body Type",
     transforms: []
 },
@@ -33,7 +29,6 @@ module.exports = [
     id: "height",
     format: "range",
     name: "Height",
-    creation: "size",
     unit: "Feet",
     base: 6,
     transforms: [

@@ -54,3 +54,27 @@
     border-width: 1px;
     border-top-style: dotted;
 }
+
+.descriptor-range .range-numbers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.descriptor-range .range-numbers-middle {
+    display: flex;
+    flex-direction: row;
+    border-color: white;
+    border-width: 1px;
+    border-style: solid;
+    padding: 0px 4px;
+}
+
+.descriptor-range .range-numbers-middle input {
+    text-align: right;
+    background-color: inherit;
+    border-style: none;
+    color: inherit;
+    width: content;
+    width: 100px;
+}

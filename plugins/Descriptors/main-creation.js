@@ -32,8 +32,30 @@ class DescriptorPlugin extends CreationPlugin
         self.updateDescriptors(classification.current);
 
         /* Applying all the differening behavior between descriptors */
-        $$(".descriptor", this.elements.descriptorsList).forEach(function(descriptor) {
-
+        $$(".descriptor", this.elements.descriptorsList).forEach(function(descriptor)
+        {
+            const format = descriptor.dataset.format;
+            switch (format)
+            {
+                case "range":
+                    const sliderInput = descriptor.querySelector(".range-input-slider");
+                    const numberInput = descriptor.querySelector(".range-input-number");
+                    sliderInput.addEventListener("input", function()
+                    {
+                        numberInput.value = sliderInput.value;
+                    });
+                    numberInput.addEventListener("change", function()
+                    {
+                        let value = numberInput.value;
+                        value = value > numberInput.max ? numberInput.max : value;
+                        value = value < numberInput.max ? numberInput.min : value;
+                        numberInput.value = value;
+                        sliderInput.value = value;
+                    });
+                    break;
+                case "variation":
+                    break;
+            }
         });
     }
 
@@ -48,17 +70,29 @@ class DescriptorPlugin extends CreationPlugin
         descriptors.forEach(function(descriptor)
         {
             descriptor.classList.add("hidden");
+            descriptor.dataset.active = "false";
             const type = descriptor.dataset.id;
             const descriptorSpecies = descriptor.dataset.classificationSpecies;
             const descriptorRace = descriptor.dataset.classificationRace;
             const descriptorSex = descriptor.dataset.classificationSex;
 
-            if (descriptorSpecies !== species && descriptorRace !== race && descriptorSex !== sex)
+            if (descriptorSpecies !== species)
+            {
+                return;
+            }
+            if (descriptorRace && descriptorRace !== race)
+            {
+                return;
+            }
+            if (descriptorSex && descriptorSex !== sex)
             {
                 return;
             }
 
-            const activation = (descriptorRace ? 1 : 0) + (descriptorSex ? 2 : 0) + (descriptorRace && descriptorSex ? 4 : 0);
+            const activation = (descriptorSpecies ? 1 : 0) +
+                (descriptorRace ? 2 : 0) +
+                (descriptorSex ? 4 : 0) +
+                (descriptorRace && descriptorSex ? 8 : 0);
             if (activeDescriptors.has(type) && activeDescriptors.get(type).activation > activation)
             {
                 return;

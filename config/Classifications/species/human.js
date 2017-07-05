@@ -64,7 +64,7 @@ module.exports = {
         descriptors: [
         {
             id: "height",
-            center: 5.75,
+            center: 5.50,
             range: 0.75
         }],
         transforms: [

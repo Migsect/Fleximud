@@ -36,7 +36,7 @@ class DescriptorConfiguration
 
             type: this.type,
             config: this,
-            body: this.getTemplate(
+            body: this.getTemplate()(
             {
                 config: this,
                 type: this.type
@@ -56,27 +56,28 @@ class RangeDescriptorConfiguration extends DescriptorConfiguration
     constructor(type, config)
     {
         super(type);
-        const self = this;
-        self.center = config.center;
-        self.range = config.range;
+        this.center = config.center;
+        this.range = config.range;
     }
 
     get max()
     {
-        const self = this;
-        return self.center + self.range;
+        return this.center + this.range;
     }
 
     get min()
     {
-        const self = this;
-        return self.center - self.range;
+        return this.center - this.range;
     }
 
     get average()
     {
-        const self = this;
-        return self.center;
+        return this.center;
+    }
+
+    get step()
+    {
+        return (this.max - this.min) / 100;
     }
 }
 

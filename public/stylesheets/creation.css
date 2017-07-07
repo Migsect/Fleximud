@@ -29,6 +29,10 @@
     margin-top: 1px;
 }
 
+.creation-tab.active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
 .creation-tab-name {
     flex: 1 1 0px;
 }

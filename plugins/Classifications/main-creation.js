@@ -4,9 +4,9 @@ require("./styles/creation.css");
 const CreationPlugin = require("plugins/CreationPlugin");
 const Utils = require("utils");
 const $ = document.querySelector.bind(document);
-const setTabStatus = window.creation.setTabStatus;
+const tabManager = window.creation.tabManager;
 
-class ClassificationPlugin extends CreationPlugin
+class Classifications extends CreationPlugin
 {
     onLoad()
     {
@@ -85,7 +85,7 @@ class ClassificationPlugin extends CreationPlugin
     switchSex(id)
     {
         const self = this;
-        setTabStatus(null, "");
+        tabManager.setTabStatus(null, "");
         id = id.trim();
         self.current.sex = id;
 
@@ -102,7 +102,7 @@ class ClassificationPlugin extends CreationPlugin
     switchRace(id)
     {
         const self = this;
-        setTabStatus(null, "");
+        tabManager.setTabStatus(null, "");
         id = id.trim();
         self.current.race = id;
 
@@ -119,8 +119,8 @@ class ClassificationPlugin extends CreationPlugin
     switchSpecies(id)
     {
         const self = this;
-        setTabStatus(null, "");
-        setTabStatus("descriptors", "");
+        tabManager.setTabStatus(null, "");
+        tabManager.setTabStatus("descriptors", "");
         id = id.trim();
         self.current.species = id;
 
@@ -173,4 +173,4 @@ class ClassificationPlugin extends CreationPlugin
         self.updateInformation();
     }
 }
-module.exports = ClassificationPlugin;
+module.exports = Classifications;

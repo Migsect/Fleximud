@@ -20,7 +20,7 @@ class WebPlugin
         console.log("Loading Plugin:", pluginId);
         plugin.state = "loading";
 
-        const supported = plugin.dependacies.every(function(dependacy)
+        const supported = plugin.depends.every(function(dependacy)
         {
             const result = WebPlugin.loadPlugin(plugins, dependacy);
             if (!result)
@@ -56,7 +56,7 @@ class WebPlugin
             {
                 return;
             }
-            const plugin = new constructor(plugins, constructor.dependacies || []);
+            const plugin = new constructor(plugins, constructor.depends || []);
             plugins.set(id, plugin);
 
         });
@@ -72,11 +72,11 @@ class WebPlugin
         return this.constructor.name;
     }
 
-    constructor(plugins, dependacies)
+    constructor(plugins, depends)
     {
         this.events = new Map();
         this.plugins = plugins;
-        this.dependacies = dependacies || [];
+        this.depends = depends || [];
         this.state = "unloaded";
     }
 

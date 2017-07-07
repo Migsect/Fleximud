@@ -7,7 +7,7 @@ const Utils = require("utils");
 const $ = document.querySelector.bind(document);
 const $$ = Utils.querySelectorAll;
 
-class AttributesPlugin extends CreationPlugin
+class Attributes extends CreationPlugin
 {
     onLoad()
     {
@@ -122,7 +122,6 @@ class AttributesPlugin extends CreationPlugin
 
         return true;
     }
-
 }
 
-module.exports = AttributesPlugin;
+module.exports = Attributes;

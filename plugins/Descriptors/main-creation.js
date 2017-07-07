@@ -7,13 +7,42 @@ const $$ = Utils.querySelectorAll;
 require("./styles/creation.css");
 const CreationPlugin = require("plugins/CreationPlugin");
 
-class DescriptorPlugin extends CreationPlugin
+class Descriptors extends CreationPlugin
 {
-    static get dependacies()
+    static get depends()
     {
         return [
-            "ClassificationPlugin"
+            "Classifications"
         ];
+    }
+
+    /**
+     * Applies behavior to a descriptor element.
+     */
+    applyDescriptorBehavior(descriptor)
+    {
+        const format = descriptor.dataset.format;
+        switch (format)
+        {
+            case "range":
+                const sliderInput = descriptor.querySelector(".range-input-slider");
+                const numberInput = descriptor.querySelector(".range-input-number");
+                sliderInput.addEventListener("input", function()
+                {
+                    numberInput.value = sliderInput.value;
+                });
+                numberInput.addEventListener("change", function()
+                {
+                    let value = numberInput.value;
+                    value = value > numberInput.max ? numberInput.max : value;
+                    value = value < numberInput.min ? numberInput.min : value;
+                    numberInput.value = value;
+                    sliderInput.value = value;
+                });
+                break;
+            case "variation":
+                break;
+        }
     }
 
     onLoad()
@@ -24,7 +53,7 @@ class DescriptorPlugin extends CreationPlugin
             descriptorsList: $(".descriptors")
         };
 
-        const classification = self.plugins.get("ClassificationPlugin");
+        const classification = self.plugins.get("Classifications");
         classification.addEventListener("info_update", function(data)
         {
             self.updateDescriptors(data);
@@ -34,31 +63,13 @@ class DescriptorPlugin extends CreationPlugin
         /* Applying all the differening behavior between descriptors */
         $$(".descriptor", this.elements.descriptorsList).forEach(function(descriptor)
         {
-            const format = descriptor.dataset.format;
-            switch (format)
-            {
-                case "range":
-                    const sliderInput = descriptor.querySelector(".range-input-slider");
-                    const numberInput = descriptor.querySelector(".range-input-number");
-                    sliderInput.addEventListener("input", function()
-                    {
-                        numberInput.value = sliderInput.value;
-                    });
-                    numberInput.addEventListener("change", function()
-                    {
-                        let value = numberInput.value;
-                        value = value > numberInput.max ? numberInput.max : value;
-                        value = value < numberInput.max ? numberInput.min : value;
-                        numberInput.value = value;
-                        sliderInput.value = value;
-                    });
-                    break;
-                case "variation":
-                    break;
-            }
+            self.applyDescriptorBehavior(descriptor);
         });
     }
 
+    /**
+     * Updates all the descriptors such that they match the current classification information.
+     */
     updateDescriptors(data)
     {
         const species = data.species;
@@ -112,4 +123,4 @@ class DescriptorPlugin extends CreationPlugin
     }
 }
 
-module.exports = DescriptorPlugin;
+module.exports = Descriptors;

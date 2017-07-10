@@ -1,10 +1,11 @@
 "use strict";
 
+require("./styles/creation.css");
+
 const Utils = require("utils");
 const $ = document.querySelector.bind(document);
 const $$ = Utils.querySelectorAll;
 
-require("./styles/creation.css");
 const CreationPlugin = require("plugins/CreationPlugin");
 
 class Descriptors extends CreationPlugin
@@ -30,6 +31,7 @@ class Descriptors extends CreationPlugin
                 sliderInput.addEventListener("input", function()
                 {
                     numberInput.value = sliderInput.value;
+                    sliderInput.dataset.value = sliderInput.value;
                 });
                 numberInput.addEventListener("change", function()
                 {
@@ -38,9 +40,15 @@ class Descriptors extends CreationPlugin
                     value = value < numberInput.min ? numberInput.min : value;
                     numberInput.value = value;
                     sliderInput.value = value;
+                    sliderInput.dataset.value = value;
                 });
                 break;
             case "variation":
+                const selectInput = descriptor.querySelector(".variation-input-selection");
+                selectInput.addEventListener("change", function()
+                {
+                    selectInput.dataset.value = selectInput.value;
+                });
                 break;
         }
     }
@@ -50,7 +58,8 @@ class Descriptors extends CreationPlugin
         const self = this;
 
         self.elements = {
-            descriptorsList: $(".descriptors")
+            descriptorsList: $(".descriptors"),
+            descriptors: $$(".descriptor", $(".descriptors"))
         };
 
         const classification = self.plugins.get("Classifications");
@@ -76,7 +85,7 @@ class Descriptors extends CreationPlugin
         const race = data.race;
         const sex = data.sex;
 
-        const descriptors = $$(".descriptor", this.elements.descriptorsList);
+        const descriptors = this.elements.descriptors;
         const activeDescriptors = new Map();
         descriptors.forEach(function(descriptor)
         {
@@ -120,6 +129,28 @@ class Descriptors extends CreationPlugin
             descriptor.classList.remove("hidden");
             descriptor.dataset.active = "true";
         });
+    }
+
+    calculateFields()
+    {
+        this.resetFields();
+        const descriptors = $$(".descriptor:not(.hidden)", this.elements.descriptorsList);
+        descriptors.forEach((descriptor) =>
+        {
+            const designated = descriptor.querySelector(".field-designator");
+            const key = descriptor.dataset.id;
+            const value = designated.dataset.value.trim();
+            const convertedValue = Number.isNaN(+value) ? value : Number(value);
+            console.log(key, convertedValue);
+            this.setField(key, value.length <= 0 ? null : convertedValue);
+
+        });
+    }
+
+    isComplete()
+    {
+        this.calculateFields();
+        return Object.keys(this.getFields()).every((key) => this.getField(key));
     }
 }
 

@@ -41,9 +41,13 @@
     min-width: auto;
     flex: 0 1 auto;
     font-size: 80%;
-    color: rgb(0, 255, 0);
+    color: rgb(255, 0, 0);
     padding-right: 4px;
     padding-left: 4px;
+}
+
+.creation-tab[data-complete="true"] .creation-tab-status {
+    color: rgb(0, 255, 0);
 }
 
 .creation-buttons {

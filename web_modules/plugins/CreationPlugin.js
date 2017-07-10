@@ -11,37 +11,41 @@ class CreationPlugin extends WebPlugin
         self.fieldHeader = self.constructor.name;
         self.fields = {};
     }
-
+    getFieldHeader()
+    {
+        return this.fieldHeader;
+    }
     setFieldHeader(name)
     {
-        const self = this;
-        self.fieldHeader = name;
+        this.fieldHeader = name;
     }
     setField(key, value)
     {
-        const self = this;
-        self.fields[key] = value;
+        this.fields[key] = value;
     }
     getField(key)
     {
-        const self = this;
-        return self.fields[key];
+        return this.fields[key];
     }
     hasField(key)
     {
-        const self = this;
-        return self.fields.hasOwnProperty(key);
+        return this.fields.hasOwnProperty(key);
     }
     resetFields()
     {
-        const self = this;
-        self.fields = {};
+        this.fields = {};
+    }
+    getFields()
+    {
+        return this.fields;
     }
 
     /**
      * Checks whether or not the creation-plugin has all its fields completed.
      * By default this will return true if the plugin does not have any specific
      * constraints for its fields.
+     *
+     * @return {Boolean} True if the plugin is complete
      */
     isComplete()
     {

@@ -12,12 +12,15 @@ class TabManager
         this.currentTab = this.tabs[0];
         this.currentTab.classList.add("active");
 
+        this.nextButton = $("#creation-button-next");
+        this.finalizeButton = $("#creation-button-finalize");
+
         this.plugins = new Map();
         this.setupListeners();
     }
 
     /**
-     * Registers the plugin
+     * Registers the plugin to receive updates when its tab is switched to and from
      */
     registerCreationPlugin(plugin)
     {
@@ -54,16 +57,85 @@ class TabManager
             return;
         }
         const plugin = this.plugins.get(id.toLowerCase());
-        if (plugin.isComplete())
-        {
-            this.setTabStatus(id, "Complete");
-        }
+        this.setTabStatus(id, plugin.isComplete() ? "Complete" : "Incomplete");
 
         if (!plugin.onTabSwitchFrom)
         {
             return;
         }
         plugin.onTabSwitchFrom();
+    }
+
+    setTab(id)
+    {
+        const tab = this.tabs.find((tab) => tab.dataset.id === id.toLowerCase());
+        if (!tab)
+        {
+            console.log("ERROR: Cannot find tab with data-id:", id);
+            return;
+        }
+        const tabForm = $("#" + tab.dataset.form);
+        if (!tabForm)
+        {
+            console.log("ERROR: Cannot find tab form with id:", tab.dataset.form);
+            return;
+        }
+        this.forms.forEach(function(form)
+        {
+            form.classList.add("hidden");
+        });
+        tabForm.classList.remove("hidden");
+
+        /* Changing the current tab and calling plugin events */
+        this.currentTab.classList.remove("active");
+        this.onTabSwitchFrom(this.currentTab.dataset.id);
+
+        this.currentTab = tab;
+
+        this.currentTab.classList.add("active");
+        this.onTabSwitchTo(this.currentTab.dataset.id);
+
+        /* Checking to see if we need to switch to finalize */
+        let nextTab = this.currentTab.nextSibling;
+        while (nextTab !== null && nextTab.tagName != 'DIV')
+        {
+            nextTab = nextTab.nextSibling;
+        }
+        if (nextTab === null)
+        {
+            console.log("Setup finalize");
+            this.nextButton.classList.add("hidden");
+            this.finalizeButton.classList.remove("hidden");
+        }
+    }
+
+    /**
+     * Finalizes the creation and sends the request to the server with the character creation
+     * request.
+     */
+    finalize()
+    {
+        const allComplete = this.tabs.map((tab) =>
+        {
+            const id = tab.dataset.id;
+            const plugin = this.plugins.get(id);
+            const isComplete = plugin.isComplete();
+            this.setTabStatus(id, isComplete ? "Complete" : "Incomplete");
+            return isComplete;
+        }).every((status) => status);
+        if (!allComplete)
+        {
+            setTimeout(() => window.alert("Please complete all creation forms to finalize."), 1);
+            return;
+        }
+        const characterForm = {};
+        this.plugins.forEach((plugin) =>
+        {
+            const header = plugin.getFieldHeader();
+            const fields = plugin.getFields();
+            characterForm[header] = fields;
+        });
+        console.log(characterForm);
     }
 
     /**
@@ -75,28 +147,12 @@ class TabManager
         {
             tab.addEventListener("click", () =>
             {
-                const formId = tab.dataset.form;
-                this.onTabSwitchFrom(this.currentTab.dataset.id);
-                this.onTabSwitchTo(tab.dataset.id);
-
-                this.forms.forEach(function(form)
-                {
-                    form.classList.add("hidden");
-                });
-                $("#" + formId).classList.remove("hidden");
-
-                if (this.currentTab)
-                {
-                    this.currentTab.classList.remove("active");
-                }
-                this.currentTab = tab;
-                this.currentTab.classList.add("active");
+                this.setTab(tab.dataset.id);
             });
         });
 
-        $("#creation-button-next").addEventListener("click", () =>
+        this.nextButton.addEventListener("click", () =>
         {
-            this.setTabStatus(null, "Complete");
             let nextTab = this.currentTab.nextSibling;
             while (nextTab !== null && nextTab.tagName != 'DIV')
             {
@@ -104,31 +160,27 @@ class TabManager
             }
             if (nextTab === null)
             {
-                // TODO probably show finalize
-                return;
+                nextTab = this.currentTab;
             }
-            $("#" + this.currentTab.dataset.form).classList.add("hidden");
-            $("#" + nextTab.dataset.form).classList.remove("hidden");
-
-            this.onTabSwitchFrom(this.currentTab.dataset.id);
-            this.currentTab.classList.remove("active");
-            this.currentTab = nextTab;
-            this.currentTab.classList.add("active");
-            this.onTabSwitchTo(this.currentTab.dataset.id);
+            this.setTab(nextTab.dataset.id);
         });
 
-        $("#creation-button-finalize").addEventListener("click", function() {});
+        this.finalizeButton.addEventListener("click", () =>
+        {
+            this.finalize();
+        });
     }
 
     setTabStatus(id, status)
     {
-        let tab = !id ? this.currentTab : $("#creation-tab-" + id);
+        const isComplete = status.toLowerCase() === "complete";
+        const tab = !id ? this.currentTab : $("#creation-tab-" + id);
         if (!tab)
         {
             return;
         }
         const tabStatus = tab.querySelector(".creation-tab-status");
-        tab.dataset.complete = status.toLowerCase() === "complete" ? "true" : "false";
+        tab.dataset.complete = isComplete ? "true" : "false";
         tabStatus.innerHTML = status;
     }
 }

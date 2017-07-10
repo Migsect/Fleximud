@@ -18,9 +18,9 @@ class Attributes extends CreationPlugin
         };
 
         /* Collapse and uncollapse */
-        $$(".attribute-item-children-expand").forEach(function(element)
+        $$(".attribute-item-children-expand").forEach((element) =>
         {
-            element.addEventListener("click", function()
+            element.addEventListener("click", () =>
             {
                 const childList = element.parentNode.querySelector(".attribute-item-children-items");
                 childList.classList.remove("hidden");
@@ -30,9 +30,9 @@ class Attributes extends CreationPlugin
                 collapseButton.classList.remove("hidden");
             });
         });
-        $$(".attribute-item-children-collapse").forEach(function(element)
+        $$(".attribute-item-children-collapse").forEach((element) =>
         {
-            element.addEventListener("click", function()
+            element.addEventListener("click", () =>
             {
                 const childList = element.parentNode.querySelector(".attribute-item-children-items");
                 childList.classList.add("hidden");
@@ -42,8 +42,9 @@ class Attributes extends CreationPlugin
                 collapseButton.classList.remove("hidden");
             });
         });
-        $$(".attribute-item-points").forEach(function(element)
+        $$(".attribute-item-points").forEach((element) =>
         {
+            const id = element.dataset.id;
             const amountElement = element.querySelector(".attribute-item-points-amount");
             const amountAdd = element.querySelector(".attribute-item-points-add");
             const amountSubtract = element.querySelector(".attribute-item-points-subtract");
@@ -52,6 +53,7 @@ class Attributes extends CreationPlugin
             {
                 amountElement.innerHTML = amount;
                 element.dataset.amount = amount;
+                self.setField(id, Number(amount));
             }
 
             function getAmount()

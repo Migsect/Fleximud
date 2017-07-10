@@ -13,7 +13,9 @@ class IdentitiesPlugin extends Plugin
     {
         const formTemplate = this.getCreationTemplate();
         return formTemplate(
-        {});
+        {
+            max: 20
+        });
     }
 }
 

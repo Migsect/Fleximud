@@ -1,0 +1,48 @@
+.creation-form-identities .creation-form-body {
+    flex-direction: column;
+    margin: 2px;
+}
+
+.identity-section {
+    padding: 2px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-style: dotted;
+}
+
+.identity-section:not(:first-child) {
+    margin-top: 2px;
+}
+
+.identity-section-header {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2px;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.identity-section-body {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    align-items: stretch;
+}
+
+.creation-form-identities input {
+    color: inherit;
+    background-color: inherit;
+    border-color: rgba(255, 255, 255, 0.5);
+    border-width: 1px;
+    border-style: solid;
+    padding: 1px 4px;
+    margin: 2px;
+    flex: 1 1 auto;
+}
+
+.identity-item {
+    display: flex;
+    flex-direction: row;
+}

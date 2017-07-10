@@ -88,6 +88,7 @@ class Classifications extends CreationPlugin
         tabManager.setTabStatus(null, "");
         id = id.trim();
         self.current.sex = id;
+        self.setField("sex", id);
 
         const sexElement = $("#" + self.current.species + "-" + id + ".classification-choice-sex");
         self.elements.sexChoices.forEach(function(sexElement)
@@ -105,6 +106,7 @@ class Classifications extends CreationPlugin
         tabManager.setTabStatus(null, "");
         id = id.trim();
         self.current.race = id;
+        self.setField("race", id);
 
         const raceElement = $("#" + self.current.species + "-" + id + ".classification-choice-race");
         self.elements.raceChoices.forEach(function(raceElement)
@@ -119,10 +121,10 @@ class Classifications extends CreationPlugin
     switchSpecies(id)
     {
         const self = this;
-        tabManager.setTabStatus(null, "");
         tabManager.setTabStatus("descriptors", "");
         id = id.trim();
         self.current.species = id;
+        self.setField("species", id);
 
         const speciesElement = $("#" + id + ".classification-choice-species");
         self.elements.speciesChoices.forEach(function(speciesElement)

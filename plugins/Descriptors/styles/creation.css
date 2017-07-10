@@ -64,7 +64,7 @@
 .descriptor-range .range-numbers-middle {
     display: flex;
     flex-direction: row;
-    border-color: white;
+    border-color: rgba(255, 255, 255, 0.5);
     border-width: 1px;
     border-style: solid;
     padding: 0px 4px;

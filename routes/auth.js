@@ -10,7 +10,7 @@ const templates = require(process.cwd() + "/templates/templates");
 const GlobalLayout = require(process.cwd() + "/layouts/global/global");
 const authPage = templates("pages/auth");
 
-const Accounts = require("../modules/Model/Account");
+const Account = require("../modules/Model/Account");
 
 /* Gets the main view for authentication, aka the login screen */
 router.get("/", function(request, response)
@@ -45,7 +45,7 @@ router.post("/login", function(request, response)
     const email = message.email;
     const password = message.password;
 
-    Accounts.getAccountByEmail(email).then(function(account)
+    Account.getAccountByEmail(email).then(function(account)
     {
         Logger.debug("Retr.Account:", account);
 
@@ -117,7 +117,7 @@ router.post("/create", function(request, response)
     const email = message.email;
     const password = message.password;
 
-    Accounts.newAccount(username, email, password).then(function(account)
+    Account.createAccount(username, email, password).then(function(account)
     {
         session.account = account;
         response.status(200).send(JSON.stringify(

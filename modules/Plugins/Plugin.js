@@ -115,6 +115,16 @@ class Plugin
             order: this.manifest.creation.order || 100
         };
     }
+
+    validateCreationForm( /* form */ )
+    {
+        // Return true
+        return true;
+    }
+    applyCharacterForm( /* form, character */ )
+    {
+        // Do Nothing
+    }
 }
 
 module.exports = Plugin;

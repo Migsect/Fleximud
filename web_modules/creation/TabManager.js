@@ -136,6 +136,24 @@ class TabManager
             characterForm[header] = fields;
         });
         console.log(characterForm);
+        const request = Utils.sendPostRequest("/creation/create", characterForm);
+        request.onload = () =>
+        {
+            console.log("Request Status:", request.status);
+            if (request.status >= 200 && request.status < 400)
+            {
+                console.log("Post Succeeded:", request.body);
+            }
+            else
+            {
+                window.alert("Failure to create character");
+            }
+        };
+        request.onerror = (error) =>
+        {
+            window.alert("There was an error during character creation. Please try again.");
+            console.log("Post Failure:", error);
+        };
     }
 
     /**

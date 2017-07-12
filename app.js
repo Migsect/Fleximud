@@ -46,7 +46,8 @@ const DatabaseManager = require("./modules/Database/DatabaseManager");
 const databaseManager = DatabaseManager.initialize(databaseConfig);
 
 /* Setting up the database tables */
-require("./modules/Model/Account").initializeDatabase();
+require("./modules/model/Account").initializeDatabase();
+require("./modules/model/Character").initializeDatabase();
 // require("./modules/Model/Character/Character").initializeDatabase();
 
 Logger.info("Database: Loaded");

@@ -4,7 +4,7 @@ const uuid = require("uuid/v4");
 
 const Logger = require(process.cwd() + "/modules/Logger");
 
-const Account = require("../Account");
+const Account = require("./Account");
 // const Attributes = require("./Attributes/Attributes");
 // const Descriptors = require("./Descriptors/Descriptors");
 
@@ -19,6 +19,43 @@ class Character
     static get table()
     {
         return CHARACTERS_TABLE_NAME;
+    }
+
+    static createCharacter(accountId)
+    {
+        const connection = DatabaseManager.instance.connection;
+        const id = uuid();
+        return new Promise((resolve, reject) =>
+        {
+            connection(CHARACTERS_TABLE_NAME).insert(
+            {
+                uuid: id,
+                accountId: accountId,
+                data: JSON.stringify(
+                {})
+            }).then((dbid) =>
+            {
+                const character = new Character(
+                {
+                    dbid: dbid,
+                    uuid: id,
+                    accountId: accountId,
+                    data:
+                    {}
+
+                });
+                resolve(character);
+            }).catch(error =>
+            {
+                Logger.error(error);
+                reject("An issue occured with the server.");
+            });
+        });
+    }
+
+    static getCharacter()
+    {
+
     }
 
     static get dataGetters()
@@ -59,10 +96,7 @@ class Character
                 table.increments("id").primary().notNullable();
                 table.uuid("uuid").notNullable();
                 table.integer("accountId").references("id").inTable(Account.table);
-                table.json("identity").notNullable();
-                table.json("attributes").notNullable();
-                table.json("descriptors").notNullable();
-                table.json("classification").notNullable();
+                table.json("data").notNullable();
             }).then(function dbThen()
             {
                 Logger.debug("Table Ready:", CHARACTERS_TABLE_NAME);
@@ -82,14 +116,6 @@ class Character
         self.uuid = config.uuid;
         self.accountId = config.accountId;
         self.data = {};
-        // self.identity = config.name;
-        // self.attributes = new Attributes(config.attributes);
-        // self.descriptors = new Descriptors(config.descriptors);
-
-        // self.species = config.species;
-        // self.sex = config.sex;
-        // self.race = config.race;
-        // self.breed = config.breed;
     }
 
     getData(statId)

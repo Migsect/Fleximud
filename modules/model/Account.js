@@ -11,6 +11,131 @@ const ACCOUNTS_TABLE_NAME = "accounts";
 
 class Account
 {
+    static get table()
+    {
+        return ACCOUNTS_TABLE_NAME;
+    }
+
+    static initializeDatabase()
+    {
+        return new Promise((resolve, reject) =>
+        {
+            const connection = DatabaseManager.instance.connection;
+            connection.schema.createTableIfNotExists(ACCOUNTS_TABLE_NAME, function(table)
+            {
+                table.increments("id").primary().notNullable();
+                table.uuid("uuid").notNullable();
+                table.string("username").notNullable();
+                table.string("email").notNullable();
+                table.string("password").notNullable();
+            }).then(function dbThen()
+            {
+                Logger.debug("Table Ready:", ACCOUNTS_TABLE_NAME);
+                resolve();
+            }).catch(function dbCatch(error)
+            {
+                Logger.error(error);
+                reject(error);
+            });
+        });
+    }
+
+    static createAcccount(username, email, plainPassword)
+    {
+        const connection = DatabaseManager.instance.connection;
+
+        const password = PasswordHash.generate(plainPassword);
+        const id = uuid();
+        return new Promise((resolve, reject) =>
+        {
+            connection(ACCOUNTS_TABLE_NAME).select("email").where(() =>
+            {
+                this.where("email", email).orWhere("username", username);
+            }).then(emails =>
+            {
+                /* Checking to see if that email exists */
+                if (emails.length > 0)
+                {
+                    reject("An account with that email or username already exists.");
+                    return;
+                }
+                connection(ACCOUNTS_TABLE_NAME).insert(
+                {
+                    uuid: id,
+                    username: username,
+                    email: email,
+                    password: password
+                }).then((dbid) =>
+                {
+                    const account = new Account(
+                    {
+                        dbid: dbid,
+                        uuid: id,
+                        username: username,
+                        email: email,
+                        password: password
+                    });
+                    resolve(account);
+                }).catch(error =>
+                {
+                    Logger.error(error);
+                    reject("An issue occured with the server.");
+                });
+                resolve();
+            }).catch(error =>
+            {
+                Logger.error(error);
+                reject("An issue occured with the server.");
+            });
+        });
+    }
+
+    static getAccount(query)
+    {
+        const connection = DatabaseManager.instance.connection;
+        return new Promise(function(resolve, reject)
+        {
+            connection(ACCOUNTS_TABLE_NAME).select().where(query).then((results) =>
+            {
+                if (results.length < 1)
+                {
+                    resolve(null);
+                }
+                const config = results[0];
+                Logger.debug("Account-Config:", config);
+                const account = new Account(config);
+                Logger.debug("Account:", account);
+                resolve(account);
+
+            }).catch((error) =>
+            {
+                reject(error);
+            });
+        });
+    }
+
+    static getAccountByUUID(id)
+    {
+        return Account.getAccount(
+        {
+            uuid: id
+        });
+    }
+    static getAccountByEmail(email)
+    {
+        return Account.getAccount(
+        {
+            email: email
+        });
+    }
+    static getAccountByName(username)
+    {
+        return Account.getAccount(
+        {
+            username: username
+        });
+    }
+
     constructor(config)
     {
         const self = this;
@@ -41,146 +166,4 @@ class Account
 
 }
 
-Object.defineProperties(module.exports,
-{
-    table:
-    {
-        value: ACCOUNTS_TABLE_NAME
-    },
-    initializeDatabase:
-    {
-        value: function()
-        {
-            return new Promise(function(resolve, reject)
-            {
-                const connection = DatabaseManager.instance.connection;
-                connection.schema.createTableIfNotExists(ACCOUNTS_TABLE_NAME, function(table)
-                {
-                    table.increments("id").primary().notNullable();
-                    table.uuid("uuid").notNullable();
-                    table.string("username").notNullable();
-                    table.string("email").notNullable();
-                    table.string("password").notNullable();
-                }).then(function dbThen()
-                {
-                    Logger.debug("Table Ready:", ACCOUNTS_TABLE_NAME);
-                    resolve();
-                }).catch(function dbCatch(error)
-                {
-                    Logger.error(error);
-                    reject(error);
-                });
-            });
-        }
-    },
-    newAccount:
-    {
-        value: function(username, email, plainPassword)
-        {
-            const connection = DatabaseManager.instance.connection;
-
-            const password = PasswordHash.generate(plainPassword);
-            Logger.debug("H.Pass.Len:", password.length);
-
-            const id = uuid();
-            return new Promise(function(resolve, reject)
-            {
-                connection(ACCOUNTS_TABLE_NAME).select("email").where(function()
-                {
-                    this.where("email", email).orWhere("username", username);
-                }).then(function(emails)
-                {
-                    /* Checking to see if that email exists */
-                    if (emails.length > 0)
-                    {
-                        reject("An account with that email or username already exists.");
-                        return;
-                    }
-                    connection(ACCOUNTS_TABLE_NAME).insert(
-                    {
-                        uuid: id,
-                        username: username,
-                        email: email,
-                        password: password
-                    }).then(function(dbid)
-                    {
-                        const account = new Account(
-                        {
-                            dbid: dbid,
-                            uuid: id,
-                            username: username,
-                            email: email,
-                            password: password
-                        });
-                        resolve(account);
-                    }).catch(function(error)
-                    {
-                        Logger.error(error);
-                        reject("An issue occured with the server.");
-                    });
-                    resolve();
-                }).catch(function(error)
-                {
-                    Logger.error(error);
-                    reject("An issue occured with the server.");
-                });
-            });
-        }
-    },
-    getAccount:
-    {
-        value: function(query)
-        {
-            const connection = DatabaseManager.instance.connection;
-            return new Promise(function(resolve, reject)
-            {
-                connection(ACCOUNTS_TABLE_NAME).select().where(query).then((results) =>
-                {
-                    if (results.length < 1)
-                    {
-                        resolve(null);
-                    }
-                    const config = results[0];
-                    Logger.debug("Account-Config:", config);
-                    const account = new Account(config);
-                    Logger.debug("Account:", account);
-                    resolve(account);
-
-                }).catch((error) =>
-                {
-                    reject(error);
-                });
-            });
-        }
-    },
-    getAccountByUUID:
-    {
-        value: function(id)
-        {
-            return module.exports.getAccount(
-            {
-                uuid: id
-            });
-        }
-    },
-    getAccountByEmail:
-    {
-        value: function(email)
-        {
-            return module.exports.getAccount(
-            {
-                email: email
-            });
-        }
-    },
-    getAccountByName:
-    {
-        value: function(username)
-        {
-            return module.exports.getAccount(
-            {
-                username: username
-            });
-        }
-    }
-});
+module.exports = Account;

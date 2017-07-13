@@ -40,52 +40,40 @@ class Account
         });
     }
 
-    static createAcccount(username, email, plainPassword)
+    static createAccount(username, email, plainPassword)
     {
         const connection = DatabaseManager.instance.connection;
 
         const password = PasswordHash.generate(plainPassword);
         const id = uuid();
-        return new Promise((resolve, reject) =>
+        return connection(ACCOUNTS_TABLE_NAME).select("email").where(function()
         {
-            connection(ACCOUNTS_TABLE_NAME).select("email").where(() =>
+            this.where("email", email).orWhere("username", username);
+        }).then(emails =>
+        {
+            /* Checking to see if that email exists */
+            if (emails.length > 0)
             {
-                this.where("email", email).orWhere("username", username);
-            }).then(emails =>
+                return null;
+            }
+            return connection(ACCOUNTS_TABLE_NAME).insert(
             {
-                /* Checking to see if that email exists */
-                if (emails.length > 0)
+                uuid: id,
+                username: username,
+                email: email,
+                password: password
+            }).then(dbid =>
+            {
+                const account = new Account(
                 {
-                    reject("An account with that email or username already exists.");
-                    return;
-                }
-                connection(ACCOUNTS_TABLE_NAME).insert(
-                {
+                    id: dbid,
                     uuid: id,
                     username: username,
                     email: email,
                     password: password
-                }).then((dbid) =>
-                {
-                    const account = new Account(
-                    {
-                        dbid: dbid,
-                        uuid: id,
-                        username: username,
-                        email: email,
-                        password: password
-                    });
-                    resolve(account);
-                }).catch(error =>
-                {
-                    Logger.error(error);
-                    reject("An issue occured with the server.");
                 });
-                resolve();
-            }).catch(error =>
-            {
-                Logger.error(error);
-                reject("An issue occured with the server.");
+                Logger.debug("Hot and piping Account:", account);
+                return account;
             });
         });
     }
@@ -93,24 +81,17 @@ class Account
     static getAccount(query)
     {
         const connection = DatabaseManager.instance.connection;
-        return new Promise(function(resolve, reject)
-        {
-            connection(ACCOUNTS_TABLE_NAME).select().where(query).then((results) =>
-            {
-                if (results.length < 1)
-                {
-                    resolve(null);
-                }
-                const config = results[0];
-                Logger.debug("Account-Config:", config);
-                const account = new Account(config);
-                Logger.debug("Account:", account);
-                resolve(account);
 
-            }).catch((error) =>
+        return connection(ACCOUNTS_TABLE_NAME).select().where(query).then((results) =>
+        {
+            if (results.length < 1)
             {
-                reject(error);
-            });
+                return null;
+            }
+            const config = results[0];
+            const account = new Account(config);
+            return account;
+
         });
     }
 
@@ -144,18 +125,6 @@ class Account
         self.username = config.username || "Unspecified";
         self.email = config.email;
         self.password = config.password;
-    }
-
-    /**
-     * Returns a promise that will provide a list of all characters under this account.
-     * This list will not include all character information, nor will it include full Character models.
-     * Instead it will provide a list of Objects that include character DBID, UUID, Name, Species, and Sex
-     *
-     * This is utlimately meant to be used for character listings and no more.
-     */
-    getCharacterList()
-    {
-
     }
 
     verify(passwordAttempt)

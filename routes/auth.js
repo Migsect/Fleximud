@@ -7,78 +7,87 @@ const router = express.Router();
 const Logger = require(process.cwd() + "/modules/Logger");
 
 const templates = require(process.cwd() + "/templates/templates");
-const GlobalLayout = require(process.cwd() + "/layouts/global/global");
-const authPage = templates("pages/auth");
+const GlobalLayout = require("./layouts/global/global");
+const authPage = templates(__dirname + "/auth/auth");
 
 const Account = require("../modules/Model/Account");
 
 /* Gets the main view for authentication, aka the login screen */
-router.get("/", function(request, response)
+router.get("/", (request, response) =>
 {
     /* Checking to see if the session is already logged in */
     if (request.session.account)
     {
         response.redirect("/characters");
+        return;
     }
-    else
-    {
+    response.status(200).send(GlobalLayout(request, authPage(), [
+        "/stylesheets/auth.css"
+    ], [
+        "/javascripts/built/auth-entry.js"
+    ]));
 
-        response.status(200).send(GlobalLayout(request, authPage(), [
-            "/stylesheets/auth.css"
-        ], [
-            "/javascripts/built/auth-entry.js"
-        ]));
-    }
 });
 
 /* A request to login */
-router.post("/login", function(request, response)
+router.post("/login", (request, response) =>
 {
     const message = request.body;
     const session = request.session;
     if (session.account)
     {
         response.redirect("/characters");
+        return;
     }
 
     /* The login info needed */
     const email = message.email;
     const password = message.password;
 
-    Account.getAccountByEmail(email).then(function(account)
-    {
-        Logger.debug("Retr.Account:", account);
+    Account.getAccountByEmail(email)
+        .then(account =>
+        {
+            Logger.debug("Retr.Account:", account);
 
-        Logger.debug("H.Pass.Len:", account.password.length);
-        if (!account)
-        {
-            Logger.debug("Email sucked");
-            response.status(400).send(JSON.stringify(
+            Logger.debug("H.Pass.Len:", account.password.length);
+            if (!account)
             {
-                message: "Could not login with that email and password combination."
-            }));
-            return;
-        }
-        if (!account.verify(password))
-        {
-            Logger.debug("Password sucked");
-            response.status(400).send(JSON.stringify(
+                Logger.debug("Email sucked");
+                response.status(400).json(
+                {
+                    message: "Could not login with that email and password combination."
+                });
+                return;
+            }
+            if (!account.verify(password))
             {
-                message: "Could not login with that email and password combination."
-            }));
-            return;
-        }
-        session.account = account;
-        response.status(200).send(JSON.stringify(
+                Logger.debug("Password sucked");
+                response.status(400).json(
+                {
+                    message: "Could not login with that email and password combination."
+                });
+                return;
+            }
+            session.account = account;
+            response.status(200).json(
+            {
+                redirect: "/characters",
+                message: "Success"
+            });
+
+        })
+        .catch((error) =>
         {
-            redirect: "/characters",
-            message: "Success"
-        }));
-    });
+            Logger.error("POST /auth/login", error);
+            response.status(500).json(
+            {
+                message: "Internal Server Error"
+            });
+        });
 });
 
 /* If someone makes a request to logout, then they will be sent back to the main auth page */
-router.get("/logout", function(request, response)
+router.get("/logout", (request, response) =>
 {
     const session = request.session;
     if (!session.account)
@@ -97,17 +106,17 @@ router.get("/logout", function(request, response)
 });
 
 /* This is a request to create an account */
-router.post("/create", function(request, response)
+router.post("/create", (request, response) =>
 {
     const message = request.body;
     const session = request.session;
 
     if (session.account)
     {
-        response.status(400).send(JSON.stringify(
+        response.status(400).json(
         {
             message: "You are already logged into an account."
-        }));
+        });
     }
 
     Logger.debug("Create: ", message);
@@ -117,21 +126,31 @@ router.post("/create", function(request, response)
     const email = message.email;
     const password = message.password;
 
-    Account.createAccount(username, email, password).then(function(account)
+    Account.createAccount(username, email, password).then(account =>
     {
+        if (!account)
+        {
+            response.status(400).send(JSON.stringify(
+            {
+                message: "Account could not be created"
+            }));
+            return;
+        }
         session.account = account;
+        Logger.debug("Cooled down Account:", account);
         response.status(200).send(JSON.stringify(
         {
             redirect: "/characters",
             message: "Success"
         }));
 
-    }).catch(function(error)
+    }).catch(error =>
     {
-        response.status(400).send(JSON.stringify(
+        Logger.error("POST /auth/create", error);
+        response.status(500).json(
         {
-            message: error
-        }));
+            message: "Internal Server Error"
+        });
     });
 });
 

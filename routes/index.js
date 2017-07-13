@@ -3,10 +3,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Accounts = require("../modules/model/Account");
-
-const GlobalLayout = require(process.cwd() + "/layouts/global/global");
-const templates = require("../templates/templates");
+const GlobalLayout = require("./layouts/global/global");
+const templates = require(process.cwd() + "/templates/templates");
 // var topBar = templates("topBar");
 
 /* GET home page. */

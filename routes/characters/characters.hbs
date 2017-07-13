@@ -1,0 +1,11 @@
+<div>
+    <div class="character-list">
+        {{#each characters}}
+        <a href="/client?character={{this.character.uuid}}" class="character-item">
+            {{#each this.infos}}
+            <div class="character-item-info">{{this}}</div>
+            {{/each}}
+        </a> {{/each}}
+    </div>
+    <a href="/creation" class="character-create">Create New Character</a>
+</div>

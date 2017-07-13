@@ -116,7 +116,7 @@ class Plugin
         };
     }
 
-    validateCreationForm( /* form */ )
+    validateCharacterForm( /* form */ )
     {
         // Return true
         return true;
@@ -124,6 +124,10 @@ class Plugin
     applyCharacterForm( /* form, character */ )
     {
         // Do Nothing
+    }
+    getCharacterListInfo( /* character */ )
+    {
+        return null;
     }
 }
 

@@ -3,7 +3,7 @@
 const uuid = require("uuid/v4");
 
 const Logger = require(process.cwd() + "/modules/Logger");
-
+const PluginManager = require(process.cwd() + "/modules/Plugins/PluginManager");
 const Account = require("./Account");
 // const Attributes = require("./Attributes/Attributes");
 // const Descriptors = require("./Descriptors/Descriptors");
@@ -25,32 +25,42 @@ class Character
     {
         const connection = DatabaseManager.instance.connection;
         const id = uuid();
-        return new Promise((resolve, reject) =>
+        return connection(CHARACTERS_TABLE_NAME).insert(
         {
-            connection(CHARACTERS_TABLE_NAME).insert(
+            uuid: id,
+            accountId: accountId,
+            data: JSON.stringify(
+            {})
+        }).then(dbid =>
+        {
+            return new Character(
             {
+                id: dbid[0],
                 uuid: id,
                 accountId: accountId,
-                data: JSON.stringify(
-                {})
-            }).then((dbid) =>
-            {
-                const character = new Character(
-                {
-                    dbid: dbid,
-                    uuid: id,
-                    accountId: accountId,
-                    data:
-                    {}
-
-                });
-                resolve(character);
-            }).catch(error =>
-            {
-                Logger.error(error);
-                reject("An issue occured with the server.");
+                data:
+                {}
             });
         });
+    }
+
+    /**
+     * Retrieves a list of characters for the provided account (as per accounts dbid)
+     *
+     * @param {Account} account The account to find characters for.
+     * @return {Promise<Character[]>} A promise for a list of characters (may be empty)
+     */
+    static getAccountsCharacters(account)
+    {
+        const connection = DatabaseManager.instance.connection;
+        return connection(CHARACTERS_TABLE_NAME)
+            .select()
+            .where(
+            {
+                accountId: account.dbid
+            })
+            .then(results => results.map(result => new Character(result)));
+
     }
 
     static getCharacter()
@@ -111,11 +121,12 @@ class Character
 
     constructor(config)
     {
-        const self = this;
-        self.dbid = config.id;
-        self.uuid = config.uuid;
-        self.accountId = config.accountId;
-        self.data = {};
+        this.dbid = config.id;
+        this.uuid = config.uuid;
+        this.accountId = config.accountId;
+        this.data = JSON.parse(config.data
+) ||
+        {};
     }
 
     getData(statId)
@@ -129,9 +140,28 @@ class Character
         return getter(this.data, object);
     }
 
+    getListItem()
+    {
+        return {
+            character: this,
+            infos: Array.from(PluginManager.plugins.values())
+                .map(plugin => plugin.getCharacterListInfo(this))
+                .filter(info => info)
+                .sort((a, b) => a.priority < b.priority)
+                .map(info => info.info)
+        };
+    }
+
     save()
     {
-
+        const connection = DatabaseManager.instance.connection;
+        Logger.debug("dbid", this.dbid);
+        return connection(CHARACTERS_TABLE_NAME)
+            .where("id", this.dbid)
+            .update(
+            {
+                data: JSON.stringify(this.data)
+            });
     }
 }
 

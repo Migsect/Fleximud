@@ -5,10 +5,10 @@ const PluginManager = require(process.cwd() + "/modules/Plugins/PluginManager");
 
 const templates = require(process.cwd() + "/templates/templates");
 
-const pageTemplate = templates(process.cwd() + "/pages/creation/creation");
-const tabTemplate = templates(process.cwd() + "/pages/creation/creation_tab");
+const pageTemplate = templates(__dirname + "/creation");
+const tabTemplate = templates(__dirname + "/creation_tab");
 
-const formTemplate = templates(process.cwd() + "/pages/creation/creation_form");
+const formTemplate = templates(__dirname + "/creation_form");
 
 module.exports = function renderer()
 {

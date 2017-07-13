@@ -47,6 +47,7 @@ class AttributesPlugin extends Plugin
             points: 20
         });
     }
+
 }
 
 module.exports = AttributesPlugin;

@@ -4,19 +4,18 @@ const path = require("path");
 
 const Plugin = require(process.cwd() + "/modules/Plugins/Plugin");
 const AttributeTypes = require("./modules/AttributeType");
-const Attributes = require("./modules/Attributes");
+// const Attributes = require("./modules/Attributes");
+const Aspect = require("./modules/AttributesAspect");
 
 const templates = require(process.cwd() + "/templates/templates");
 const elementAttribute = templates(path.join(__dirname, "templates/element_attribute"));
 
-function compileAttributeTree(attributeType, hideDepth = 0)
-{
-    const children = attributeType.children.map((child) =>
-    {
+function compileAttributeTree(attributeType, hideDepth = 0) {
+
+    const children = attributeType.children.map((child) => {
         return compileAttributeTree(child, hideDepth - 1);
     });
-    return elementAttribute(
-    {
+    return elementAttribute({
         id: attributeType.id,
         name: attributeType.name,
         color: attributeType.color,
@@ -25,22 +24,19 @@ function compileAttributeTree(attributeType, hideDepth = 0)
     });
 }
 
-class AttributesPlugin extends Plugin
-{
-    onLoad()
-    {
+class AttributesPlugin extends Plugin {
+
+    onLoad() {
         const config = this.getConfig();
         config.copyDefaults();
         config.load();
         this.attributeTree = AttributeTypes.parseAttributeTypes(config.types, this.logger);
     }
 
-    getCreationForm()
-    {
+    getCreationForm() {
         const formTemplate = this.getCreationTemplate();
         const attributesTree = compileAttributeTree(this.attributeTree.top, 2);
-        return formTemplate(
-        {
+        return formTemplate({
             tree: attributesTree,
             help: this.getConfig().get("help", ""),
             information: [].join(""),
@@ -48,6 +44,9 @@ class AttributesPlugin extends Plugin
         });
     }
 
+    get aspectConstructor() {
+        return Aspect;
+    }
 }
 
 module.exports = AttributesPlugin;

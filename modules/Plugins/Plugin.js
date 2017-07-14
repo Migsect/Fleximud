@@ -6,35 +6,27 @@ const fs = require("fs-extra");
 const Logger = require(process.cwd() + "/modules/Logger");
 const templates = require(process.cwd() + "/templates/templates");
 
-class PluginLogger
-{
-    constructor(name)
-    {
+class PluginLogger {
+    constructor(name) {
         this._name = name;
     }
 
-    info()
-    {
+    info() {
         Logger.info("[" + this._name + "]", ...arguments);
     }
-    error()
-    {
+    error() {
         Logger.error("[" + this._name + "]", ...arguments);
     }
-    debug()
-    {
+    debug() {
         Logger.debug("[" + this._name + "]", ...arguments);
     }
-    warn()
-    {
+    warn() {
         Logger.warn("[" + this._name + "]", ...arguments);
     }
 }
 
-class Plugin
-{
-    constructor(manager, directory, manifest)
-    {
+class Plugin {
+    constructor(manager, directory, manifest) {
         this.directory = directory;
         this.manager = manager;
         this.manifest = manifest;
@@ -48,18 +40,25 @@ class Plugin
      * Retrieves the plugin's personal logger.
      * This will indicate the plugin as the source of the logging.
      */
-    get logger()
-    {
-        if (!this._logger)
-        {
+    get logger() {
+        if (!this._logger) {
             this._logger = new PluginLogger(this.manifest.name);
         }
         return this._logger;
     }
-    getConfig()
-    {
-        if (this.config)
-        {
+
+    /**
+     * Returns the name of the plugin.
+     * This is mostly just a short hand getter for the manifest name.
+     * 
+     * @return {String} The name of the plugin
+     */
+    get name() {
+        return this.manifest.name;
+    }
+
+    getConfig() {
+        if (this.config) {
             return this.config;
         }
         const mainConfig = this.configRoot + "/config.js";
@@ -72,40 +71,33 @@ class Plugin
     /**
      * Reloads the plugin
      */
-    reload()
-    {
+    reload() {
         this.onUnload();
         this.onLoad();
         this.onReload();
     }
 
-    onLoad()
-    {
+    onLoad() {
         // Do Nothing
     }
 
-    onUnload()
-    {
+    onUnload() {
         // Do Nothing
     }
 
-    onReload()
-    {
+    onReload() {
         // Do nothing
     }
 
-    getCreationTemplate()
-    {
+    getCreationTemplate() {
         return templates(path.join(this.directory, "templates/creation"));
 
     }
-    getCreationForm()
-    {
+    getCreationForm() {
         return this.getCreationTemplate()();
     }
 
-    getCreationSection()
-    {
+    getCreationSection() {
         const name = this.manifest.creation.name || this.manifest.name;
         const id = this.manifest.creation.id || name.toLowerCase();
         return {
@@ -116,17 +108,13 @@ class Plugin
         };
     }
 
-    validateCharacterForm( /* form */ )
-    {
-        // Return true
-        return true;
-    }
-    applyCharacterForm( /* form, character */ )
-    {
-        // Do Nothing
-    }
-    getCharacterListInfo( /* character */ )
-    {
+    /**
+     * Returns the Aspects constructor that is used to add an object to characters that represents an interface
+     * on the player for interactions with the plugin.
+     * 
+     * @return {Function}  Aspects Constructor
+     */
+    get aspectConstructor() {
         return null;
     }
 }

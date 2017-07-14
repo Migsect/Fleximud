@@ -14,32 +14,31 @@ const CHARACTERS_TABLE_NAME = "characters";
 const dataSetters = new Map();
 const dataGetters = new Map();
 
-class Character
-{
-    static get table()
-    {
+class Character {
+    static get table() {
         return CHARACTERS_TABLE_NAME;
     }
 
-    static createCharacter(accountId)
-    {
+    /**
+     * Creates a new character for the supplied account and using the data as a basis for the character's data.
+     * 
+     * @param  {[type]} accountId [description]
+     * @param  {[type]} data      [description]
+     * @return {[type]}           [description]
+     */
+    static createCharacter(accountId, data) {
         const connection = DatabaseManager.instance.connection;
         const id = uuid();
-        return connection(CHARACTERS_TABLE_NAME).insert(
-        {
+        return connection(CHARACTERS_TABLE_NAME).insert({
             uuid: id,
             accountId: accountId,
-            data: JSON.stringify(
-            {})
-        }).then(dbid =>
-        {
-            return new Character(
-            {
+            data: JSON.stringify(data || {})
+        }).then(dbid => {
+            return new Character({
                 id: dbid[0],
                 uuid: id,
                 accountId: accountId,
-                data:
-                {}
+                data: data || null
             });
         });
     }
@@ -50,98 +49,103 @@ class Character
      * @param {Account} account The account to find characters for.
      * @return {Promise<Character[]>} A promise for a list of characters (may be empty)
      */
-    static getAccountsCharacters(account)
-    {
+    static getAccountsCharacters(account) {
         const connection = DatabaseManager.instance.connection;
         return connection(CHARACTERS_TABLE_NAME)
             .select()
-            .where(
-            {
+            .where({
                 accountId: account.dbid
             })
             .then(results => results.map(result => new Character(result)));
 
     }
 
-    static getCharacter()
-    {
+    static getCharacter() {
 
     }
 
-    static get dataGetters()
-    {
+    static get dataGetters() {
         return dataGetters;
     }
 
-    static get dataSetters()
-    {
+    static get dataSetters() {
         return dataSetters;
     }
 
-    static registerDataGetter(dataId, getter)
-    {
-        if (dataGetters.has(dataId))
-        {
+    static registerDataGetter(dataId, getter) {
+
+        if (dataGetters.has(dataId)) {
             throw new Error("Data Getter Id '" + dataId + "' is already under use.");
         }
         dataGetters.set(dataId, getter);
     }
 
-    static registerDataSetter(dataId, setter)
-    {
-        if (dataGetters.has(dataId))
-        {
+    static registerDataSetter(dataId, setter) {
+
+        if (dataGetters.has(dataId)) {
             throw new Error("Data Setter Id '" + dataId + "' is already under use.");
         }
         dataSetters.set(dataId, setter);
     }
 
-    static initializeDatabase()
-    {
-        return new Promise(function(resolve, reject)
-        {
-            const connection = DatabaseManager.instance.connection;
-            connection.schema.createTableIfNotExists(CHARACTERS_TABLE_NAME, function(table)
-            {
-                table.increments("id").primary().notNullable();
-                table.uuid("uuid").notNullable();
-                table.integer("accountId").references("id").inTable(Account.table);
-                table.json("data").notNullable();
-            }).then(function dbThen()
-            {
-                Logger.debug("Table Ready:", CHARACTERS_TABLE_NAME);
-                resolve();
-            }).catch(function dbCatch(error)
-            {
-                Logger.error(error);
-                reject(error);
-            });
+    static initializeDatabase() {
+
+        const connection = DatabaseManager.instance.connection;
+        return connection.schema.createTableIfNotExists(CHARACTERS_TABLE_NAME, function(table) {
+            table.increments("id").primary().notNullable();
+            table.uuid("uuid").notNullable();
+            table.integer("accountId").references("id").inTable(Account.table);
+            table.json("data").notNullable();
+        }).then(() => {
+            Logger.debug("Table Ready:", CHARACTERS_TABLE_NAME);
+            return;
         });
+
     }
 
-    constructor(config)
-    {
+    /**
+     * Constructs the character from a database retrieved or compiled configuration.
+     * @param  {Object} config A config object for the character.
+     * @return {Character} The constructed character.
+     */
+    constructor(config) {
+
+        if (config.data && typeof config.data === "string") {
+            config.data = JSON.parse(config.data);
+        }
+
         this.dbid = config.id;
         this.uuid = config.uuid;
         this.accountId = config.accountId;
-        this.data = JSON.parse(config.data
-) ||
-        {};
+        this.data = config.data || {};
+
+        this.aspects = {};
+        Array.from(PluginManager.plugins).forEach(plugin => {
+            const name = plugin.name;
+            if (!plugin.aspectConstructor) {
+                return;
+            }
+            const aspect = plugin.aspectConstructor(plugin, this.data);
+            this.aspects[name] = aspect;
+        });
+
     }
 
-    getData(statId)
-    {
+    getData(statId) {
         const getter = dataGetters(statId);
         return getter(this.data);
     }
-    setData(statId, object)
-    {
+    setData(statId, object) {
         const getter = dataSetters(statId);
         return getter(this.data, object);
     }
 
-    getListItem()
-    {
+    /**
+     * Retrieves an object that is used when the character is being displayed as a list item.
+     * 
+     * @return {Object{character, infos}} An object containing the character and the infos.
+     */
+    getListItem() {
         return {
             character: this,
             infos: Array.from(PluginManager.plugins.values())
@@ -152,14 +156,20 @@ class Character
         };
     }
 
-    save()
-    {
+    /**
+     * Saves the character's data to the database.
+     * This returns a promise that will resolve when the database updates the character.
+     * The value provided by the promise is the number of characters saved, which should be 1 or 0 if
+     * not update was made.
+     * 
+     * @return {Promise} A promise that will resolve when the database action is complete.
+     */
+    save() {
         const connection = DatabaseManager.instance.connection;
         Logger.debug("dbid", this.dbid);
         return connection(CHARACTERS_TABLE_NAME)
             .where("id", this.dbid)
-            .update(
-            {
+            .update({
                 data: JSON.stringify(this.data)
             });
     }

@@ -13,11 +13,9 @@ const GlobalLayout = require("./layouts/global/global");
 const creationRenderer = require("./creation/creation");
 
 /* GET home page. */
-router.get("/", (request, response) =>
-{
+router.get("/", (request, response) => {
     const session = request.session;
-    if (!session.account)
-    {
+    if (!session.account) {
         response.redirect("/auth");
         return;
     }
@@ -29,14 +27,12 @@ router.get("/", (request, response) =>
     ]));
 });
 
-router.post("/create", (request, response) =>
-{
+router.post("/create", (request, response) => {
+
     const session = request.session;
     const characterForm = request.body;
-    if (!session.account)
-    {
-        response.status(401).json(
-        {
+    if (!session.account) {
+        response.status(401).json({
             message: "One should be logged in to create a character."
         });
         return;
@@ -47,63 +43,56 @@ router.post("/create", (request, response) =>
     /* Creating the pairs and validating the forms */
     const characterFormKeys = Object.keys(characterForm);
     const pairs = [];
-    for (let i = 0; i < characterFormKeys.length; i += 1)
-    {
+    for (let i = 0; i < characterFormKeys.length; i += 1) {
         const key = characterFormKeys[i];
         const form = characterForm[key];
         const plugin = PluginManager.getPlugin(key);
-        if (!plugin)
-        {
+        if (!plugin) {
             Logger.warn("During Creation - Could not find plugin with id:", key);
-            response.status(500).json(
-            {
+            response.status(500).json({
                 message: "Internal Server Error"
             });
             return;
         }
-        if (!plugin.validateCharacterForm())
-        {
-            response.status(400).json(
-            {
+
+        const aspectConstructor = plugin.aspectConstructor;
+        if (aspectConstructor &&
+            aspectConstructor.validateCharacterForm &&
+            !aspectConstructor.validateCharacterForm()
+        ) {
+            response.status(400).json({
                 message: "Invalid form for: " + key
             });
             return;
         }
-        pairs.push(
-        {
+        pairs.push({
             form: form,
             plugin: plugin
         });
     }
-    /* Actually creating the character */
-    Character.createCharacter(account.dbid).then(character =>
-    {
-        pairs.forEach((pair) =>
-        {
-            const plugin = pair.plugin;
-            const form = pair.form;
-            plugin.applyCharacterForm(form, character);
-        });
-        character.save()
-            .catch((error) =>
-            {
-                Logger.error("During Creation - Database Error:", error);
-                response.status(500).json(
-                {
-                    message: "Internal Server Error"
-                });
-            });
 
-        response.status(200).json(
-        {
+    /* Pre-applying all the forms the data for the character. */
+    const characterData = {};
+    pairs.forEach((pair) => {
+        const plugin = pair.plugin;
+        const form = pair.form;
+        const aspectConstructor = plugin.aspectConstructor;
+        if (!aspectConstructor || !aspectConstructor.applyForm) {
+            /* A characteristic constructor is what adds plugin behaviors to players */
+            return;
+        }
+        aspectConstructor.applyForm(form, characterData);
+    });
+
+    Character.createCharacter(account.dbid, characterData).then(() => {
+
+        response.status(200).json({
             mesaage: "Created Character",
             redirect: "/characters"
         });
-    }).catch(error =>
-    {
+    }).catch(error => {
         Logger.error("During Creation - Database Error:", error);
-        response.status(500).json(
-        {
+        response.status(500).json({
             message: "Internal Server Error"
         });
     });

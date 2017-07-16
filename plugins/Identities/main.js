@@ -15,13 +15,13 @@ class IdentitiesPlugin extends Plugin {
         });
     }
 
-    getCharacterListInfo(character) {
-        const data = character.data.identities;
-        return {
-            priority: 0,
-            info: data.forename + " " + data.surname
-        };
-    }
+    // getCharacterListInfo(character) {
+    //     const data = character.data.identities;
+    //     return {
+    //         priority: 0,
+    //         info: data.forename + " " + data.surname
+    //     };
+    // }
 
     get aspectConstructor() {
         return Aspect;

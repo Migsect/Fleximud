@@ -1,6 +1,6 @@
 "use strict";
 
-const Aspect = require(process.cwd() + "/modules/Plugins/CharacterAspect");
+const Aspect = require(process.cwd() + "/modules/Plugins/Aspect");
 
 class ClassificationsAspect extends Aspect {
     /**
@@ -30,6 +30,46 @@ class ClassificationsAspect extends Aspect {
 
     constructor(plugin, data) {
         super(plugin, data, "classifications");
+    }
+
+    /**
+     * Provides a getter to get the original species of the character.
+     * If it the core object is not defined, it returns an error value.
+     * If it is not defined, then unknown is returned.
+     * 
+     * @return {String} The returned data
+     */
+    get originalSpecies() {
+        return this.data.core ? (this.data.core.species || "UNKNOWN") : "ERROR";
+    }
+
+    /**
+     * Provides a getter to get the original race of the character.
+     * If it the core object is not defined, it returns an error value.
+     * If it is not defined, then unknown is returned.
+     * 
+     * @return {String} The returned data
+     */
+    get originalRace() {
+        return this.data.core ? (this.data.core.race || "UNKNOWN") : "ERROR";
+    }
+
+    /**
+     * Provides a getter to get the original sex of the character.
+     * If it the core object is not defined, it returns an error value.
+     * If it is not defined, then unknown is returned.
+     * 
+     * @return {String} The returned data
+     */
+    get originalSex() {
+        return this.data.core ? (this.data.core.sex || "UNKNOWN") : "ERROR";
+    }
+
+    getListInfoConfig() {
+        return {
+            priority: 1,
+            display: this.originalSpecies + " - " + this.originalSex
+        };
     }
 }
 

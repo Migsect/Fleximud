@@ -15,6 +15,13 @@ const dataSetters = new Map();
 const dataGetters = new Map();
 
 class Character {
+
+    /**
+     * Gets the name of the table for the characters.
+     * This is should be used instead of hardcoding the name of the character table.
+     * 
+     * @return {String} The name of the table in the database for characters.
+     */
     static get table() {
         return CHARACTERS_TABLE_NAME;
     }
@@ -44,24 +51,53 @@ class Character {
     }
 
     /**
+     * Retrieves a character based upon the provided query.
+     * 
+     * @param {Object} query The query object to search for.
+     * @return {Promise<Character[]>} The list of characters matching the query.
+     */
+    static getCharacters(query) {
+        const connection = DatabaseManager.instance.connection;
+        return connection(CHARACTERS_TABLE_NAME)
+            .select()
+            .where(query)
+            .then(results => results.map(result => new Character(result)));
+    }
+    /**
+     * Retrieves a singular character based upon the provided query.
+     * This is mostly a quality-of-line method for getting a single character.
+     *
+     * @param {Query} query The query object to search for.
+     * @return {Promose<Character>} A promise to provide the character or otherwise null if not found.
+     */
+    static getCharacter(query) {
+        return Character.getCharacters(query)
+            .then(characters => characters.length > 0 ? characters[0] : null);
+    }
+
+    /**
      * Retrieves a list of characters for the provided account (as per accounts dbid)
      *
      * @param {Account} account The account to find characters for.
      * @return {Promise<Character[]>} A promise for a list of characters (may be empty)
      */
-    static getAccountsCharacters(account) {
-        const connection = DatabaseManager.instance.connection;
-        return connection(CHARACTERS_TABLE_NAME)
-            .select()
-            .where({
-                accountId: account.dbid
-            })
-            .then(results => results.map(result => new Character(result)));
-
+    static getCharactersByAccount(account) {
+        return Character.getCharacters({
+            accountId: account.dbid
+        });
     }
 
-    static getCharacter() {
-
+    /**
+     * Retrieves the character with the specified uuid.
+     * If there is no character with the uuid, returns null.
+     * 
+     * @param  {String} uuid The UUID to match
+     * @return {Promise<Character>} A promise for the character (returns null if no character found).
+     */
+    static getCharacterById(uuid) {
+        return Character.getCharacter({
+            uuid: uuid
+        });
     }
 
     static get dataGetters() {
@@ -105,6 +141,7 @@ class Character {
 
     /**
      * Constructs the character from a database retrieved or compiled configuration.
+     * 
      * @param  {Object} config A config object for the character.
      * @return {Character} The constructed character.
      */
@@ -120,12 +157,12 @@ class Character {
         this.data = config.data || {};
 
         this.aspects = {};
-        Array.from(PluginManager.plugins).forEach(plugin => {
+        Array.from(PluginManager.plugins.values()).forEach(plugin => {
             const name = plugin.name;
             if (!plugin.aspectConstructor) {
                 return;
             }
-            const aspect = plugin.aspectConstructor(plugin, this.data);
+            const aspect = new plugin.aspectConstructor(plugin, this.data);
             this.aspects[name] = aspect;
         });
 
@@ -148,11 +185,12 @@ class Character {
     getListItem() {
         return {
             character: this,
-            infos: Array.from(PluginManager.plugins.values())
-                .map(plugin => plugin.getCharacterListInfo(this))
+            infos: Array.from(Object.keys(this.aspects))
+                .map(aspectKey => this.aspects[aspectKey])
+                .map(plugin => plugin.getListInfoConfig(this))
                 .filter(info => info)
                 .sort((a, b) => a.priority < b.priority)
-                .map(info => info.info)
+                .map(info => info.display)
         };
     }
 
@@ -166,7 +204,6 @@ class Character {
      */
     save() {
         const connection = DatabaseManager.instance.connection;
-        Logger.debug("dbid", this.dbid);
         return connection(CHARACTERS_TABLE_NAME)
             .where("id", this.dbid)
             .update({

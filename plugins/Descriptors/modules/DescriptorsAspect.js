@@ -1,8 +1,9 @@
 "use strict";
 
-const Aspect = require(process.cwd() + "/modules/Plugins/CharacterAspect");
+const Aspect = require(process.cwd() + "/modules/Plugins/Aspect");
 
 class DescriptorsAspect extends Aspect {
+
     /**
      * Applies the form retrieved from character creation and applies it to character data.
      * 

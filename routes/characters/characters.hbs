@@ -1,11 +1,16 @@
-<div>
+<div class="center-column">
+    <div class="character-list-header">
+        Characters
+    </div>
+    {{#if characters.length}}
     <div class="character-list">
         {{#each characters}}
-        <a href="/client?character={{this.character.uuid}}" class="character-item">
+        <a href="/client?character={{this.character.uuid}}" class="character-item clickable">
             {{#each this.infos}}
             <div class="character-item-info">{{this}}</div>
             {{/each}}
         </a> {{/each}}
     </div>
-    <a href="/creation" class="character-create">Create New Character</a>
+    {{/if}}
+    <a href="/creation" class="character-create clickable">Create New Character</a>
 </div>

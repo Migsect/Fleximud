@@ -1,6 +1,6 @@
 "use strict";
 
-const Aspect = require(process.cwd() + "/modules/Plugins/CharacterAspect");
+const Aspect = require(process.cwd() + "/modules/Plugins/Aspect");
 
 class AttributesAspect extends Aspect {
     /**

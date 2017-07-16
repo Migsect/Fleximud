@@ -26,6 +26,7 @@ class PluginLogger {
 }
 
 class Plugin {
+
     constructor(manager, directory, manifest) {
         this.directory = directory;
         this.manager = manager;
@@ -112,7 +113,7 @@ class Plugin {
      * Returns the Aspects constructor that is used to add an object to characters that represents an interface
      * on the player for interactions with the plugin.
      * 
-     * @return {Function}  Aspects Constructor
+     * @return {Function} Aspect Constructor
      */
     get aspectConstructor() {
         return null;

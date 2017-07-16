@@ -1,6 +1,6 @@
 "use strict";
 
-const Aspect = require(process.cwd() + "/modules/Plugins/CharacterAspect");
+const Aspect = require(process.cwd() + "/modules/Plugins/Aspect");
 
 class IdentitiesAspect extends Aspect {
 
@@ -25,6 +25,49 @@ class IdentitiesAspect extends Aspect {
 
     constructor(plugin, data) {
         super(plugin, data, "identities");
+    }
+
+    /**
+     * Shortcut for getting the forname from the data. Will provide a placeholder if not found.
+     * 
+     * @return {String} The forename
+     */
+    get forename() {
+        return this.data.forename || "UNKNOWN";
+    }
+
+    /**
+     * Shortcut for getting the midname from the data. Will provide a placeholder if not found.
+     * 
+     * @return {String} The midname
+     */
+    get midname() {
+        return this.data.midname || "UNKNOWN";
+    }
+
+    /**
+     * Shortcut for getting the surname from the data. Will provide a placeholder if not found.
+     * 
+     * @return {String} The surname
+     */
+    get surname() {
+        return this.data.surname || "UNKNOWN";
+    }
+
+    /**
+     * Shortcut for getting the alias from the data. Will provide a placeholder if not found.
+     * 
+     * @return {String} The alias
+     */
+    get alias() {
+        return this.data.alias || "UNKNOWN";
+    }
+
+    getListInfoConfig() {
+        return {
+            priority: 100,
+            display: this.forename + " " + this.surname
+        };
     }
 
 }

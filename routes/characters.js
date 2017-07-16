@@ -10,34 +10,28 @@ const templates = require(process.cwd() + "/templates/templates");
 const GlobalLayout = require("./layouts/global/global");
 const charactersPage = templates(__dirname + "/characters/characters");
 
-/* GET home page. */
-router.get("/", function(request, response)
-{
+/* GET characters page. */
+router.get("/", function(request, response) {
     const session = request.session;
     const account = session.account;
-    Logger.debug(account);
-    if (!account)
-    {
+    if (!account) {
         response.redirect("/auth");
         return;
     }
-    Character.getAccountsCharacters(account)
-        .then(characters =>
-        {
+    Character.getCharactersByAccount(account)
+        .then(characters => {
             const characterItems = characters.map((character) => character.getListItem());
+
             Logger.debug("characterItems", characterItems);
-            response.status(200).send(GlobalLayout(request, charactersPage(
-            {
+            response.status(200).send(GlobalLayout(request, charactersPage({
                 characters: characterItems
             }), [
                 "/stylesheets/characters.css"
             ], [ /* Scripts */ ]));
         })
-        .catch(error =>
-        {
+        .catch(error => {
             Logger.error("During Creation - Database Error:", error);
-            response.status(500).json(
-            {
+            response.status(500).json({
                 message: "Internal Server Error"
             });
         });

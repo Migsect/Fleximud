@@ -1,8 +1,8 @@
 <div class="center-column">
+    {{#if characters.length}}
     <div class="character-list-header">
         Characters
     </div>
-    {{#if characters.length}}
     <div class="character-list">
         {{#each characters}}
         <a href="/client?character={{this.character.uuid}}" class="character-item clickable">

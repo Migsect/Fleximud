@@ -59,11 +59,9 @@ Logger.info("Database: Loaded");
 /* Setting up winston for logging */
 const winston = require("winston");
 const expressWinston = require("express-winston");
-app.use(expressWinston.logger(
-{
+app.use(expressWinston.logger({
     transports: [
-        new winston.transports.Console(
-        {
+        new winston.transports.Console({
             json: false,
             colorize: true
         })
@@ -72,8 +70,7 @@ app.use(expressWinston.logger(
     msg: "HTTP {{req.method}} {{req.url}}",
     expressFormat: true,
     colorize: true,
-    ignoreRoute: function()
-    {
+    ignoreRoute: function() {
         return false;
     }
 }));
@@ -82,32 +79,28 @@ app.use(expressWinston.logger(
 app.locals.middleware = {};
 
 /* View engine setup */
-app.set('views', path.join(__dirname, 'views'));
-app.set("view engine", "hbs");
+// app.set('views', path.join(__dirname, 'views'));
+// app.set("view engine", "hbs");
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded(
-{
+app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 /* Session setup */
-const appSession = session(
-{
-    store: new KnexSessionStore(
-    {
+const appSession = session({
+    store: new KnexSessionStore({
         createtable: true,
         tablename: "sessions",
         knex: DatabaseManager.instance.connection
     }),
     secret: config.sessions.secret ? config.sessions.secret : "secrety secret",
-    cookie:
-    {
+    cookie: {
         maxAge: config.sessions.maxAge ? config.sessions.maxAge : 3600000 /* An hour */
     },
     resave: true,
@@ -131,8 +124,7 @@ const sharedsession = require("express-socket.io-session");
 // });
 
 /* Setting up socket to have access to the session variable */
-io.use(sharedsession(app.locals.middleware.session,
-{
+io.use(sharedsession(app.locals.middleware.session, {
     autoSave: true
 }));
 
@@ -144,15 +136,15 @@ const index = require("./routes/index");
 const auth = require("./routes/auth");
 const creation = require("./routes/creation");
 const characters = require("./routes/characters");
-// const client = require("./routes/client");
+const client = require("./routes/client");
 // const account = require("./routes/account");
 
 app.use("/'", index);
 app.use("/auth", auth);
 app.use("/creation", creation);
 app.use("/characters", characters);
+app.use('/client', client);
 // app.use('/account', account);
-// app.use('/client', client);
 
 Logger.info("Routes: Loaded");
 
@@ -168,8 +160,7 @@ PluginManager.loadPlugins();
  * ########################################################################## */
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next)
-{
+app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
@@ -179,13 +170,10 @@ app.use(function(req, res, next)
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development')
-{
-    app.use(function(err, req, res)
-    {
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res) {
         res.status(err.status || 500);
-        res.render('error',
-        {
+        res.render('error', {
             message: err.message,
             error: err
         });

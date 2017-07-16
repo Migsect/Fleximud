@@ -22,7 +22,7 @@
     "express-winston": "^2.4.0",
     "handlebars": "^4.0.5",
     "html": "*",
-    "interactjs": "^1.2.8",
+    "interactjs": "^1.2.9",
     "knex": "^0.13.0",
     "mongoose": "*",
     "morgan": "~1.7.0",

@@ -27,7 +27,7 @@ router.get("/", function(request, response) {
                 characters: characterItems
             }), [
                 "/stylesheets/characters.css"
-            ], [ /* Scripts */ ]));
+            ], []));
         })
         .catch(error => {
             Logger.error("During Creation - Database Error:", error);

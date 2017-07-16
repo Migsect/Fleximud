@@ -1,42 +1,32 @@
 "use strict";
 const WebPlugin = require("./WebPlugin");
 
-class CreationPlugin extends WebPlugin
-{
-    constructor(plugins, dependacies)
-    {
-        super(plugins, dependacies);
-        const self = this;
+class CreationPlugin extends WebPlugin {
+    constructor(plugins, depends) {
+        super(plugins, depends);
 
-        self.fieldHeader = self.constructor.name;
-        self.fields = {};
-    }
-    getFieldHeader()
-    {
-        return this.fieldHeader;
-    }
-    setFieldHeader(name)
-    {
-        this.fieldHeader = name;
-    }
-    setField(key, value)
-    {
-        this.fields[key] = value;
-    }
-    getField(key)
-    {
-        return this.fields[key];
-    }
-    hasField(key)
-    {
-        return this.fields.hasOwnProperty(key);
-    }
-    resetFields()
-    {
+        this.fieldHeader = this.constructor.name;
         this.fields = {};
     }
-    getFields()
-    {
+    getFieldHeader() {
+        return this.fieldHeader;
+    }
+    setFieldHeader(name) {
+        this.fieldHeader = name;
+    }
+    setField(key, value) {
+        this.fields[key] = value;
+    }
+    getField(key) {
+        return this.fields[key];
+    }
+    hasField(key) {
+        return this.fields.hasOwnProperty(key);
+    }
+    resetFields() {
+        this.fields = {};
+    }
+    getFields() {
         return this.fields;
     }
 
@@ -47,8 +37,7 @@ class CreationPlugin extends WebPlugin
      *
      * @return {Boolean} True if the plugin is complete
      */
-    isComplete()
-    {
+    isComplete() {
         return true;
     }
 }

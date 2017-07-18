@@ -12,7 +12,81 @@ class Panel {
     constructor(name, body) {
         /* The body will almost never change and should always be this element. */
         this.body = Utils.htmlToElement(panelBodyTemplate(body));
-        this.name = name;
+        this._name = name;
+        this.element = null;
+        this.visible = true;
+        this.listeners = new Map();
+    }
+
+    /**
+     * Gets the name.
+     * @return {String} The name of the panel.
+     */
+    get name() {
+        return this._name;
+    }
+
+    /**
+     * Sets the name property as well as attempts to update the name within the 
+     * html element if it exists and if it has a name.
+     *
+     * @param {String} value The value to make the name.
+     */
+    set name(value) {
+        this._name = value;
+    }
+
+    /**
+     * Adds an event listener to the panel.
+     * Events are triggered in response to certain panel events such as when it closes
+     * or if it is hidden.
+     *
+     * @param {String} event The event to add the listener to
+     * @param {Function} listener The listener callback to execute after the event.
+     */
+    addEventListener(event, listener) {
+        if (!this.listeners.has(event)) {
+            this.listeners.set(event, []);
+        }
+        this.listeners.get(event).push(listener);
+    }
+
+    /**
+     * Triggers an event for the panel.
+     * This will call all listeners for that event and pass the additional arguments.
+     * This additionally returns a list of all the returns of the listeners.
+     * 
+     * @param {String} event The event string to trigger
+     * @param {Object[]} ... parameters to pass to the listeners.
+     * @return {Object[]} The returns of all the listeners.
+     */
+    triggerEvent(event) {
+        const args = Array.call.slice.call(arguments, 1);
+        if (!this.listeners.has(event)) {
+            return;
+        }
+        return this.listeners.get(event).map((listener) => listener.call(this, ...args));
+    }
+
+    /**
+     * Sets the visibility of the panel.
+     * 
+     * @param  {Boolean} visible The visibility to set.
+     */
+    setVisible(visible) {
+        this.visible = typeof visible === "boolean" ? visible : this.visible;
+        this.triggerEvent("visible", this.visible);
+        if (this.element) {
+            if (visible) {
+                this.element.classList.add("hidden");
+            } else {
+                this.element.classList.remove("hidden");
+            }
+        }
+    }
+
+    close() {
+
     }
 
     /**
@@ -25,7 +99,6 @@ class Panel {
      * @return {Element} The movable panel element.
      */
     getMovable(parent) {
-        console.log("PANEL.name:", this.name);
         const element = Utils.htmlToElement(panelMovableTemplate({
             name: this.name
         }));
@@ -37,7 +110,7 @@ class Panel {
         }
 
         iteract(element, {
-            ignoreFrom: ".panel-body"
+            ignoreFrom: ".panel-body,.panel-handle-minimize,.panel-handle-close"
         }).draggable({
             restrict: {
                 restriction: "parent",
@@ -63,15 +136,8 @@ class Panel {
             preserveAspectRatio: false,
             edges: { left: true, right: true, bottom: true, top: true }
         }).on("resizemove", function(event) {
-            const target = event.target;
 
-            /* 
-             * Need a scale to adjust to the new panel we're working within. 
-             * https://github.com/taye/interact.js/issues/430 
-             */
-            const container = element.parentNode;
-            const scaleX = container.getBoundingClientRect().width / container.offsetWidth;
-            const scaleY = container.getBoundingClientRect().height / container.offsetHeight;
+            const target = event.target;
 
             /* keep the dragged position in the data-x/data-y attributes */
             var x = (parseFloat(target.getAttribute('data-x')) || 0);
@@ -92,6 +158,7 @@ class Panel {
             target.setAttribute('data-y', y);
         });
 
+        this.element = element;
         return element;
     }
 
@@ -115,6 +182,7 @@ class Panel {
             parent.appendChild(element);
         }
 
+        this.element = element;
         return element;
     }
 }

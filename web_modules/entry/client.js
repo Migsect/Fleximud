@@ -1,9 +1,9 @@
 "use strict";
 
+const $ = document.querySelector.bind(document);
+
 const WebPlugin = require("Plugins/WebPlugin");
 const PanelManager = require("client/panels/PanelManager");
-
-const $ = document.querySelector.bind(document);
 
 /* ########################################################################## *
  * # Loading the panel manager                                              # *  

@@ -42,7 +42,7 @@ class Character {
             data: JSON.stringify(data || {})
         }).then(dbid => {
             return new Character({
-                id: dbid[0],
+                dbid: dbid[0],
                 uuid: id,
                 accountId: accountId,
                 data: data || null
@@ -151,7 +151,7 @@ class Character {
             config.data = JSON.parse(config.data);
         }
 
-        this.dbid = config.id;
+        this.dbid = config.id || config.dbid; /* Note, either or may be used */
         this.uuid = config.uuid;
         this.accountId = config.accountId;
         this.data = config.data || {};

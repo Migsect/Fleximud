@@ -83,11 +83,10 @@ router.post("/create", (request, response) => {
         }
         aspectConstructor.applyForm(form, characterData);
     });
-
+    console.log("Account DBID:", account.dbid);
     Character.createCharacter(account.dbid, characterData).then(() => {
-
         response.status(200).json({
-            mesaage: "Created Character",
+            message: "Created Character",
             redirect: "/characters"
         });
     }).catch(error => {

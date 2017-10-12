@@ -1,47 +1,39 @@
 "use strict";
 
 module.exports = {
-    database:
-    {
+    dataFolder: "./data",
+    database: {
         client: "sqlite3",
-        connection:
-        {
+        connection: {
             filename: "./data/main.sqlite"
         },
         useNullAsDefault: true
     },
-    logging:
-    {
+    logging: {
         level: "debug",
         fileLevel: "info"
     },
-    sessions:
-    {
+    sessions: {
         secret: "macro dogos",
         maxAge: 86400000
     },
-    admin:
-    {
+    admin: {
         email: "radmin",
         username: "radmin",
         password: "radmin"
     },
-    creation:
-    {
-        attributes:
-        {
+    creation: {
+        attributes: {
             attributePoints: 10,
             shownDepth: 2,
             attributeChoiceMultiplier: 1.2,
         },
-        identity:
-        {
+        identity: {
 
         }
     },
     tickRate: 20,
-    stats:
-    {
+    stats: {
         attributeMidTier: 2,
         regenUpdateRate: 0.5
     }

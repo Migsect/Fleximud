@@ -27,9 +27,16 @@ class Account {
         });
     }
 
+    /**
+     * Creates an account and adds it to the database.
+     *
+     * @param      {String}  username       The username of the account
+     * @param      {String}  email          The email of the account
+     * @param      {String}  plainPassword  The plain password of the account
+     * @return     {Promise} A promise to return the account once created.
+     */
     static createAccount(username, email, plainPassword) {
         const connection = DatabaseManager.instance.connection;
-
         const password = PasswordHash.generate(plainPassword);
         const id = uuid();
         return connection(ACCOUNTS_TABLE_NAME).select("email").where(function() {
@@ -46,7 +53,7 @@ class Account {
                 password: password
             }).then(dbid => {
                 const account = new Account({
-                    id: dbid,
+                    dbid: dbid[0],
                     uuid: id,
                     username: username,
                     email: email,
@@ -85,17 +92,16 @@ class Account {
     }
 
     constructor(config) {
-        const self = this;
-        self.dbid = config.id;
-        self.uuid = config.uuid;
-        self.username = config.username || "Unspecified";
-        self.email = config.email;
-        self.password = config.password;
+        console.log("Account Object Recostruction:", config);
+        this.dbid = config.id || config.dbid;
+        this.uuid = config.uuid;
+        this.username = config.username || "Unspecified";
+        this.email = config.email;
+        this.password = config.password;
     }
 
     verify(passwordAttempt) {
-        const self = this;
-        return PasswordHash.verify(passwordAttempt, self.password);
+        return PasswordHash.verify(passwordAttempt, this.password);
     }
 
 }

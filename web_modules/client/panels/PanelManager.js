@@ -3,7 +3,10 @@
 const $ = document.querySelector.bind(document);
 
 const Panel = require("./Panel");
-const panelListItemTemplate = require("./panelActiveElement.hbs");
+const TemplateUtils = require("Utils/TemplateUtils");
+const elementize = TemplateUtils.elementize;
+const panelListItemTemplate = elementize(require("./panelListElement.hbs"));
+
 const Utils = require("utils");
 
 class PanelManager {
@@ -18,14 +21,17 @@ class PanelManager {
             active: $("#panel-active"),
         };
 
-        this.TEST_PANELS();
+        this.panels = [];
+
+        // TEMP Test for panels
+        // this.TEST_PANELS();
     }
 
-    TEST_PANELS() {
-        const testPanel = new Panel("TEST_PANEL_NAME.TEST_PANEL_NAME.TEST_PANEL_NAME.TEST_PANEL_NAME", "<div>TEST_PABEL_BODY</div>");
-        console.log("TEST_PANELS", testPanel);
-        const elementPanel = testPanel.getMovable(this.view);
-    }
+    // TEST_PANELS() {
+    //     const testPanel = new Panel("TEST_PANEL_NAME.TEST_PANEL_NAME.TEST_PANEL_NAME.TEST_PANEL_NAME", "<div>TEST_PABEL_BODY</div>");
+    //     console.log("TEST_PANELS", testPanel);
+    //     const elementPanel = testPanel.getMovable(this.view);
+    // }
 
     /**
      * Creates a new panel with the name and body.
@@ -36,7 +42,9 @@ class PanelManager {
      * @param {String} body The body of the panel to create.
      */
     createPanel(name, body) {
-
+        const panel = new Panel(name, body);
+        this.registerPanel(panel);
+        return panel;
     }
 
     /**
@@ -48,7 +56,8 @@ class PanelManager {
      */
     registerPanel(panel) {
         const name = panel.name;
-        const activeElement = Utils.htmlToElement(panelListItemTemplate({ name: panel.name }));
+        const activeElement = panelListItemTemplate({ name: panel.name });
+
     }
 
     /**
